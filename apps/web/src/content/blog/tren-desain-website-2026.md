@@ -20,7 +20,7 @@ Tahun 2026 membawa sejumlah tren baru yang mengubah cara kita mendesain dan memb
 
 ## 1. AI-Powered Design & Personalisasi
 
-Kecerdasan buatan (AI) bukan lagi sekadar buzzword — kini menjadi bagian integral dari desain website modern. **AI-powered personalization** memungkinkan website menampilkan konten yang berbeda berdasarkan perilaku, lokasi, dan preferensi setiap pengunjung.
+Kecerdasan buatan (AI) bukan lagi sekadar buzzword, kini menjadi bagian integral dari desain website modern. **AI-powered personalization** memungkinkan website menampilkan konten yang berbeda berdasarkan perilaku, lokasi, dan preferensi setiap pengunjung.
 
 Menurut laporan McKinsey, personalisasi berbasis AI dapat meningkatkan **revenue hingga 10-15%** dan meningkatkan efisiensi marketing spend hingga 30%. Contoh implementasi meliputi:
 
@@ -42,7 +42,7 @@ Menurut riset Nielsen Norman Group, micro-interactions yang tepat dapat meningka
 - **Skeleton loading** sebagai pengganti spinner tradisional
 - **Morphing buttons** yang berubah bentuk saat diklik
 
-Kunci keberhasilan micro-interaction adalah **subtlety** — animasi harus meningkatkan pengalaman pengguna, bukan mengalihkan perhatian.
+Kunci keberhasilan micro-interaction adalah **subtlety**, animasi harus meningkatkan pengalaman pengguna, bukan mengalihkan perhatian.
 
 ## 3. Dark Mode & Color Scheme Switching
 
@@ -78,7 +78,7 @@ Mobile-first design bukan lagi opsional melainkan keharusan. Prinsip utamanya:
 - **Desain untuk layar kecil terlebih dahulu**, lalu scale up untuk desktop
 - **Touch-friendly interface** dengan ukuran tap target minimal 44x44 piksel (standar Google)
 - **Konten yang readable** tanpa perlu zooming
-- **Navigation yang simpel** — hamburger menu, bottom navigation, atau gesture-based
+- **Navigation yang simpel**, hamburger menu, bottom navigation, atau gesture-based
 
 Google menggunakan **mobile-first indexing**, artinya versi mobile website Anda yang di-crawl dan diindeks terlebih dahulu. Website yang tidak responsif akan kehilangan ranking di mesin pencari.
 
@@ -108,7 +108,7 @@ Web Content Accessibility Guidelines (WCAG) 2.2 menjadi standar baru dengan pene
 - **Focus indicators** yang jelas dan konsisten
 - **Readable font size** minimum 16px untuk body text
 
-Selain etika, aksesibilitas juga berdampak pada **SEO** — Google memberikan nilai lebih pada website yang memenuhi standar aksesibilitas.
+Selain etika, aksesibilitas juga berdampak pada **SEO**, Google memberikan nilai lebih pada website yang memenuhi standar aksesibilitas.
 
 ## 8. Speed Optimization & Core Web Vitals
 
@@ -125,11 +125,11 @@ Teknik optimasi yang trending di 2026:
 - **Framework modern**: Astro, Next.js, dan SvelteKit dengan partial hydration
 - **Lazy loading native**: `loading="lazy"` dan Intersection Observer API
 
-Menurut data Google, setiap **1 detik keterlambatan** dalam loading time mengurangi konversi hingga 7%. Website cepat bukan hanya soal UX — ini langsung berdampak pada revenue.
+Menurut data Google, setiap **1 detik keterlambatan** dalam loading time mengurangi konversi hingga 7%. Website cepat bukan hanya soal UX, ini langsung berdampak pada revenue.
 
 ## Bagaimana Ekalliptus Mengimplementasikan Tren Ini
 
-Di Ekalliptus, kami menerapkan tren-tren di atas dalam setiap proyek website yang kami kerjakan. Website kami sendiri dibangun menggunakan **Astro** — framework modern yang menghasilkan performa optimal dengan partial hydration dan static-first approach.
+Di Ekalliptus, kami menerapkan tren-tren di atas dalam setiap proyek website yang kami kerjakan. Website kami sendiri dibangun menggunakan **Astro**, framework modern yang menghasilkan performa optimal dengan partial hydration dan static-first approach.
 
 Kami juga mengimplementasikan:
 - **Dark/light mode** otomatis berdasarkan preferensi sistem

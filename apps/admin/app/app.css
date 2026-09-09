@@ -24,7 +24,7 @@
   --color-ring: hsl(var(--ring));
 }
 
-/* Self-hosted Inter — eliminates Google Fonts CDN round-trip */
+/* Self-hosted Inter, eliminates Google Fonts CDN round-trip */
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -82,7 +82,7 @@
     --accent: 170 55% 38%;
     --accent-foreground: 0 0% 100%;
 
-    /* Secondary brand accent — indigo/violet for gradients & highlights */
+    /* Secondary brand accent, indigo/violet for gradients & highlights */
     --accent-2: 262 83% 60%;
     --accent-2-foreground: 0 0% 100%;
 
@@ -140,7 +140,7 @@
     --accent: 170 55% 45%;
     --accent-foreground: 0 0% 100%;
 
-    /* Secondary brand accent — indigo/violet for gradients & highlights */
+    /* Secondary brand accent, indigo/violet for gradients & highlights */
     --accent-2: 262 83% 67%;
     --accent-2-foreground: 0 0% 100%;
 
@@ -209,7 +209,7 @@
     margin-bottom: env(safe-area-inset-bottom, 0px);
   }
 
-  /* Smooth theme transition — only on key surfaces, not every element */
+  /* Smooth theme transition, only on key surfaces, not every element */
   html.theme-transitioning body,
   html.theme-transitioning .glass-panel,
   html.theme-transitioning .glass-nav,
@@ -224,7 +224,7 @@
                 stroke 320ms cubic-bezier(0.4, 0, 0.2, 1) !important;
   }
 
-  /* View Transitions API — GPU-accelerated circular reveal from toggle position */
+  /* View Transitions API, GPU-accelerated circular reveal from toggle position */
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
@@ -569,7 +569,7 @@
     contain-intrinsic-size: auto 800px;
   }
 
-  /* Admin-only perf override — admin pages have many glass elements.
+  /* Admin-only perf override, admin pages have many glass elements.
      Reducing blur radius and using solid-er backgrounds cuts GPU cost. */
   body[data-admin="true"] .glass-card,
   body[data-admin="true"] .glass-panel,

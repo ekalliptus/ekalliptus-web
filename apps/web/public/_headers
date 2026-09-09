@@ -1,4 +1,4 @@
-# Cloudflare Worker static assets — Security + Performance headers
+# Cloudflare Worker static assets, Security + Performance headers
 # ekalliptus.com
 
 # ── Global Security ──────────────────────────────────────────────────────────
@@ -10,10 +10,10 @@
   Cross-Origin-Opener-Policy: same-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
 
-  # CSP — Google Fonts removed (self-hosted), worker-src added for SW
+  # CSP, Google Fonts removed (self-hosted), worker-src added for SW
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' blob: https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com; worker-src 'self' blob:; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
 
-# ── HTML pages — allow Cloudflare edge cache (60s) + always revalidate ──────
+# ── HTML pages, allow Cloudflare edge cache (60s) + always revalidate ──────
 /
   Cache-Control: public, s-maxage=60, stale-while-revalidate=30, no-cache
   Link: </fonts/inter-latin-400-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
@@ -33,35 +33,35 @@
 /services/*
   Cache-Control: public, s-maxage=3600, stale-while-revalidate=300, no-cache
 
-# Admin + API — never cache
+# Admin + API, never cache
 /admin/*
   Cache-Control: no-store, private
 
 /api/*
   Cache-Control: no-store
 
-# ── Hashed build output — immutable forever ──────────────────────────────────
+# ── Hashed build output, immutable forever ──────────────────────────────────
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
 /chunks/*
   Cache-Control: public, max-age=31536000, immutable
 
-# ── Self-hosted fonts — immutable ────────────────────────────────────────────
+# ── Self-hosted fonts, immutable ────────────────────────────────────────────
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: *
 
-# ── Vendor scripts (three.js, vanta) — immutable ────────────────────────────
+# ── Vendor scripts (three.js, vanta), immutable ────────────────────────────
 /vendor/*
   Cache-Control: public, max-age=31536000, immutable
 
-# ── Service worker — must revalidate every time ──────────────────────────────
+# ── Service worker, must revalidate every time ──────────────────────────────
 /sw.js
   Cache-Control: no-cache, no-store, must-revalidate
   Service-Worker-Allowed: /
 
-# ── Static media — long cache, public ───────────────────────────────────────
+# ── Static media, long cache, public ───────────────────────────────────────
 /*.webp
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 
@@ -80,7 +80,7 @@
 /*.ico
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 
-# ── Blog SVGs — immutable (content never changes once deployed) ──────────────
+# ── Blog SVGs, immutable (content never changes once deployed) ──────────────
 /blog/*.svg
   Cache-Control: public, max-age=31536000, immutable
 

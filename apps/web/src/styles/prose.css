@@ -1,5 +1,5 @@
 /* ============================================
-   BLOG PROSE — Custom styles for Markdown content
+   BLOG PROSE, Custom styles for Markdown content
    Base typography (replaces @tailwindcss/typography plugin
    so prose CSS doesn't ship to non-blog pages)
    ============================================ */
@@ -35,13 +35,13 @@
 .prose li { margin-top: 0.5em; margin-bottom: 0.5em; }
 .prose blockquote { font-style: italic; font-weight: 500; }
 
-/* H2 section rhythm — accent bar marks each major section */
+/* H2 section rhythm, accent bar marks each major section */
 .prose h2 {
   padding-bottom: 0.45em;
   border-bottom: 1px solid hsl(var(--border) / 0.2);
 }
 
-/* Table styling — matches glass aesthetic */
+/* Table styling, matches glass aesthetic */
 .prose table {
   border-collapse: separate;
   border-spacing: 0;
@@ -104,7 +104,7 @@
   font-weight: 600;
 }
 
-/* Blockquote — glass panel style */
+/* Blockquote, glass panel style */
 .prose blockquote {
   border-left: 3px solid hsl(var(--primary) / 0.4);
   background: hsl(var(--card) / 0.3);
@@ -117,7 +117,7 @@
   color: hsl(var(--muted-foreground));
 }
 
-/* Lists — custom markers */
+/* Lists, custom markers */
 .prose ul {
   list-style-type: none;
   padding-left: 0;
@@ -183,7 +183,7 @@
   line-height: 1.7;
 }
 
-/* Horizontal rule — subtle line */
+/* Horizontal rule, subtle line */
 .prose hr {
   border: none;
   height: 1px;
@@ -191,7 +191,7 @@
   margin: 2.5rem 0;
 }
 
-/* Headings — anchor link styling */
+/* Headings, anchor link styling */
 .prose h2,
 .prose h3,
 .prose h4 {
@@ -204,12 +204,12 @@
   opacity: 1;
 }
 
-/* Image in prose — glass frame */
+/* Image in prose, glass frame */
 .prose img {
   border: 1px solid hsl(var(--border) / 0.15);
 }
 
-/* Links — underline for a11y (not color-only), animated on hover */
+/* Links, underline for a11y (not color-only), animated on hover */
 .prose a {
   text-decoration: underline;
   text-decoration-color: hsl(var(--primary) / 0.35);

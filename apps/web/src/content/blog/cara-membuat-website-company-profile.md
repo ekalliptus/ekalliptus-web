@@ -23,12 +23,12 @@ seo:
 
 ## Komponen Wajib Website Company Profile
 
-1. **Beranda (Home)** — Hero section, CTA, highlight layanan, social proof
-2. **Tentang Kami (About)** — Cerita perusahaan, misi, tim, pencapaian
-3. **Layanan (Services)** — Detail layanan, pricing, proses kerja, FAQ
-4. **Portfolio** — Showcase project, case study singkat
-5. **Kontak** — Form, alamat, telepon, Google Maps
-6. **Blog** (Recommended) — Konten insight, boost SEO
+1. **Beranda (Home)**, Hero section, CTA, highlight layanan, social proof
+2. **Tentang Kami (About)**, Cerita perusahaan, misi, tim, pencapaian
+3. **Layanan (Services)**, Detail layanan, pricing, proses kerja, FAQ
+4. **Portfolio**, Showcase project, case study singkat
+5. **Kontak**, Form, alamat, telepon, Google Maps
+6. **Blog** (Recommended), Konten insight, boost SEO
 
 ---
 
@@ -54,7 +54,7 @@ seo:
 - Buat design system (warna, tipografi, spacing)
 - Wireframe semua halaman utama di Figma
 - High-fidelity mockup dengan 3 ronde revisi
-- **Mobile-first design** — 70%+ traffic dari mobile
+- **Mobile-first design**, 70%+ traffic dari mobile
 
 ### Langkah 4: Development (2-4 minggu)
 
@@ -92,7 +92,7 @@ seo:
 Target: First Contentful Paint < 1.8s, Largest Contentful Paint < 2.5s.
 
 ### 2. Mobile-Responsive Sempurna
-Bukan cuma "muat di mobile" — user experience yang setara dengan desktop.
+Bukan cuma "muat di mobile", user experience yang setara dengan desktop.
 
 ### 3. SEO On-Page Solid
 - Meta title & description tiap halaman
@@ -133,8 +133,8 @@ Untuk pricing lengkap, lihat [jasa pembuatan website](/services/website) atau [p
 
 Tim Ekalliptus Digital siap membantu:
 
-- **Konsultasi gratis** — diskusi kebutuhan tanpa kewajiban
-- **Design custom** — bukan template generik
+- **Konsultasi gratis**, diskusi kebutuhan tanpa kewajiban
+- **Design custom**, bukan template generik
 - Ketentuan revisi dan maintenance sesuai proposal
 - **Harga mulai Rp 1,5 juta**
 

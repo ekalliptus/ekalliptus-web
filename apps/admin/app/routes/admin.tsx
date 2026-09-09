@@ -163,7 +163,7 @@ export default function AdminLayout() {
                 link.disabled ? (
                   <span
                     key={link.key}
-                    title={`Nonaktif — ${link.disabledReason}`}
+                    title={`Nonaktif: ${link.disabledReason}`}
                     className="sidebar-link-disabled flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium cursor-not-allowed opacity-40"
                   >
                     <link.icon className="h-4 w-4 flex-shrink-0" />
@@ -248,7 +248,7 @@ export default function AdminLayout() {
               link.disabled ? (
                 <span
                   key={link.key}
-                  title={`Nonaktif — ${link.disabledReason}`}
+                  title={`Nonaktif: ${link.disabledReason}`}
                   className="sidebar-link-disabled flex items-center gap-2.5 rounded-lg px-3 py-2 text-[13px] font-medium cursor-not-allowed opacity-40"
                 >
                   <link.icon className="h-4 w-4 flex-shrink-0" />

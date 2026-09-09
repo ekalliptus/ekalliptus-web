@@ -18,7 +18,7 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
 const handleRequest = defineMiddleware(async (ctx, next) => {
   // Capture Cloudflare runtime env on EVERY request.
   // Public routes (webhook, order, etc.) need access to Supabase secrets.
-  // Wrap in try/catch — Cloudflare bindings can be Proxies that throw on access.
+  // Wrap in try/catch, Cloudflare bindings can be Proxies that throw on access.
   try {
     captureRuntimeEnv(cfEnv as unknown as Record<string, unknown>)
   } catch (err) {

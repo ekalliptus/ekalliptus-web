@@ -155,12 +155,12 @@ export default function OrderDetail() {
             </div>
             <div className="rounded-lg border border-border bg-card/40 px-4 py-3">
               <p className="text-[10px] uppercase tracking-wide text-muted-foreground font-semibold">WhatsApp</p>
-              <p className="mt-1 text-sm font-medium">{order.whatsapp || "—"}</p>
+              <p className="mt-1 text-sm font-medium">{order.whatsapp || "-"}</p>
             </div>
             <div className="rounded-lg border border-border bg-card/40 px-4 py-3">
               <p className="text-[10px] uppercase tracking-wide text-muted-foreground font-semibold">Dibuat</p>
               <p className="mt-1 text-sm font-medium">
-                {order.created_at ? new Date(order.created_at).toLocaleString("id-ID") : "—"}
+                {order.created_at ? new Date(order.created_at).toLocaleString("id-ID") : "-"}
               </p>
             </div>
           </div>

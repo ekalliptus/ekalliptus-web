@@ -1,4 +1,4 @@
-// Ekalliptus service worker — runtime cache for static assets
+// Ekalliptus service worker, runtime cache for static assets
 // Versioning: bump CACHE_VERSION when you change cache strategy or want to invalidate clients
 const CACHE_VERSION = 'v3-2026-07-20'
 const STATIC_CACHE = `ekal-static-${CACHE_VERSION}`

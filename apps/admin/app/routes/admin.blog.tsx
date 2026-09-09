@@ -111,7 +111,7 @@ export default function BlogList() {
                     {p.title}
                   </Link>
                   <div className="text-xs text-muted-foreground mt-0.5">
-                    {LOCALE_FLAG[p.locale] ?? "🌐"} {p.category ?? "Uncategorized"} · {p.updated_at ? new Date(p.updated_at).toLocaleDateString("id-ID") : "—"}
+                    {LOCALE_FLAG[p.locale] ?? "🌐"} {p.category ?? "Uncategorized"} · {p.updated_at ? new Date(p.updated_at).toLocaleDateString("id-ID") : "-"}
                   </div>
                 </div>
                 <StatusBadge status={p.status} />

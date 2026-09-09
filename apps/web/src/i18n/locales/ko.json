@@ -27,7 +27,7 @@
   },
   "index": {
     "intro": {
-      "title": "ekalliptus — 선도적인 디지털 솔루션",
+      "title": "ekalliptus: 선도적인 디지털 솔루션",
       "subtitle": "현대적인 비즈니스를 위한 디지털 전환을 원하시나요? 아니면 더 전문적인 웹사이트를 구축하고 싶으신가요?"
     },
     "about": {
@@ -443,7 +443,7 @@
     "services": {
       "eyebrow": "Our Services",
       "title": "Complete digital solutions in one place",
-      "subtitle": "From idea to launch — we handle every stage to a professional standard.",
+      "subtitle": "From idea to launch, we handle every stage to a professional standard.",
       "featureTitle": "End-to-End Digital Solutions",
       "featureDesc": "Strategy, design, and development in one team. Consistent, measurable results, ready to grow with your business.",
       "featureCta": "Start your project",

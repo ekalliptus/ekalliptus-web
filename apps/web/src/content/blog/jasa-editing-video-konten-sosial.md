@@ -202,13 +202,13 @@ Berikut jenis konten yang sering kami kerjakan:
 ## Testimoni Klien
 
 > *"Editingnya rapi banget, sesuai sama brand aesthetic aku. Follower naik 30% dalam sebulan!"*
-> — Sarah, Fashion Brand Owner
+>, Sarah, Fashion Brand Owner
 
 > *"Gak pusing lagi mikir editing. Tinggal kirim footage, 2 hari udah jadi. Recommended!"*
-> — Budi, Food Blogger
+>, Budi, Food Blogger
 
 > *"Bikin video company profile jadi engaging. Tim Ekalliptus bener-bunder paham vibe brand kami."*
-> — PT Kreasindo Digital
+>, PT Kreasindo Digital
 
 ---
 

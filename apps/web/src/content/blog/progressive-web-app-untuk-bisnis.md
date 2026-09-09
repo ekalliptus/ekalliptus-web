@@ -16,7 +16,7 @@ seo:
 
 Membangun native app berarti bayar dua kali untuk dua platform; mengandalkan website biasa berarti pengalaman mobile yang lambat. **Progressive Web App (PWA)** menawarkan jalan tengah: satu codebase, pengalaman mendekati aplikasi native.
 
-PWA bukan teknologi baru — Google memperkenalkan konsep ini pada 2015 — tetapi adopsinya meledak dalam beberapa tahun terakhir. Perusahaan besar seperti Twitter, Starbucks, dan Pinterest telah membuktikan bahwa PWA bisa meningkatkan engagement dan konversi secara signifikan.
+PWA bukan teknologi baru, Google memperkenalkan konsep ini pada 2015, tetapi adopsinya meledak dalam beberapa tahun terakhir. Perusahaan besar seperti Twitter, Starbucks, dan Pinterest telah membuktikan bahwa PWA bisa meningkatkan engagement dan konversi secara signifikan.
 
 ## Apa Itu Progressive Web App?
 
@@ -28,9 +28,9 @@ Tiga teknologi inti yang membuat PWA bekerja:
 
 **Service Worker** adalah script yang berjalan di background browser, terpisah dari halaman web. Fungsi utamanya:
 
-- **Caching** — menyimpan resource secara lokal untuk akses offline
-- **Background sync** — mengirim data yang tertunda saat koneksi kembali
-- **Push notification** — menerima dan menampilkan notifikasi meski browser tertutup
+- **Caching**, menyimpan resource secara lokal untuk akses offline
+- **Background sync**, mengirim data yang tertunda saat koneksi kembali
+- **Push notification**, menerima dan menampilkan notifikasi meski browser tertutup
 
 ### Web App Manifest
 
@@ -50,7 +50,7 @@ PWA **wajib** dijalankan melalui HTTPS untuk keamanan. Service Worker hanya bisa
 
 PWA menyimpan konten penting secara lokal melalui caching. Pengguna tetap bisa mengakses konten, menjelajahi katalog produk, atau mengisi formulir meskipun koneksi internet terputus. Saat online kembali, data disinkronkan otomatis.
 
-Ini sangat relevan untuk Indonesia di mana **kualitas koneksi internet bervariasi** — terutama di luar kota besar.
+Ini sangat relevan untuk Indonesia di mana **kualitas koneksi internet bervariasi**, terutama di luar kota besar.
 
 ### 2. Lebih Cepat dari Website Biasa
 
@@ -58,7 +58,7 @@ Berkat caching agresif dan arsitektur app-shell, PWA memuat konten hampir **inst
 
 ### 3. Installable Tanpa App Store
 
-Pengguna bisa menginstall PWA langsung dari browser ke home screen — tanpa perlu App Store atau Play Store. Ini menghilangkan friction utama instalasi app: mencari di store, menunggu download, dan menghabiskan storage.
+Pengguna bisa menginstall PWA langsung dari browser ke home screen, tanpa perlu App Store atau Play Store. Ini menghilangkan friction utama instalasi app: mencari di store, menunggu download, dan menghabiskan storage.
 
 ### 4. Biaya Pengembangan Lebih Rendah
 
@@ -67,7 +67,7 @@ Membangun satu PWA jauh lebih hemat dibanding membangun website + native app And
 - **Native App (Android + iOS)**: Rp 50-200 juta
 - **PWA**: Rp 5-30 juta
 
-Selisih ini semakin besar untuk maintenance — satu codebase PWA vs dua codebase native.
+Selisih ini semakin besar untuk maintenance, satu codebase PWA vs dua codebase native.
 
 ### 5. Update Otomatis
 
@@ -102,8 +102,8 @@ Twitter meluncurkan PWA sebagai pengganti mobile website mereka. Hasilnya:
 
 Starbucks membangun PWA untuk ordering system mereka:
 - **2x lipat** daily active users dibanding mobile web sebelumnya
-- PWA bekerja offline — pelanggan bisa browse menu dan custom order
-- Ukuran hanya **233 KB** — 99.84% lebih kecil dari native app iOS
+- PWA bekerja offline, pelanggan bisa browse menu dan custom order
+- Ukuran hanya **233 KB**, 99.84% lebih kecil dari native app iOS
 
 ### Pinterest
 
@@ -130,11 +130,11 @@ Toko online mendapat manfaat besar: katalog produk offline, checkout yang cepat,
 
 ### Media & Konten
 
-Portal berita, blog, dan platform konten bisa menyajikan artikel offline. Pembaca bisa menyimpan artikel untuk dibaca nanti tanpa koneksi — seperti fitur "Read Later" di native app.
+Portal berita, blog, dan platform konten bisa menyajikan artikel offline. Pembaca bisa menyimpan artikel untuk dibaca nanti tanpa koneksi, seperti fitur "Read Later" di native app.
 
 ### Restaurant & F&B
 
-Menu digital, ordering system, dan loyalty program bisa berjalan sebagai PWA. Pelanggan install dari QR code di meja — tidak perlu download app dari store.
+Menu digital, ordering system, dan loyalty program bisa berjalan sebagai PWA. Pelanggan install dari QR code di meja, tidak perlu download app dari store.
 
 ### SaaS & Productivity Tools
 
@@ -150,10 +150,10 @@ Framework seperti **Next.js**, **Nuxt**, dan **SvelteKit** menyediakan plugin PW
 
 ### Komponen Utama yang Perlu Dibuat
 
-1. **Web App Manifest** — definisi identitas PWA (nama, ikon, warna)
-2. **Service Worker** — logika caching dan offline support
-3. **App Shell** — kerangka UI yang di-cache dan dimuat instan
-4. **HTTPS** — wajib untuk semua PWA
+1. **Web App Manifest**, definisi identitas PWA (nama, ikon, warna)
+2. **Service Worker**, logika caching dan offline support
+3. **App Shell**, kerangka UI yang di-cache dan dimuat instan
+4. **HTTPS**, wajib untuk semua PWA
 
 ### Strategi Caching
 
@@ -163,7 +163,7 @@ Framework seperti **Next.js**, **Nuxt**, dan **SvelteKit** menyediakan plugin PW
 
 ## Kesimpulan
 
-PWA menawarkan sweet spot antara cost, performance, dan user experience. Untuk bisnis Indonesia — terutama yang menargetkan pengguna mobile dengan koneksi yang bervariasi — PWA adalah investasi yang sangat masuk akal.
+PWA menawarkan sweet spot antara cost, performance, dan user experience. Untuk bisnis Indonesia, terutama yang menargetkan pengguna mobile dengan koneksi yang bervariasi, PWA adalah investasi yang sangat masuk akal.
 
 Di Ekalliptus, kami membangun website dan aplikasi web yang mendukung teknologi PWA. Website kami sendiri menggunakan service worker untuk caching dan performa optimal.
 

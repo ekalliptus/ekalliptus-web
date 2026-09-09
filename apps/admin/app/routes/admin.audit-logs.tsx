@@ -93,7 +93,7 @@ export default function AuditLogs() {
                     <span className="text-muted-foreground">{r.table_name}</span>
                   </span>
                   <span className="text-xs text-muted-foreground">
-                    {r.created_at ? new Date(r.created_at).toLocaleString("id-ID") : "—"}
+                    {r.created_at ? new Date(r.created_at).toLocaleString("id-ID") : "-"}
                   </span>
                 </div>
                 {r.record_id && <div className="text-xs text-muted-foreground font-mono">id: {r.record_id}</div>}

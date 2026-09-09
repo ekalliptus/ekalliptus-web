@@ -14,7 +14,7 @@
  *
  * Replace the placeholders below with real client testimonials over time.
  * `hasVerifiedTestimonials()` is what the page uses to decide whether to emit
- * AggregateRating — so until at least one entry is verified, no review schema
+ * AggregateRating, so until at least one entry is verified, no review schema
  * is produced. This is intentional.
  */
 
@@ -56,7 +56,7 @@ export const testimonials: Testimonial[] = [
     name: 'Calon Klien Anda',
     role: 'UMKM / Startup',
     quote:
-      'Kami menjaga setiap testimoni tetap jujur dan terverifikasi. Tidak ada ulasan palsu — hanya cerita nyata dari klien yang puas.',
+      'Kami menjaga setiap testimoni tetap jujur dan terverifikasi. Tidak ada ulasan palsu, hanya cerita nyata dari klien yang puas.',
     rating: 5,
     service: 'Mobile App',
     verified: false,

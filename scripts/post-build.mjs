@@ -16,7 +16,7 @@
 // under dist/client and rewrite every reference to them in the built Worker
 // (dist/server) and any client JS.
 //
-// NOTE: we intentionally do NOT delete `.wrangler/deploy` — that directory
+// NOTE: we intentionally do NOT delete `.wrangler/deploy`, that directory
 // holds the deploy redirect the adapter created; removing it breaks
 // `wrangler deploy`.
 

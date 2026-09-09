@@ -26,8 +26,8 @@ seo:
 Gunakan tools gratis: Google Keyword Planner, Ubersuggest, AnswerThePublic. Fokus ke **long-tail keywords**: "jasa pembuatan website tegal" lebih winnable dari "jasa website".
 
 **Contoh untuk UMKM lokal:**
-- "[Layanan] [Kota]" — "katering pernikahan Tegal"
-- "[Produk] terdekat" — "toko sepatu terdekat Tegal"
+- "[Layanan] [Kota]", "katering pernikahan Tegal"
+- "[Produk] terdekat", "toko sepatu terdekat Tegal"
 
 ---
 
@@ -52,10 +52,10 @@ Hindari lebih dari 1 H1 per halaman dan skip dari H1 langsung ke H4.
 
 ## Tip 4: Optimasi Gambar
 
-1. **Ukuran file kecil** — kompres ke WebP/JPG <100KB
-2. **Alt text deskriptif** — deskripsikan gambar dengan keyword natural
-3. **Filename SEO-friendly** — `cuci-ac-tegal.jpg` bukan `IMG_3421.jpg`
-4. **Lazy loading** — tambahkan `loading="lazy"` untuk gambar di bawah fold
+1. **Ukuran file kecil**, kompres ke WebP/JPG <100KB
+2. **Alt text deskriptif**, deskripsikan gambar dengan keyword natural
+3. **Filename SEO-friendly**, `cuci-ac-tegal.jpg` bukan `IMG_3421.jpg`
+4. **Lazy loading**, tambahkan `loading="lazy"` untuk gambar di bawah fold
 
 ---
 
@@ -78,10 +78,10 @@ Target: PageSpeed score >85, LCP <2.5s, CLS <0.1. Quick wins:
 ## Tip 7: Buat Konten Bernilai (Blog Strategy)
 
 Blog boost SEO secara signifikan. Strategi konten UMKM:
-1. **Tutorial** — "Cara memilih ... yang tepat"
-2. **Listicle** — "10 tips ..."
-3. **Comparison** — "[A] vs [B]: Mana lebih baik?"
-4. **Local content** — "Best ... di [Kota]"
+1. **Tutorial**, "Cara memilih ... yang tepat"
+2. **Listicle**, "10 tips ..."
+3. **Comparison**, "[A] vs [B]: Mana lebih baik?"
+4. **Local content**, "Best ... di [Kota]"
 
 ---
 
@@ -106,7 +106,7 @@ Lihat panduan [jasa pembuatan website Tegal](/blog/jasa-pembuatan-website-tegal)
 **Cara mendapat backlink (white-hat):**
 1. Guest post di blog seindustri
 2. Daftar di direktori bisnis lokal
-3. Liputan media — kirim press release
+3. Liputan media, kirim press release
 4. Partnership dengan bisnis komplementer
 
 **Hindari:** beli backlink (penalti Google), comment spam.
@@ -115,8 +115,8 @@ Lihat panduan [jasa pembuatan website Tegal](/blog/jasa-pembuatan-website-tegal)
 
 ## Bonus: Setup Analytics
 
-- **Google Analytics 4** — track traffic, source, behavior
-- **Google Search Console** — pantau keyword dan identifikasi error
+- **Google Analytics 4**, track traffic, source, behavior
+- **Google Search Console**, pantau keyword dan identifikasi error
 
 ---
 

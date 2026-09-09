@@ -33,7 +33,7 @@ const statusMap: Record<string, { token: string; label: string }> = {
 
 export default function StatusBadge({ status, className = "" }: StatusBadgeProps) {
   const key = String(status ?? "").toLowerCase().trim();
-  const entry = statusMap[key] ?? { token: "info", label: status || "—" };
+  const entry = statusMap[key] ?? { token: "info", label: status || "-" };
   const token = entry.token;
 
   return (

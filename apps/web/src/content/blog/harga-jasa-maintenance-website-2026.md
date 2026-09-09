@@ -34,7 +34,7 @@ Paket maintenance website profesional umumnya mencakup:
 Update CMS (jika pakai), plugin, tema, dan dependency server ke versi terbaru yang stabil. Ini menambal celah keamanan dan memastikan kompatibilitas.
 
 ### 2. Backup Berkala
-Backup otomatis harian atau mingguan ke penyimpanan terpisah (bukan di server yang sama). Backup ini menyelamatkan data Anda jika terjadi bencana — baik hack, error server, maupun human error.
+Backup otomatis harian atau mingguan ke penyimpanan terpisah (bukan di server yang sama). Backup ini menyelamatkan data Anda jika terjadi bencana, baik hack, error server, maupun human error.
 
 ### 3. Monitoring Keamanan
 Pemindaian malware, deteksi intrusi, firewall aplikasi web (WAF), dan alert dini jika ada aktivitas mencurigakan. Termasuk pemasangan SSL certificate dan force HTTPS.
@@ -70,7 +70,7 @@ Pilih penyedia yang punya track record jelas. Tanyakan website apa saja yang per
 Pastikan proposal menjelaskan cakupan pekerjaan, jalur komunikasi, prioritas penanganan, dan batas tanggung jawab penyedia.
 
 ### 3. Backup Harian adalah Wajib
-Jangan pakai jasa yang hanya backup bulanan. Data adalah aset paling berharga — backup harian otomatis ke lokasi terpisah adalah standar minimum.
+Jangan pakai jasa yang hanya backup bulanan. Data adalah aset paling berharga, backup harian otomatis ke lokasi terpisah adalah standar minimum.
 
 ### 4. Transparansi Laporan
 Penyedia baik akan memberi laporan bulanan: apa yang di-update, status keamanan, uptime percentage, dan performa. Hindari yang "set and forget".
@@ -93,13 +93,13 @@ Bisa, jika Anda punya pengetahuan teknis dan waktu. Tapi ingat: biaya waktu Anda
 Umumnya bulanan (bisa cancel kapan saja) atau tahunan (dengan diskon). Hindari kontrak yang memaksa minimum 1 tahun tanpa opsi keluar.
 
 ### Apakah maintenance termasuk pembuatan fitur baru?
-Biasanya tidak — itu masuk scope "development" terpisah. Tapi beberapa jasa termasuk jam development terbatas (mis. 2 jam/bulan untuk perubahan kecil).
+Biasanya tidak, itu masuk scope "development" terpisah. Tapi beberapa jasa termasuk jam development terbatas (mis. 2 jam/bulan untuk perubahan kecil).
 
 ## Kesimpulan
 
-Maintenance website adalah investasi, bukan biaya. Website yang ter-maintain dengan baik akan lebih aman, cepat, dan reliable — yang berarti lebih banyak visitor, lebih tinggi konversi, dan lebih baik untuk SEO.
+Maintenance website adalah investasi, bukan biaya. Website yang ter-maintain dengan baik akan lebih aman, cepat, dan reliable, yang berarti lebih banyak visitor, lebih tinggi konversi, dan lebih baik untuk SEO.
 
-Mencari jasa maintenance website terpercaya di Indonesia? [Tim Ekalliptus Digital](https://ekalliptus.com/about) menyediakan paket maintenance untuk semua jenis website — dari landing page hingga web app custom. [Konsultasi gratis via WhatsApp](https://ekalliptus.com/order) untuk dapatkan penawaran sesuai kebutuhan website Anda.
+Mencari jasa maintenance website terpercaya di Indonesia? [Tim Ekalliptus Digital](https://ekalliptus.com/about) menyediakan paket maintenance untuk semua jenis website, dari landing page hingga web app custom. [Konsultasi gratis via WhatsApp](https://ekalliptus.com/order) untuk dapatkan penawaran sesuai kebutuhan website Anda.
 
 ---
 

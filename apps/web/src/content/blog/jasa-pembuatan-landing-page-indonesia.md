@@ -19,7 +19,7 @@ Landing page yang dirancang dengan struktur konversi yang benar bisa **melipatga
 
 ## Apa Itu Landing Page?
 
-Landing page adalah halaman web tunggal yang dirancang khusus untuk satu tujuan: **mendorong visitor melakukan satu aksi tertentu** — entah beli, daftar, download, atau hubungi Anda.
+Landing page adalah halaman web tunggal yang dirancang khusus untuk satu tujuan: **mendorong visitor melakukan satu aksi tertentu**, entah beli, daftar, download, atau hubungi Anda.
 
 Berbeda dengan homepage yang punya banyak link dan tujuan, landing page fokus. Itulah mengapa rata-rata landing page mengkonversi 2-5x lebih baik daripada homepage untuk kampanye iklan.
 
@@ -49,10 +49,10 @@ Visitor menentukan tinggal atau pergi dalam 3 detik. Headline harus jelas tentan
 Headline menarik perhatian; subheadline menjelaskan value proposition secara konkret. Kombinasi keduanya harus jawab: "Apa untungnya buat saya?"
 
 ### Visual yang Relevan
-Gambar/video produk atau hasil yang bisa didapat. Hindari stock photo generik — gunakan visual yang relevan dengan penawaran.
+Gambar/video produk atau hasil yang bisa didapat. Hindari stock photo generik, gunakan visual yang relevan dengan penawaran.
 
 ### Call-to-Action (CTA) yang Jelas
-Satu tombol CTA yang menonjol (warna kontras), dengan teks action-oriented: "Mulai Gratis", "Dapatkan Sekarang", "Konsultasi Gratis" — bukan "Submit" atau "Klik".
+Satu tombol CTA yang menonjol (warna kontras), dengan teks action-oriented: "Mulai Gratis", "Dapatkan Sekarang", "Konsultasi Gratis", bukan "Submit" atau "Klik".
 
 ### Social Proof
 Testimoni klien, logo brand yang pernah pakai, jumlah user, rating bintang. Social proof membangun trust dan mengurangi kekhawatiran pembeli.
@@ -67,7 +67,7 @@ Banyak pengunjung mengakses web dari perangkat mobile. Tombol harus mudah disent
 Minta info yang benar-benar perlu. Setiap field tambahan menurunkan konversi. Untuk lead gen: nama + WhatsApp cukup. Untuk checkout: sebisa mungkin minimal.
 
 ### Urgensi/Scarcity (Jika Relevan)
-"Diskon hari ini", "slot terbatas", "bonus untuk 50 pembeli pertama". Gunakan jujur — jangan palsu.
+"Diskon hari ini", "slot terbatas", "bonus untuk 50 pembeli pertama". Gunakan jujur, jangan palsu.
 
 ## Tips Memilih Jasa Pembuatan Landing Page
 
@@ -87,7 +87,7 @@ Landing page tanpa tracking = buta. Pastikan jasa pasang: Google Analytics, Meta
 Landing page jarang sempurna di versi pertama. Pilih jasa yang include revisi atau paket optimasi lanjutan setelah launch.
 
 ### 6. Konsultasi tentang Copy
-Desain bagus tapi copy jelek = konversi rendah. Jasa terbaik akan konsultasi tentang headline, struktur copy, dan positioning — bukan hanya desain visual.
+Desain bagus tapi copy jelek = konversi rendah. Jasa terbaik akan konsultasi tentang headline, struktur copy, dan positioning, bukan hanya desain visual.
 
 ## Landing Page vs Homepage: Kapan Pakai yang Mana?
 

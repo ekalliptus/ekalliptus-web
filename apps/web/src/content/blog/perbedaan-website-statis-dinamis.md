@@ -16,11 +16,11 @@ seo:
 
 Saat hendak membangun website bisnis, salah satu keputusan pertama yang harus dibuat adalah: **website statis atau dinamis?** Keputusan ini mempengaruhi biaya, performa, keamanan, dan kemudahan maintenance website Anda ke depan.
 
-Perbedaan keduanya menentukan biaya, kecepatan akses, dan cara Anda mengelola konten — memilih salah satu tanpa memahami trade-off-nya sering berujung rebuild.
+Perbedaan keduanya menentukan biaya, kecepatan akses, dan cara Anda mengelola konten, memilih salah satu tanpa memahami trade-off-nya sering berujung rebuild.
 
 ## Apa Itu Website Statis?
 
-**Website statis** adalah website yang file-filenya (HTML, CSS, JavaScript) sudah jadi dan dikirim langsung ke browser pengunjung tanpa proses tambahan di server. Kontennya "tetap" — tidak berubah kecuali developer secara manual mengedit kode dan deploy ulang.
+**Website statis** adalah website yang file-filenya (HTML, CSS, JavaScript) sudah jadi dan dikirim langsung ke browser pengunjung tanpa proses tambahan di server. Kontennya "tetap", tidak berubah kecuali developer secara manual mengedit kode dan deploy ulang.
 
 Contoh website statis:
 - Landing page produk
@@ -32,10 +32,10 @@ Contoh website statis:
 
 Website statis modern **bukan berarti sederhana atau ketinggalan zaman**. Framework modern seperti **Astro**, **Hugo**, dan **Eleventy** memungkinkan pembuatan website statis yang canggih dengan fitur seperti:
 
-- **Component-based development** — kode yang modular dan reusable
-- **Markdown support** — tulis konten dalam format yang mudah
-- **Build-time data fetching** — ambil data dari API saat build, bukan saat runtime
-- **Partial hydration** — tambahkan interaktivitas JavaScript hanya di komponen yang membutuhkan
+- **Component-based development**, kode yang modular dan reusable
+- **Markdown support**, tulis konten dalam format yang mudah
+- **Build-time data fetching**, ambil data dari API saat build, bukan saat runtime
+- **Partial hydration**, tambahkan interaktivitas JavaScript hanya di komponen yang membutuhkan
 
 Framework seperti Astro menghasilkan website yang sangat cepat karena mengirim **minimal JavaScript** ke browser.
 
@@ -82,7 +82,7 @@ CMS seperti WordPress menguasai **43% dari semua website di internet** menurut W
 
 Website statis adalah **jenis website tercepat** yang mungkin dibuat. Tidak ada proses database query, server-side rendering, atau PHP execution. File HTML langsung disajikan dari CDN terdekat.
 
-Menurut data WebPageTest, website statis rata-rata memiliki **Time to First Byte (TTFB) di bawah 100ms** — jauh lebih cepat dari website dinamis yang rata-rata 300-800ms.
+Menurut data WebPageTest, website statis rata-rata memiliki **Time to First Byte (TTFB) di bawah 100ms**, jauh lebih cepat dari website dinamis yang rata-rata 300-800ms.
 
 ### 2. Keamanan Tinggi
 
@@ -96,7 +96,7 @@ Platform seperti **Cloudflare Pages**, **Netlify**, dan **Vercel** menyediakan h
 - Bandwidth unlimited
 - Auto-deploy dari Git
 
-Untuk bisnis kecil, ini berarti **Rp 0/bulan** untuk hosting — hanya perlu biaya domain.
+Untuk bisnis kecil, ini berarti **Rp 0/bulan** untuk hosting, hanya perlu biaya domain.
 
 ### 4. Skalabilitas Tanpa Batas
 
@@ -106,7 +106,7 @@ Website statis yang di-deploy via CDN bisa menangani **jutaan pengunjung** tanpa
 
 ### 1. Konten Mudah Diupdate
 
-Admin panel atau CMS memungkinkan siapa saja — bahkan yang tidak bisa coding — untuk menambah, mengedit, atau menghapus konten. Ini penting untuk bisnis yang sering update konten seperti blog, toko online, atau portal berita.
+Admin panel atau CMS memungkinkan siapa saja, bahkan yang tidak bisa coding, untuk menambah, mengedit, atau menghapus konten. Ini penting untuk bisnis yang sering update konten seperti blog, toko online, atau portal berita.
 
 ### 2. Fitur Interaktif Tanpa Batas
 
@@ -138,9 +138,9 @@ Tren modern menggabungkan kekuatan keduanya melalui pendekatan **hybrid** atau *
 Konten di-generate menjadi halaman statis saat build time, tetapi data diambil dari CMS atau database. Hasilnya: **performa statis** dengan **kemudahan update** seperti website dinamis.
 
 Framework yang mendukung pendekatan ini:
-- **Astro** — bisa mix static dan dynamic per halaman
-- **Next.js** — Static Generation + Server Components
-- **Nuxt** — hybrid rendering (static + server)
+- **Astro**, bisa mix static dan dynamic per halaman
+- **Next.js**, Static Generation + Server Components
+- **Nuxt**, hybrid rendering (static + server)
 
 ### Headless CMS
 
@@ -158,7 +158,7 @@ Headless CMS populer:
 
 - Website Anda jarang diupdate (< 1x per minggu)
 - Anda mengutamakan **kecepatan dan keamanan**
-- Budget terbatas — butuh hosting gratis/murah
+- Budget terbatas, butuh hosting gratis/murah
 - Tidak memerlukan fitur login, e-commerce, atau database
 - Konten bisa dikelola oleh developer
 
@@ -184,9 +184,9 @@ Headless CMS populer:
 
 ## Kesimpulan
 
-Tidak ada jawaban universal — pilihan antara statis dan dinamis tergantung pada kebutuhan spesifik bisnis Anda. Yang terpenting adalah memahami **trade-off** masing-masing dan memilih berdasarkan prioritas: performa, kemudahan update, fitur yang dibutuhkan, dan budget.
+Tidak ada jawaban universal, pilihan antara statis dan dinamis tergantung pada kebutuhan spesifik bisnis Anda. Yang terpenting adalah memahami **trade-off** masing-masing dan memilih berdasarkan prioritas: performa, kemudahan update, fitur yang dibutuhkan, dan budget.
 
-Di Ekalliptus, kami menggunakan pendekatan **hybrid modern** dengan framework Astro dan Supabase. Website yang kami bangun mendapat performa website statis dengan kemudahan pengelolaan konten website dinamis — yang terbaik dari kedua dunia.
+Di Ekalliptus, kami menggunakan pendekatan **hybrid modern** dengan framework Astro dan Supabase. Website yang kami bangun mendapat performa website statis dengan kemudahan pengelolaan konten website dinamis, yang terbaik dari kedua dunia.
 
 ## FAQ
 

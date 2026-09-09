@@ -1,6 +1,6 @@
-# Deployment — Cloudflare Workers
+# Deployment, Cloudflare Workers
 
-This project deploys to **Cloudflare Workers** (Static Assets model — **not** Pages)
+This project deploys to **Cloudflare Workers** (Static Assets model, **not** Pages)
 via `wrangler deploy`. The live Worker is named **`ekalliptus`** and serves the
 apex `ekalliptus.com`.
 
@@ -24,7 +24,7 @@ namespace id.
 Server-side env is read via `readEnv()` (`src/lib/runtime-env.ts`), which prefers
 the **Cloudflare runtime env** (secrets set with `wrangler secret`) and falls back
 to the build-inlined `import.meta.env`. So server secrets do **not** need to be in
-the build — they live as Worker secrets and survive `wrangler deploy`.
+the build, they live as Worker secrets and survive `wrangler deploy`.
 
 **Runtime secrets** (already set on the `ekalliptus` Worker via `wrangler secret put`):
 
@@ -39,7 +39,7 @@ the build — they live as Worker secrets and survive `wrangler deploy`.
 `ZAI_API_URL` and `CONSULT_SECRET` have safe in-code defaults; override via
 `wrangler secret put` if needed.
 
-**Build-time only** (must exist at build — Vite inlines them into the client):
+**Build-time only** (must exist at build, Vite inlines them into the client):
 
 | Variable | Notes |
 |---|---|
@@ -78,7 +78,7 @@ Deploy on every push to `main`. One-time dashboard setup:
    - Root directory: `/`
 4. **Build variables**: add the **build-time-only** vars (`VITE_SUPABASE_URL`,
    `VITE_SUPABASE_ANON_KEY`, `PUBLIC_*`, `PUBLIC_URL`). The server runtime secrets
-   (Supabase/ZAI) are already set as Worker secrets and persist across deploys —
+   (Supabase/ZAI) are already set as Worker secrets and persist across deploys,
    they do **not** need to be build variables.
 5. Save. Push to `main` → Cloudflare builds and deploys automatically.
 

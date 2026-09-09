@@ -27,7 +27,7 @@
   },
   "index": {
     "intro": {
-      "title": "ekalliptus — Öncü Dijital Çözümler",
+      "title": "ekalliptus: Öncü Dijital Çözümler",
       "subtitle": "Modern işletmeniz için dijital dönüşüm yapmak mı istiyorsunuz? Ya da daha profesyonel bir web sitesi geliştirmek mi?"
     },
     "about": {
@@ -443,7 +443,7 @@
     "services": {
       "eyebrow": "Our Services",
       "title": "Complete digital solutions in one place",
-      "subtitle": "From idea to launch — we handle every stage to a professional standard.",
+      "subtitle": "From idea to launch, we handle every stage to a professional standard.",
       "featureTitle": "End-to-End Digital Solutions",
       "featureDesc": "Strategy, design, and development in one team. Consistent, measurable results, ready to grow with your business.",
       "featureCta": "Start your project",

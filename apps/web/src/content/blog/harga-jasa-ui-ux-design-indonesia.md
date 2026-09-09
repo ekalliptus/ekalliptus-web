@@ -17,7 +17,7 @@ seo:
 
 ## Berapa Harga Jasa UI/UX Design di Indonesia?
 
-Jawabannya **bervariasi luas** — mulai Rp 500 ribu untuk wireframe sederhana hingga ratusan juta untuk design system enterprise. Artikel ini membahas detail breakdown harga dan tips memilih designer yang tepat.
+Jawabannya **bervariasi luas**, mulai Rp 500 ribu untuk wireframe sederhana hingga ratusan juta untuk design system enterprise. Artikel ini membahas detail breakdown harga dan tips memilih designer yang tepat.
 
 ---
 
@@ -55,19 +55,19 @@ Jawabannya **bervariasi luas** — mulai Rp 500 ribu untuk wireframe sederhana h
 
 ## Breakdown Harga per Fase
 
-### Fase 1: Discovery & Research — Rp 1 - 5 juta
+### Fase 1: Discovery & Research, Rp 1 - 5 juta
 Stakeholder interview, competitor analysis, user persona, user journey mapping.
 
-### Fase 2: Information Architecture — Rp 500rb - 3 juta
+### Fase 2: Information Architecture, Rp 500rb - 3 juta
 Sitemap, user flow diagrams, wireframe rendah-fidelity.
 
-### Fase 3: UI Design — Rp 2 - 15 juta
+### Fase 3: UI Design, Rp 2 - 15 juta
 Mood board, high-fidelity mockup, component library, 3 ronde revisi.
 
-### Fase 4: Prototyping — Rp 1 - 5 juta
+### Fase 4: Prototyping, Rp 1 - 5 juta
 Interactive prototype di Figma, micro-interactions, animation references.
 
-### Fase 5: Design System — Rp 3 - 20 juta
+### Fase 5: Design System, Rp 3 - 20 juta
 Design tokens, component library lengkap, dokumentasi, dev handoff specs.
 
 ---
@@ -82,21 +82,21 @@ Design tokens, component library lengkap, dokumentasi, dev handoff specs.
 
 ## Tips Memilih Designer UI/UX
 
-1. **Lihat case study, bukan hanya Dribbble** — minta lihat problem + process + results
-2. **Cek skill beyond visual** — UX research, design system thinking, dev handoff fluency
-3. **Communication match** — designer harus bisa explain reasoning
-4. **Tools yang digunakan** — default modern adalah Figma
-5. **Cek reference klien** — bukan hanya testimoni di website mereka
+1. **Lihat case study, bukan hanya Dribbble**, minta lihat problem + process + results
+2. **Cek skill beyond visual**, UX research, design system thinking, dev handoff fluency
+3. **Communication match**, designer harus bisa explain reasoning
+4. **Tools yang digunakan**, default modern adalah Figma
+5. **Cek reference klien**, bukan hanya testimoni di website mereka
 
 ---
 
 ## Hidden Costs yang Sering Terlewat
 
-1. Stock photo/illustrations — Rp 100rb - 1 juta
-2. Custom icon set — Rp 500rb - 3 juta
-3. Animasi/Lottie — Rp 500rb - 5 juta
-4. Revisi tambahan — Rp 500rb - 2 juta per ronde
-5. Source file handover — kadang ada extra fee
+1. Stock photo/illustrations, Rp 100rb - 1 juta
+2. Custom icon set, Rp 500rb - 3 juta
+3. Animasi/Lottie, Rp 500rb - 5 juta
+4. Revisi tambahan, Rp 500rb - 2 juta per ronde
+5. Source file handover, kadang ada extra fee
 
 ---
 
@@ -105,7 +105,7 @@ Design tokens, component library lengkap, dokumentasi, dev handoff specs.
 ROI UI/UX yang baik datang dari:
 - **Conversion rate naik 20-50%** dari website well-designed
 - **User retention naik 30%+** dari app dengan UX baik
-- **Reduced development time** — design jelas = developer tidak rework
+- **Reduced development time**, design jelas = developer tidak rework
 
 ---
 

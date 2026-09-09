@@ -52,7 +52,7 @@ Lihat **`docs/SETUP.md`** (atau sesuai project) untuk langkah detail. Urutan sin
 
 ### Keamanan & secret
 - **Service-role key HANYA** boleh dipakai di `src/pages/api/**` (lihat `createSupabaseAdmin`).
-- `import.meta.env.PUBLIC_*` dibaca **saat build** — taruh di `.env.production` (anon key aman di-commit, RLS-guarded).
+- `import.meta.env.PUBLIC_*` dibaca **saat build**, taruh di `.env.production` (anon key aman di-commit, RLS-guarded).
 - **Secret** (`SUPABASE_SERVICE_ROLE_KEY`, `CF_DEPLOY_HOOK_URL`, `CRON_SECRET`)
   via `wrangler secret put`, **jangan pernah** taruh di `wrangler.jsonc` atau `.env.production`.
 - Cron secret HANYA via header `X-Cron-Secret`, **jangan** query string (ke-log di akses Cloudflare).
@@ -127,10 +127,10 @@ src/worker.ts                       # Astro fetch + scheduled() cron handler
 src/lib/supabase/admin.ts           # createSupabaseAdmin (server-only, service role)
 src/lib/supabase/server.ts          # SSR Supabase client (cookies)
 src/lib/supabase/browser.ts         # browser Supabase client (admin islands)
-src/lib/supabase/types.ts           # generated Database types — regenerate, jangan edit manual
+src/lib/supabase/types.ts           # generated Database types, regenerate, jangan edit manual
 src/lib/supabase/env.ts             # resolveEnv: workers runtime vs import.meta.env
 src/lib/security.ts                 # passwordStrengthError, sanitasi input
-src/lib/sanitize.ts                 # sanitizeArticleHtml — DOMPurify/sanitize-html policy
+src/lib/sanitize.ts                 # sanitizeArticleHtml, DOMPurify/sanitize-html policy
 src/lib/activity.ts                 # recordActivity (audit log, wajib di setiap mutasi)
 src/layouts/Layout.astro            # global head: SEO meta, OG, Twitter, GA4, verifikasi
 src/styles/tailwind.css             # shadcn tokens (--background, --primary, dll) + light/dark

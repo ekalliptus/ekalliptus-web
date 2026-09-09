@@ -20,9 +20,9 @@ Salah pilih hosting atau domain berarti bayar dua kali: sekali migrasi, sekali p
 
 ## Apa Itu Hosting dan Domain?
 
-**Domain** adalah alamat website Anda di internet — misalnya `ekalliptus.com`. Domain berfungsi seperti alamat rumah yang memudahkan orang menemukan website Anda. Tanpa domain, pengunjung harus mengingat deretan angka IP address seperti `104.21.56.78`.
+**Domain** adalah alamat website Anda di internet, misalnya `ekalliptus.com`. Domain berfungsi seperti alamat rumah yang memudahkan orang menemukan website Anda. Tanpa domain, pengunjung harus mengingat deretan angka IP address seperti `104.21.56.78`.
 
-**Hosting** adalah tempat penyimpanan semua file website Anda — kode, gambar, database, dan konten. Hosting ibarat tanah dan bangunan tempat website Anda "tinggal". Saat seseorang mengakses domain Anda, browser mereka terhubung ke server hosting untuk mengambil dan menampilkan website.
+**Hosting** adalah tempat penyimpanan semua file website Anda, kode, gambar, database, dan konten. Hosting ibarat tanah dan bangunan tempat website Anda "tinggal". Saat seseorang mengakses domain Anda, browser mereka terhubung ke server hosting untuk mengambil dan menampilkan website.
 
 Keduanya saling melengkapi: domain tanpa hosting tidak bisa menampilkan apa-apa, hosting tanpa domain sulit diakses pengunjung.
 
@@ -66,9 +66,9 @@ Keduanya saling melengkapi: domain tanpa hosting tidak bisa menampilkan apa-apa,
 **Cloud hosting** menggunakan jaringan server yang terdistribusi. Website Anda berjalan di multiple server, sehingga jika satu server bermasalah, server lain mengambil alih secara otomatis.
 
 **Kelebihan:**
-- **Uptime tinggi** — redundansi server otomatis
-- **Scalable** — resource bisa ditambah atau dikurangi sesuai kebutuhan
-- **Pay-as-you-go** — bayar sesuai pemakaian
+- **Uptime tinggi**, redundansi server otomatis
+- **Scalable**, resource bisa ditambah atau dikurangi sesuai kebutuhan
+- **Pay-as-you-go**, bayar sesuai pemakaian
 - Performa konsisten meski traffic fluktuatif
 
 **Kekurangan:**
@@ -104,10 +104,10 @@ Hindari domain yang terlalu panjang atau menggunakan angka dan tanda hubung berl
 
 ### 2. Pilih Ekstensi yang Tepat
 
-- **.com** — pilihan universal, paling dipercaya (tersedia global)
-- **.co.id** — untuk bisnis Indonesia yang terdaftar resmi
-- **.id** — domain Indonesia yang lebih modern dan pendek
-- **.store** — cocok untuk toko online
+- **.com**, pilihan universal, paling dipercaya (tersedia global)
+- **.co.id**, untuk bisnis Indonesia yang terdaftar resmi
+- **.id**, domain Indonesia yang lebih modern dan pendek
+- **.store**, cocok untuk toko online
 
 ### 3. Sesuaikan dengan Brand
 
@@ -174,14 +174,14 @@ Untuk website yang dibangun dengan framework modern seperti Astro atau Next.js, 
 
 ## Langkah Memulai: Beli Domain dan Hosting
 
-1. **Tentukan kebutuhan** — estimasi traffic, jenis website, budget
-2. **Pilih nama domain** — cek ketersediaan di Namecheap, Niagahoster, atau registrar lain
-3. **Pilih paket hosting** — mulai dari shared jika baru memulai, upgrade nanti
-4. **Setup DNS** — arahkan domain ke server hosting Anda
-5. **Install SSL** — aktifkan HTTPS untuk keamanan
-6. **Bangun website** — gunakan CMS atau hire developer profesional
+1. **Tentukan kebutuhan**, estimasi traffic, jenis website, budget
+2. **Pilih nama domain**, cek ketersediaan di Namecheap, Niagahoster, atau registrar lain
+3. **Pilih paket hosting**, mulai dari shared jika baru memulai, upgrade nanti
+4. **Setup DNS**, arahkan domain ke server hosting Anda
+5. **Install SSL**, aktifkan HTTPS untuk keamanan
+6. **Bangun website**, gunakan CMS atau hire developer profesional
 
-Di Ekalliptus, kami membantu klien dari tahap pemilihan hosting dan domain hingga website live. Layanan web development kami sudah termasuk setup hosting, konfigurasi domain, dan SSL — Anda tinggal fokus pada konten bisnis.
+Di Ekalliptus, kami membantu klien dari tahap pemilihan hosting dan domain hingga website live. Layanan web development kami sudah termasuk setup hosting, konfigurasi domain, dan SSL, Anda tinggal fokus pada konten bisnis.
 
 ## FAQ
 

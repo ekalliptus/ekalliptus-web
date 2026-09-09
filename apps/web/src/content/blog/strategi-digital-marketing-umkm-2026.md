@@ -14,7 +14,7 @@ seo:
   metaDescription: 'Panduan digital marketing untuk UMKM Indonesia 2026: SEO, social media, Google Ads, content marketing. Strategi efektif dengan budget terbatas.'
 ---
 
-Indonesia memiliki lebih dari **64 juta UMKM** yang berkontribusi terhadap 61% PDB nasional menurut data Kementerian Koperasi dan UKM. Namun, baru sekitar **20% yang sudah go digital** — artinya jutaan UMKM masih kehilangan potensi pasar online yang besar.
+Indonesia memiliki lebih dari **64 juta UMKM** yang berkontribusi terhadap 61% PDB nasional menurut data Kementerian Koperasi dan UKM. Namun, baru sekitar **20% yang sudah go digital**, artinya jutaan UMKM masih kehilangan potensi pasar online yang besar.
 
 Untuk 20 persen UMKM yang sudah go digital, digital marketing adalah kanal penjualan utama dengan **budget** yang bisa diatur dari kecil. Strategi berikut disusun berdasarkan prioritas dampak, bukan tren.
 
@@ -42,7 +42,7 @@ Melalui social media dan email marketing, UMKM bisa membangun hubungan berkelanj
 
 **SEO** adalah strategi untuk meningkatkan visibilitas website Anda di hasil pencarian Google secara organik (gratis). Menurut data BrightEdge, **68% pengalaman online dimulai dari mesin pencari**.
 
-#### Local SEO — Kunci untuk UMKM
+#### Local SEO, Kunci untuk UMKM
 
 Bagi UMKM yang melayani area lokal, **Local SEO** adalah investasi paling bernilai. Langkah-langkah utama:
 
@@ -53,9 +53,9 @@ Bagi UMKM yang melayani area lokal, **Local SEO** adalah investasi paling bernil
 #### Riset Keyword
 
 Temukan kata kunci yang dicari calon pelanggan Anda menggunakan tools gratis:
-- **Google Keyword Planner** — estimasi volume pencarian
-- **Google Trends** — tren pencarian dari waktu ke waktu
-- **AnswerThePublic** — pertanyaan yang sering dicari orang
+- **Google Keyword Planner**, estimasi volume pencarian
+- **Google Trends**, tren pencarian dari waktu ke waktu
+- **AnswerThePublic**, pertanyaan yang sering dicari orang
 
 Fokus pada **long-tail keyword** yang spesifik. Contoh: "jasa pembuatan website Tegal" lebih mudah diranking daripada "jasa website".
 
@@ -96,7 +96,7 @@ Dengan **191 juta pengguna social media** di Indonesia (We Are Social 2025), pla
 
 ### 4. Google Ads & Meta Ads
 
-Iklan berbayar memberikan hasil yang cepat — cocok untuk UMKM yang butuh **revenue segera** sambil membangun SEO jangka panjang.
+Iklan berbayar memberikan hasil yang cepat, cocok untuk UMKM yang butuh **revenue segera** sambil membangun SEO jangka panjang.
 
 #### Google Ads
 
@@ -174,11 +174,11 @@ Posting di social media tanpa rencana adalah membuang waktu. Buat **content cale
 
 ### 2. Tidak Konsisten
 
-Posting aktif selama 2 minggu lalu hilang selama sebulan. Konsistensi lebih penting dari frekuensi — lebih baik posting 3x seminggu secara rutin daripada setiap hari selama seminggu lalu berhenti.
+Posting aktif selama 2 minggu lalu hilang selama sebulan. Konsistensi lebih penting dari frekuensi, lebih baik posting 3x seminggu secara rutin daripada setiap hari selama seminggu lalu berhenti.
 
 ### 3. Tidak Memiliki Website
 
-Social media saja tidak cukup. Website adalah **aset digital yang Anda miliki** — algoritma social media bisa berubah kapan saja. Website memberikan kredibilitas, kontrol penuh atas konten, dan pondasi untuk SEO.
+Social media saja tidak cukup. Website adalah **aset digital yang Anda miliki**, algoritma social media bisa berubah kapan saja. Website memberikan kredibilitas, kontrol penuh atas konten, dan pondasi untuk SEO.
 
 ### 4. Mengabaikan Data
 
@@ -188,7 +188,7 @@ Jangan asal menebak apa yang berhasil. Gunakan **Google Analytics** (gratis) unt
 
 Digital marketing untuk UMKM tidak harus rumit atau mahal. Mulai dari fondasi: **website profesional + Google Business Profile + 1 social media yang aktif**. Dari situ, kembangkan secara bertahap berdasarkan data dan hasil yang Anda lihat.
 
-Di Ekalliptus, kami membantu UMKM membangun kehadiran digital yang kuat — dimulai dari website profesional yang SEO-optimized sebagai fondasi semua strategi digital marketing Anda.
+Di Ekalliptus, kami membantu UMKM membangun kehadiran digital yang kuat, dimulai dari website profesional yang SEO-optimized sebagai fondasi semua strategi digital marketing Anda.
 
 ## FAQ
 

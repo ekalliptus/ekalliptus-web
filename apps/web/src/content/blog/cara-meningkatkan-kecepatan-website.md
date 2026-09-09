@@ -22,7 +22,7 @@ Website yang lambat membuat pengunjung frustrasi, dan Google secara aktif menuru
 
 ### Dampak pada SEO
 
-Sejak 2021, Google menggunakan **Core Web Vitals** sebagai faktor ranking. Website yang lambat secara langsung kehilangan posisi di hasil pencarian. Menurut data Searchmetrics, website di **posisi 1 Google** rata-rata memiliki waktu loading **1.65 detik** — hampir 2x lebih cepat dari website di posisi 10.
+Sejak 2021, Google menggunakan **Core Web Vitals** sebagai faktor ranking. Website yang lambat secara langsung kehilangan posisi di hasil pencarian. Menurut data Searchmetrics, website di **posisi 1 Google** rata-rata memiliki waktu loading **1.65 detik**, hampir 2x lebih cepat dari website di posisi 10.
 
 ### Dampak pada User Experience
 
@@ -54,7 +54,7 @@ Google mengukur performa website melalui tiga metrik utama:
 
 - **LCP (Largest Contentful Paint)**: Waktu yang dibutuhkan untuk menampilkan elemen terbesar di viewport. Target: **di bawah 2.5 detik**.
 - **INP (Interaction to Next Paint)**: Waktu respons website terhadap interaksi pengguna (klik, tap, ketik). Target: **di bawah 200ms**.
-- **CLS (Cumulative Layout Shift)**: Stabilitas visual — seberapa banyak elemen "bergeser" saat halaman loading. Target: **di bawah 0.1**.
+- **CLS (Cumulative Layout Shift)**: Stabilitas visual, seberapa banyak elemen "bergeser" saat halaman loading. Target: **di bawah 0.1**.
 
 ## 10 Cara Meningkatkan Kecepatan Website
 
@@ -88,9 +88,9 @@ Konfigurasi optimal menggunakan **Cache-Control header**:
 **CDN** mendistribusikan konten website Anda ke server-server yang tersebar di seluruh dunia. Pengunjung akan mengakses server terdekat dengan lokasi mereka, mengurangi latency secara drastis.
 
 CDN populer untuk website Indonesia:
-- **Cloudflare** — gratis untuk paket dasar, server di Jakarta
-- **BunnyCDN** — harga terjangkau per GB
-- **AWS CloudFront** — untuk website enterprise
+- **Cloudflare**, gratis untuk paket dasar, server di Jakarta
+- **BunnyCDN**, harga terjangkau per GB
+- **AWS CloudFront**, untuk website enterprise
 
 Menggunakan CDN bisa mengurangi latency **50-70%** untuk pengunjung yang jauh dari server utama.
 
@@ -116,7 +116,7 @@ Untuk website dinamis (WordPress, aplikasi web), database yang tidak teroptimasi
 - **Hapus data yang tidak perlu**: revisi post lama, komentar spam, transient options
 - **Tambahkan index** pada kolom yang sering di-query
 - **Gunakan caching layer** seperti Redis atau Memcached
-- **Optimasi query** — hindari SELECT * dan gunakan pagination
+- **Optimasi query**, hindari SELECT * dan gunakan pagination
 
 ### 8. Pilih Hosting yang Tepat
 
@@ -140,7 +140,7 @@ Resource yang **render-blocking** mencegah browser menampilkan konten sampai fil
 
 Framework web modern dirancang dengan performa sebagai prioritas:
 
-- **Astro**: Menghasilkan HTML statis dengan partial hydration — hanya mengirim JavaScript yang benar-benar dibutuhkan
+- **Astro**: Menghasilkan HTML statis dengan partial hydration, hanya mengirim JavaScript yang benar-benar dibutuhkan
 - **Next.js**: Static Generation (SSG) dan Incremental Static Regeneration (ISR)
 - **SvelteKit**: Kompilasi ke vanilla JavaScript tanpa runtime overhead
 
@@ -160,7 +160,7 @@ Website yang dibangun dengan Astro bisa mencapai skor **PageSpeed 95-100** denga
 
 ## Kesimpulan
 
-Meningkatkan kecepatan website bukan proyek sekali jadi — ini proses berkelanjutan. Mulai dari langkah yang memberikan dampak terbesar: **optimasi gambar, aktifkan caching, dan gunakan CDN**. Ketiga langkah ini saja bisa meningkatkan kecepatan website Anda secara signifikan.
+Meningkatkan kecepatan website bukan proyek sekali jadi, ini proses berkelanjutan. Mulai dari langkah yang memberikan dampak terbesar: **optimasi gambar, aktifkan caching, dan gunakan CDN**. Ketiga langkah ini saja bisa meningkatkan kecepatan website Anda secara signifikan.
 
 Di Ekalliptus, setiap website yang kami bangun sudah dioptimasi untuk performa maksimal. Kami menggunakan framework Astro dengan Cloudflare CDN, menghasilkan website yang secara konsisten mendapat skor PageSpeed di atas 90.
 
@@ -168,7 +168,7 @@ Di Ekalliptus, setiap website yang kami bangun sudah dioptimasi untuk performa m
 
 ### Berapa skor PageSpeed yang ideal?
 
-Skor **90-100** dianggap excellent, **50-89** butuh perbaikan, dan **di bawah 50** menandakan masalah serius. Untuk SEO, targetkan minimal skor **75** di mobile — Google lebih mengutamakan performa mobile.
+Skor **90-100** dianggap excellent, **50-89** butuh perbaikan, dan **di bawah 50** menandakan masalah serius. Untuk SEO, targetkan minimal skor **75** di mobile, Google lebih mengutamakan performa mobile.
 
 ### Apakah menggunakan banyak plugin WordPress memperlambat website?
 

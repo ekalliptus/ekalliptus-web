@@ -79,7 +79,7 @@ function slugify(input: string): string {
     // ignore
   }
 
-  // 3) Prepare file list — auto-detect all .md files
+  // 3) Prepare file list, auto-detect all .md files
   const { readdirSync } = await import('fs')
   const safeFilenameRe = /^[a-z0-9-]+\.md$/i
   const files = readdirSync(postsDir).filter((f: string) => safeFilenameRe.test(f))
