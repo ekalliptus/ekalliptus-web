@@ -68,9 +68,14 @@ async function enforceDistributedLimit(ctx: { request?: Request; url: URL }): Pr
 }
 
 // Content never varies by query string (tracking params aside), so the cache
-// key is origin+pathname only — otherwise UTMs would fragment the cache.
+// key is origin+pathname+build id — the baked-in build id orphans every cached
+// entry from the previous deploy, preventing stale HTML that references
+// replaced asset hashes.
 function cacheKey(ctx: { url: URL }): Request {
-  return new Request(ctx.url.origin + ctx.url.pathname, { method: 'GET' })
+  // typeof guard keeps this safe outside vite (e.g. vitest), where the
+  // define replacement never runs.
+  const buildId = typeof __BUILD_ID__ === 'string' ? __BUILD_ID__ : 'dev'
+  return new Request(`${ctx.url.origin}${ctx.url.pathname}#__v:${buildId}`, { method: 'GET' })
 }
 
 async function cacheGet(ctx: { request?: Request; url: URL }): Promise<Response | null> {

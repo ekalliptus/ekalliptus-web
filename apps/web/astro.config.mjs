@@ -11,6 +11,11 @@ export default defineConfig({
   }),
   site: 'https://ekalliptus.com',
   vite: {
+    // Baked at build time; the edge-cache key includes it so a new deploy
+    // never matches cached HTML that references assets from the old bundle.
+    define: {
+      __BUILD_ID__: JSON.stringify(Date.now().toString(36))
+    },
     build: {
       cssMinify: true,
       minify: 'terser',

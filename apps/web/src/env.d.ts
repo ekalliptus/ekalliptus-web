@@ -3,6 +3,9 @@
 export {}
 
 declare global {
+  // Baked by vite define in astro.config.mjs at build time.
+  const __BUILD_ID__: string
+
   namespace App {
     interface Locals {
       adminSession?: import('@ekalliptus/core').AdminSession
