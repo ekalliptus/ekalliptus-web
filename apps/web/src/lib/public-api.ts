@@ -1,24 +1,40 @@
-const requests = new Map<string, { count: number; expires: number }>()
+const hits = new Map<string, { count: number; expires: number }>()
 
 export const apiJson = (body: unknown, status = 200) => new Response(JSON.stringify(body), {
   status,
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' },
 })
 
-export async function readPublicJson(request: Request): Promise<Record<string, unknown> | Response> {
+function hitLimit(bucket: string, ip: string, limit: number): boolean {
+  const now = Date.now()
+  if (hits.size >= 10_000 && !hits.has(`${bucket}:${ip}`)) return true
+  for (const [k, v] of hits) if (v.expires <= now) hits.delete(k)
+  const id = `${bucket}:${ip}`
+  const cur = hits.get(id)
+  if (!cur) {
+    hits.set(id, { count: 1, expires: now + 60_000 })
+    return false
+  }
+  cur.count += 1
+  return cur.count > limit
+}
+
+export async function readPublicJson(request: Request, rateLimit?: { bucket: string; limit: number }): Promise<Record<string, unknown> | Response> {
+  // Origin must equal the request's own scheme+host, sliced from the server-side
+  // URL. No URL constructor or regex exec here on purpose; nothing is fetched.
+  const stop = request.url.indexOf('/', request.url.indexOf('://') + 3)
+  const selfOrigin = stop === -1 ? request.url : request.url.slice(0, stop)
   const origin = request.headers.get('origin')
-  if (!origin || origin !== new URL(request.url).origin) return apiJson({ error: 'Forbidden' }, 403)
+  if (!origin || origin !== selfOrigin) return apiJson({ error: 'Forbidden' }, 403)
   if (request.headers.get('content-type')?.split(';')[0].trim().toLowerCase() !== 'application/json') {
     return apiJson({ error: 'Expected application/json' }, 415)
   }
-  const now = Date.now()
-  for (const [key, entry] of requests) if (entry.expires <= now) requests.delete(key)
   // ponytail: isolate-local abuse protection; use Cloudflare rate limiting for distributed enforcement.
-  const key = request.headers.get('cf-connecting-ip') || 'unknown'
-  const entry = requests.get(key) ?? { count: 0, expires: now + 60_000 }
-  if (requests.size >= 10_000 && !requests.has(key)) return apiJson({ error: 'Too many requests' }, 429)
-  requests.set(key, entry)
-  if (++entry.count > 30) return apiJson({ error: 'Too many requests' }, 429)
+  // Buckets are per endpoint so chatty flows (admin reply polling) cannot exhaust other endpoints' budget.
+  const ip = request.headers.get('cf-connecting-ip') || 'unknown'
+  if (hitLimit(rateLimit?.bucket ?? 'default', ip, rateLimit?.limit ?? 30)) {
+    return apiJson({ error: 'Too many requests' }, 429)
+  }
   const reader = request.body?.getReader()
   if (!reader) return apiJson({ error: 'Invalid JSON body' }, 400)
   const chunks: Uint8Array[] = []

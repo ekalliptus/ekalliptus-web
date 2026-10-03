@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it, vi } from 'vitest'
 import { readPublicJson, validSession, validText } from '../lib/public-api'
-import { readFileSync } from 'node:fs'
+import { formatChatResponse } from '../lib/chat-format'
 
 const request = (body = '{}', headers: Record<string, string> = {}) => new Request('https://ekalliptus.com/api/order', {
   method: 'POST', headers: { origin: 'https://ekalliptus.com', 'content-type': 'application/json', 'cf-connecting-ip': crypto.randomUUID(), ...headers }, body,
@@ -39,10 +39,6 @@ describe('public API boundary', () => {
     expect(validSession('victim-session')).toBe(false)
   })
   it('escapes AI/admin output before adding formatting', () => {
-    const widget = readFileSync(new URL('../components/ConsultationDialog.astro', import.meta.url), 'utf8')
-    const escapeHtml = (value: string) => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-    const source = widget.match(/function formatResponse\(text: string\) \{([\s\S]*?)\n  \}/)![1]
-    const format = new Function('text', 'escapeHtml', source)
-    expect(format('<img src=x onerror=alert(1)> **safe**', escapeHtml)).toBe('&lt;img src=x onerror=alert(1)&gt; <strong>safe</strong>')
+    expect(formatChatResponse('<img src=x onerror=alert(1)> **safe**')).toBe('&lt;img src=x onerror=alert(1)&gt; <strong>safe</strong>')
   })
 })

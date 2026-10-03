@@ -44,17 +44,10 @@
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
-/chunks/*
-  Cache-Control: public, max-age=31536000, immutable
-
 # ── Self-hosted fonts, immutable ────────────────────────────────────────────
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
   Access-Control-Allow-Origin: *
-
-# ── Vendor scripts (three.js, vanta), immutable ────────────────────────────
-/vendor/*
-  Cache-Control: public, max-age=31536000, immutable
 
 # ── Service worker, must revalidate every time ──────────────────────────────
 /sw.js
@@ -81,11 +74,12 @@
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 
 # ── Blog SVGs, immutable (content never changes once deployed) ──────────────
-/blog/*.svg
-  Cache-Control: public, max-age=31536000, immutable
-
+# Must precede the broader /*.svg rule: Cloudflare applies the last match.
 /*.svg
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/blog/*.svg
+  Cache-Control: public, max-age=31536000, immutable
 
 # ── Sitemap & feeds ──────────────────────────────────────────────────────────
 /*.xml

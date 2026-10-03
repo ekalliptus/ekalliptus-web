@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import '../../styles/prose.css'
-import { fetchPostBySlug, fetchPublishedPosts, normalizeBlogImage } from '../../lib/supabase'
+import { fetchPostBySlug, fetchPublishedPostSummaries, normalizeBlogImage } from '../../lib/supabase'
 import { blogPath, relatedPosts, tagPath } from '../../lib/blog'
 import { getLocaleFromRequest, getDir } from '../../i18n'
 import Navigation from '../../components/Navigation.astro'
@@ -89,17 +89,24 @@ const breadcrumbSchema = {
 }
 
 const headingIdRe = /<(h[2-4])([^>]*)>([\s\S]*?)<\/\1>/gi
+// Keep unicode word characters so non-Latin headings (Cyrillic, CJK, Arabic,
+// Thai, ...) still produce readable ids; fall back to h-<index> when nothing
+// survives so the id is never empty. Index counts generated ids only, which
+// keeps fallbacks unique and stable per page.
+let generatedHeadingCount = 0
 const processedHtml = (post.body_html || '').replace(headingIdRe, (match, tag, attrs, inner) => {
   if (/\bid\s*=/.test(attrs)) return match
   const text = inner.replace(/<[^>]*>/g, '').trim()
-  const id = text.toLowerCase().replace(/[^a-z0-9\u00C0-\u024F\s-]/g, '').replace(/\s+/g, '-').replace(/(^-|-$)/g, '')
+  const slug = text.toLowerCase().replace(/[^a-z0-9\u00C0-\u024F\u0370-\u1FFF\u3040-\uD7FF\s-]/gi, '').replace(/\s+/g, '-').replace(/(^-|-$)/g, '')
+  generatedHeadingCount += 1
+  const id = slug || `h-${generatedHeadingCount}`
   return `<${tag}${attrs} id="${id}">${inner}</${tag}>`
 })
 
 // Wrap tables in a scroll container so wide comparison tables stay usable on mobile.
 const tableWrappedHtml = processedHtml.replace(/<table[\s\S]*?<\/table>/g, (m) => `<div class="table-wrap">${m}</div>`)
 
-const relatedResult = await fetchPublishedPosts('id', 6)
+const relatedResult = await fetchPublishedPostSummaries('id', 6)
 const related = relatedResult.status === 'ok' ? relatedPosts(postData, relatedResult.data) : []
 
 const processedTocHeadings: Array<{ depth: number; slug: string; text: string }> = []
@@ -142,7 +149,7 @@ while ((tocMatch = tocRe.exec(processedHtml)) !== null) {
   <div id="reading-progress-bar" class="fixed top-0 left-0 h-1 bg-primary z-[100] transition-all duration-150" style="width:0%"></div>
   <Navigation t={(key: string) => t(key, locale)} currentLang={locale} />
 
-  <main class="article-page container mx-auto px-4 pt-24 pb-6">
+  <main id="main-content" class="article-page container mx-auto px-4 pt-24 pb-6">
     <!-- Article Header -->
     <section class="article-header px-4 py-6 sm:py-8 md:py-10">
       <div class="mx-auto max-w-5xl">
@@ -299,32 +306,12 @@ while ((tocMatch = tocRe.exec(processedHtml)) !== null) {
       <nav aria-label="Daftar isi">{processedTocHeadings.map(h => <a href={`#${h.slug}`} class="toc-link">{h.text}</a>)}</nav>
     </details>}
 
-    <!-- Floating WhatsApp CTA with greeting -->
+    <!-- Floating WhatsApp CTA -->
     <div id="wa-floating" class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
-      <div id="wa-greeting" class="wa-greeting bg-white text-gray-800 rounded-xl rounded-br-sm px-4 py-3 shadow-lg text-sm max-w-[260px] leading-relaxed">
-        <button id="wa-greeting-close" class="absolute -top-2 -right-2 bg-gray-200 hover:bg-gray-300 rounded-full w-5 h-5 flex items-center justify-center text-xs text-gray-600" aria-label="Tutup">&times;</button>
-        <p class="font-semibold text-green-600 mb-1">Halo!</p>
-        <p>Ada yang bisa kami bantu? Konsultasi gratis seputar kebutuhan digital Anda.</p>
-      </div>
       <a href={waLink('Halo Ekalliptus, saya baru membaca artikel di blog dan ingin konsultasi lebih lanjut.')} target="_blank" rel="noopener noreferrer" class="rounded-full bg-green-500 hover:bg-green-600 text-white p-3.5 shadow-lg transition-all hover:scale-110" aria-label="Chat via WhatsApp">
         <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       </a>
     </div>
-
-    <style>
-      .wa-greeting {
-        position: relative;
-        animation: waSlideIn 0.4s ease-out;
-        transform-origin: bottom right;
-      }
-      .wa-greeting.wa-hidden {
-        display: none;
-      }
-      @keyframes waSlideIn {
-        from { opacity: 0; transform: translateY(10px) scale(0.95); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
-      }
-    </style>
 
     <!-- Client-side script -->
     <script is:inline>
@@ -342,7 +329,7 @@ while ((tocMatch = tocRe.exec(processedHtml)) !== null) {
 
       // Scroll-spy: highlight the TOC entry for the section currently in view.
       if (tocLinks.length > 0 && 'IntersectionObserver' in window) {
-        const headingEls = Array.from(document.querySelectorAll('.prose h2[id], .prose h3[id]'))
+        const headingEls = Array.from(document.querySelectorAll('.prose h2[id], .prose h3[id], .prose h4[id]'))
         const linkForId = new Map()
         tocLinks.forEach(l => {
           const id = l.getAttribute('href')?.slice(1)
@@ -358,26 +345,6 @@ while ((tocMatch = tocRe.exec(processedHtml)) !== null) {
           tocLinks.forEach(l => l.classList.toggle('toc-active', l.getAttribute('href') === `#${activeId}`))
         }, { rootMargin: '-15% 0px -70% 0px' })
         headingEls.forEach(h => spy.observe(h))
-      }
-
-      // WhatsApp greeting popup
-      const waGreeting = document.getElementById('wa-greeting')
-      const waClose = document.getElementById('wa-greeting-close')
-      const waKey = 'wa_greeting_dismissed'
-      if (waGreeting) {
-        if (sessionStorage.getItem(waKey)) {
-          waGreeting.classList.add('wa-hidden')
-        } else {
-          waGreeting.classList.add('wa-hidden')
-          setTimeout(() => { waGreeting.classList.remove('wa-hidden') }, 5000)
-        }
-      }
-      if (waClose && waGreeting) {
-        waClose.addEventListener('click', (e) => {
-          e.preventDefault()
-          waGreeting.classList.add('wa-hidden')
-          sessionStorage.setItem(waKey, '1')
-        })
       }
 
       // GA4 Blog Scroll Depth Tracking

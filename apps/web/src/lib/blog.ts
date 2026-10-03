@@ -8,11 +8,13 @@ export type BlogPost = Omit<BlogRow, 'author' | 'body_html' | 'category' | 'desc
   description: string
   publish_date: string
 }
+// Metadata-only queries omit body_html; the mapper tolerates its absence.
+export type BlogRowInput = Omit<BlogRow, 'body_html'> & { body_html?: string | null }
 export type QueryResult<T> = { status: 'ok'; data: T } | { status: 'not_found' } | { status: 'error'; error: string }
 
 type QueryError = { code?: string; message: string } | null
 
-export function mapBlogPost(row: BlogRow): BlogPost {
+export function mapBlogPost(row: BlogRowInput): BlogPost {
   return {
     ...row,
     author: row.author ?? '',

@@ -21,6 +21,11 @@
     "title": "Blog & Insights",
     "description": "Collection of articles about web development, mobile apps, WordPress, and multimedia editing to help your business grow in the digital era.",
     "readMore": "Read More",
+    "empty": {
+      "title": "No articles in this category yet",
+      "hint": "Try another category or browse all articles.",
+      "showAll": "View All Articles"
+    },
     "badges": {
       "featured": "Featured"
     },

@@ -15,25 +15,35 @@ export function getLocaleFromRequest(_request: Request): string {
   return defaultLocale
 }
 
-export function t(key: string, locale: string = defaultLocale): string {
+function lookup(locale: string, key: string): string | null {
   const normalized = key.replace(/\[(\d+)\]/g, '.$1')
   const keys = normalized.split('.')
-  let value: any = locales[locale] || locales[defaultLocale]
+  let value: any = locales[locale]
+  if (!value) return null
 
   for (const k of keys) {
-    if (value === null || value === undefined) return key
+    if (value === null || value === undefined) return null
     if (Array.isArray(value)) {
       const idx = Number(k)
-      if (!Number.isInteger(idx) || idx < 0 || idx >= value.length) return key
+      if (!Number.isInteger(idx) || idx < 0 || idx >= value.length) return null
       value = value[idx]
     } else if (typeof value === 'object' && k in value) {
       value = value[k]
     } else {
-      return key
+      return null
     }
   }
 
-  return typeof value === 'string' ? value : key
+  return typeof value === 'string' ? value : null
+}
+
+/**
+ * Resolve a translation with a fallback chain:
+ * requested locale -> default locale ('id') -> raw key as last resort,
+ * so partially translated locales never leak literal keys into pages.
+ */
+export function t(key: string, locale: string = defaultLocale): string {
+  return lookup(locale, key) ?? lookup(defaultLocale, key) ?? key
 }
 
 export function getDir(locale: string): 'ltr' | 'rtl' {

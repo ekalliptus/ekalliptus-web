@@ -63,7 +63,7 @@ export const POST: APIRoute = async ({ request }) => {
     const ZAI_API_KEY = readEnv('ZAI_API_KEY') || ''
     const ZAI_MODEL = readEnv('ZAI_MODEL') || ZAI_MODEL_DEFAULT
 
-    const body = await readPublicJson(request)
+    const body = await readPublicJson(request, { bucket: 'consult', limit: 20 })
     if (body instanceof Response) return body
     const { messages } = body
 

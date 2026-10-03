@@ -74,7 +74,7 @@ const dir = getDir(locale)
     }
   </style>
 
-  <main class="relative z-0 flex min-h-screen flex-col pt-20 sm:pt-16 md:pt-20">
+  <main id="main-content" class="relative z-0 flex min-h-screen flex-col pt-20 sm:pt-16 md:pt-20">
     <div class="container mx-auto px-4 py-8 sm:py-12 max-w-4xl">
       <div class="glass-panel rounded-2xl sm:rounded-3xl p-5 sm:p-8">
 
@@ -160,8 +160,8 @@ const dir = getDir(locale)
 
     <!-- Toast dialog (validation errors / status) -->
     <div id="order-toast-backdrop" class="toast-backdrop" aria-hidden="true">
-      <div id="order-toast" role="alertdialog" aria-modal="true" aria-labelledby="order-toast-title" aria-describedby="order-toast-msg"
-        class="glass-panel rounded-2xl mx-4 max-w-sm w-full p-5 shadow-2xl toast-enter">
+      <div id="order-toast" role="alertdialog" aria-modal="true" aria-labelledby="order-toast-title" aria-describedby="order-toast-msg" tabindex="-1"
+        class="glass-panel rounded-2xl mx-4 max-w-sm w-full p-5 shadow-2xl toast-enter outline-none">
         <div class="flex items-start gap-3">
           <div id="order-toast-icon" class="flex-shrink-0 h-10 w-10 rounded-full flex items-center justify-center bg-destructive/15 text-destructive">
             <svg id="toast-icon-error" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
@@ -257,6 +257,8 @@ Mohon info detail & penawaran. Terima kasih!`
     iconSuccess.classList.toggle('hidden', isError)
     toastEl.classList.toggle('success', !isError)
     toastBackdrop.classList.add('open')
+    // alertdialog is announced only once focused; keyboard/SR users need it.
+    toastEl.focus({ preventScroll: true })
   }
 
   function hideToast() {
@@ -287,15 +289,19 @@ Mohon info detail & penawaran. Terima kasih!`
     // Each field is followed by its <p class="error-msg"> sibling.
     const errorEl = el.parentElement?.querySelector('.error-msg') as HTMLElement | null
     el.classList.toggle('field-error', !!msg)
+    el.setAttribute('aria-invalid', msg ? 'true' : 'false')
     if (errorEl) {
       errorEl.textContent = msg || ''
       errorEl.classList.toggle('show', !!msg)
+      errorEl.setAttribute('aria-live', 'polite')
+      if (msg) el.setAttribute('aria-describedby', errorEl.id || '')
+      else el.removeAttribute('aria-describedby')
     }
   }
 
-  nameInput.insertAdjacentHTML('afterend', '<p class="error-msg"></p>')
-  waInput.insertAdjacentHTML('afterend', '<p class="error-msg"></p>')
-  descInput.insertAdjacentHTML('afterend', '<p class="error-msg"></p>')
+  nameInput.insertAdjacentHTML('afterend', '<p class="error-msg" id="error-name" aria-live="polite"></p>')
+  waInput.insertAdjacentHTML('afterend', '<p class="error-msg" id="error-whatsapp" aria-live="polite"></p>')
+  descInput.insertAdjacentHTML('afterend', '<p class="error-msg" id="error-description" aria-live="polite"></p>')
 
   function validateName(silent = false): boolean {
     const v = nameInput.value.trim()
@@ -334,9 +340,14 @@ Mohon info detail & penawaran. Terima kasih!`
   })
 
   serviceBtns.forEach(btn => {
+    btn.setAttribute('aria-pressed', 'false')
     btn.addEventListener('click', () => {
-      serviceBtns.forEach(b => b.classList.remove('selected'))
+      serviceBtns.forEach(b => {
+        b.classList.remove('selected')
+        b.setAttribute('aria-pressed', 'false')
+      })
       btn.classList.add('selected')
+      btn.setAttribute('aria-pressed', 'true')
       selectedService = btn.getAttribute('data-service') || ''
       selectedServiceInput.value = selectedService
       setStep(2)

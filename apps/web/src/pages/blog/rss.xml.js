@@ -22,5 +22,5 @@ ${posts.slice(0, 20).map(post => {
 export async function GET() {
   const result = await fetchPublishedPosts('id')
   if (result.status === 'error') return new Response('Feed temporarily unavailable', { status: 503 })
-  return new Response(generateRss(result.status === 'ok' ? result.data : []), { headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=86400, s-maxage=86400' } })
+  return new Response(generateRss(result.status === 'ok' ? result.data : []), { headers: { 'Content-Type': 'application/xml', 'Cache-Control': 'public, max-age=600, s-maxage=300, stale-while-revalidate=600' } })
 }

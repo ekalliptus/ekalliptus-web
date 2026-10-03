@@ -11,7 +11,7 @@ import { X, MessageCircle } from 'lucide-astro'
 <div id="ebot-fab" class="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-3 safe-bottom" aria-live="polite">
   <!-- Greeting card (hidden until first scroll) -->
   <div id="ebot-greeting" class="ebot-greeting glass-panel rounded-2xl rounded-br-sm px-4 py-3 shadow-xl max-w-[270px] ebot-hidden">
-    <button id="ebot-greeting-close" class="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-card border border-border flex items-center justify-center transition hover:bg-accent cursor-interactive" aria-label="Tutup sapaan">
+    <button id="ebot-greeting-close" class="absolute -top-2 -right-2 h-8 w-8 rounded-full bg-card border border-border flex items-center justify-center transition hover:bg-accent cursor-interactive" aria-label="Tutup sapaan">
       <X class="h-3.5 w-3.5 text-muted-foreground" />
     </button>
     <p class="font-semibold text-primary mb-1 text-sm">Halo! 👋</p>
@@ -62,6 +62,7 @@ import { X, MessageCircle } from 'lucide-astro'
     // Show greeting on FIRST scroll only (once per session).
     const SESSION_KEY = 'ebot-greeting-seen'
     let scrollHandled = false
+    let autoHideTimer: number | undefined
 
     function showGreetingOnce() {
       if (scrollHandled) return
@@ -73,6 +74,8 @@ import { X, MessageCircle } from 'lucide-astro'
       sessionStorage.setItem(SESSION_KEY, '1')
       greeting?.classList.remove('ebot-hidden')
       greeting?.classList.add('ebot-show')
+      // A greeting that never leaves blocks the footer content it floats over.
+      autoHideTimer = window.setTimeout(hideGreeting, 7000)
     }
 
     // Trigger on first scroll, or after 8s if the user never scrolls.
@@ -80,7 +83,10 @@ import { X, MessageCircle } from 'lucide-astro'
     const fallbackTimer = window.setTimeout(showGreetingOnce, 8000)
 
     // Dismiss greeting card.
-    const hideGreeting = () => greeting?.classList.add('ebot-hidden')
+    function hideGreeting() {
+      window.clearTimeout(autoHideTimer)
+      greeting?.classList.add('ebot-hidden')
+    }
     greetingClose?.addEventListener('click', hideGreeting)
 
     // Open the ConsultationDialog when the FAB is clicked.

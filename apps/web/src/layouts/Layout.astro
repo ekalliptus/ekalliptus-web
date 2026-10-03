@@ -199,8 +199,10 @@ const publishedYMD = publishedTime ? publishedTime.slice(0, 10).replace(/-/g, '/
     <slot />
     <Footer />
     <script>
-      const main = document.querySelector('main')
-      if (main) { main.id = 'main-content'; main.tabIndex = -1 }
+      // main#main-content is rendered server-side; only the focus target
+      // behaviour (tabIndex=-1) is applied here.
+      const main = document.getElementById('main-content')
+      if (main) { main.tabIndex = -1 }
       document.querySelectorAll<HTMLImageElement>('main img[loading="lazy"]').forEach(image => {
         const finish = () => { image.classList.remove('image-pending'); image.removeAttribute('aria-busy') }
         image.addEventListener('load', finish, { once: true })

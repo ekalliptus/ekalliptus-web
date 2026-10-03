@@ -1,8 +1,7 @@
 // Ekalliptus service worker, runtime cache for static assets
 // Versioning: bump CACHE_VERSION when you change cache strategy or want to invalidate clients
-const CACHE_VERSION = 'v3-2026-07-20'
+const CACHE_VERSION = 'v4-2026-09-25'
 const STATIC_CACHE = `ekal-static-${CACHE_VERSION}`
-const RUNTIME_CACHE = `ekal-runtime-${CACHE_VERSION}`
 
 const PRECACHE = [
   '/fonts/inter-latin-400-normal.woff2',
@@ -26,7 +25,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) =>
       Promise.all(
         keys
-          .filter((k) => k !== STATIC_CACHE && k !== RUNTIME_CACHE)
+          .filter((k) => k !== STATIC_CACHE)
           .map((k) => caches.delete(k))
       )
     ).then(() => self.clients.claim())
@@ -35,7 +34,6 @@ self.addEventListener('activate', (event) => {
 
 const CACHE_FIRST_PATTERNS = [
   /^\/fonts\//,
-  /^\/vendor\//,
   /^\/blog\/.+\.(svg|webp|png|jpg|jpeg)$/,
   /\.woff2?$/,
   /^\/(ekalliptus|logo|favicon|og-image)/

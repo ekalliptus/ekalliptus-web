@@ -56,3 +56,12 @@ export function hasRole(session: AdminSession, allowed: UserRole[]): boolean {
   if (session.role === 'owner') return true
   return allowed.includes(session.role)
 }
+
+/**
+ * Gate a loader/action on a role set: returns the session when it carries one
+ * of the allowed roles (owner is always allowed), null otherwise.
+ */
+export function requireRole(session: AdminSession | null, allowed: UserRole[]): AdminSession | null {
+  if (!session) return null
+  return hasRole(session, allowed) ? session : null
+}

@@ -1,10 +1,10 @@
-import { fetchPublishedPosts } from '../../lib/supabase'
+import { fetchPublishedPostSummaries } from '../../lib/supabase'
 import { generateBlogSitemap } from '../../lib/blog'
 
 export const prerender = false
 
 export async function GET() {
-  const result = await fetchPublishedPosts('id')
+  const result = await fetchPublishedPostSummaries('id')
   if (result.status === 'error') return new Response('Sitemap temporarily unavailable', { status: 503 })
   const posts = result.status === 'ok' ? result.data : []
   return new Response(generateBlogSitemap(posts), {

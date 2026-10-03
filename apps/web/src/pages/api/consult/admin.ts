@@ -7,7 +7,7 @@ import { apiJson, readPublicJson, validText, validSession } from '../../../lib/p
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
-    const body = await readPublicJson(request)
+    const body = await readPublicJson(request, { bucket: 'consult-admin', limit: 10 })
     if (body instanceof Response) return body
     const { message, history, visitor_name } = body
     if (!validText(message, 1, 2000) || (visitor_name !== undefined && !validText(visitor_name, 1, 120)) ||
@@ -26,82 +26,111 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         const visitorName = visitor_name || 'Pengunjung'
         const lastMessage = message.length > 200 ? message.slice(0, 200) + '...' : message
 
-        const { data: consultation, error: consultError } = await supabase
+        // Read-then-write so an existing consultation's unread counter is
+        // incremented instead of reset (PostgREST has no computed updates).
+        const { data: existingConsultation } = await supabase
           .from('consultations')
-          .upsert({
-            session_id: sessionId,
-            visitor_name: visitorName,
-            status: 'scheduled',
-            last_message: lastMessage,
-            last_message_at: new Date().toISOString(),
-            unread_count: 1,
-          }, { onConflict: 'session_id' })
-          .select()
-          .single()
+          .select('id, unread_count')
+          .eq('session_id', sessionId)
+          .maybeSingle()
 
-        if (consultError || !consultation) return apiJson({ error: 'Failed to create consultation' }, 503)
-        if (consultation) {
-          // Auto-create lead from consultation handoff (non-blocking, with dedup by whatsapp)
-          try {
-            const whatsapp = typeof body.whatsapp === 'string' ? body.whatsapp : null
-            let shouldCreate = true
-            if (whatsapp) {
-              const { data: existing } = await supabase!
-                .from('leads')
-                .select('id, stage')
-                .eq('whatsapp', whatsapp)
-                .not('stage', 'in', '("won","lost")')
-                .limit(1)
-              if (existing && existing.length > 0) shouldCreate = false
-            }
-            if (shouldCreate) {
-              await createLead({
-                name: visitorName !== 'Pengunjung' ? visitorName : 'Visitor',
-                whatsapp: whatsapp,
-                email: typeof body.email === 'string' ? body.email : null,
-                service_interest: null,
-                stage: 'contacted',
-                source: 'consultation',
-                consultation_id: consultation.id,
-                notes: 'Auto-created from consultation handoff'
-              })
-            }
-          } catch (err) {
-            console.error('[consult/admin] Auto-create lead failed:', err)
-          }
-
-          const messagesToInsert: ConsultationMessageInsert[] = []
-
-          if (history && Array.isArray(history)) {
-            for (const entry of history) {
-              const senderType = entry.role === 'assistant' ? 'bot' : 'visitor'
-              const content = typeof entry.content === 'string' ? entry.content : ''
-              if (content) {
-                messagesToInsert.push({
-                  consultation_id: consultation.id,
-                  session_id: sessionId,
-                  sender_type: senderType,
-                  sender_name: senderType === 'bot' ? 'eBot' : visitorName,
-                  content: content.slice(0, 2000),
-                })
-              }
-            }
-          }
-
-          if (message) {
-            messagesToInsert.push({
-              consultation_id: consultation.id,
+        let consultation;
+        if (existingConsultation) {
+          const { data, error } = await supabase
+            .from('consultations')
+            .update({
+              visitor_name: visitorName,
+              status: 'scheduled',
+              last_message: lastMessage,
+              last_message_at: new Date().toISOString(),
+              unread_count: (existingConsultation.unread_count ?? 0) + 1,
+            })
+            .eq('id', existingConsultation.id)
+            .select()
+            .single()
+          if (error || !data) return apiJson({ error: 'Failed to create consultation' }, 503)
+          consultation = data
+        } else {
+          const { data, error } = await supabase
+            .from('consultations')
+            .upsert({
               session_id: sessionId,
-              sender_type: 'visitor',
-              sender_name: visitorName,
-              content: message.slice(0, 2000),
+              visitor_name: visitorName,
+              status: 'scheduled',
+              last_message: lastMessage,
+              last_message_at: new Date().toISOString(),
+              unread_count: 1,
+            }, { onConflict: 'session_id' })
+            .select()
+            .single()
+          if (error || !data) return apiJson({ error: 'Failed to create consultation' }, 503)
+          consultation = data
+        }
+
+        // Auto-create lead from consultation handoff (non-blocking, with dedup by whatsapp)
+        try {
+          const whatsapp = typeof body.whatsapp === 'string' ? body.whatsapp : null
+          let shouldCreate = true
+          if (whatsapp) {
+            const { data: existing } = await supabase!
+              .from('leads')
+              .select('id, stage')
+              .eq('whatsapp', whatsapp)
+              .not('stage', 'in', '("won","lost")')
+              .limit(1)
+            if (existing && existing.length > 0) shouldCreate = false
+          }
+          if (shouldCreate) {
+            await createLead({
+              name: visitorName !== 'Pengunjung' ? visitorName : 'Visitor',
+              whatsapp: whatsapp,
+              email: typeof body.email === 'string' ? body.email : null,
+              service_interest: null,
+              stage: 'contacted',
+              source: 'consultation',
+              consultation_id: consultation.id,
+              notes: 'Auto-created from consultation handoff'
             })
           }
+        } catch (err) {
+          console.error('[consult/admin] Auto-create lead failed:', err)
+        }
 
-          if (messagesToInsert.length > 0) {
-            const { error } = await supabase.from('consultation_messages').insert(messagesToInsert)
-            if (error) return apiJson({ error: 'Failed to save messages' }, 503)
+        const messagesToInsert: ConsultationMessageInsert[] = []
+
+        if (history && Array.isArray(history)) {
+          for (let i = 0; i < history.length; i++) {
+            const entry = history[i]
+            // The client pushes the typed handoff message into history before
+            // sending it; skip that final duplicate so it is stored only once.
+            if (i === history.length - 1 && entry.role === 'user' && entry.content === message) continue
+            const senderType = entry.role === 'assistant' ? 'bot' : 'visitor'
+            const content = typeof entry.content === 'string' ? entry.content : ''
+            if (content) {
+              messagesToInsert.push({
+                consultation_id: consultation.id,
+                session_id: sessionId,
+                sender_type: senderType,
+                sender_name: senderType === 'bot' ? 'eBot' : visitorName,
+                content: content.slice(0, 2000),
+              })
+            }
           }
+        }
+
+        if (message) {
+          messagesToInsert.push({
+            consultation_id: consultation.id,
+            session_id: sessionId,
+            sender_type: 'visitor',
+            sender_name: visitorName,
+            content: message.slice(0, 2000),
+          })
+        }
+
+        if (messagesToInsert.length > 0) {
+          const { error } = await supabase.from('consultation_messages').insert(messagesToInsert)
+          if (error) return apiJson({ error: 'Failed to save messages' }, 503)
         }
       } catch (err) {
         console.error('Failed to create consultation:', err)

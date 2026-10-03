@@ -2,7 +2,7 @@
 import { serializeJsonLd } from '../lib/article-html'
 import Layout from '../layouts/Layout.astro'
 import Navigation from '../components/Navigation.astro'
-import { fetchPublishedPosts, normalizeBlogImage } from '../lib/supabase'
+import { fetchPublishedPostSummaries, normalizeBlogImage } from '../lib/supabase'
 import { blogPath, dedupeFeatured, tagPath } from '../lib/blog'
 import { t, getLocaleFromRequest, getDir } from '../i18n'
 import { Calendar, User, Tag, ArrowRight, Clock } from 'lucide-astro'
@@ -13,7 +13,7 @@ export const prerender = false
 
 const locale = Astro.locals.locale ?? 'id'
 const dir = getDir(locale)
-const postsResult = await fetchPublishedPosts('id')
+const postsResult = await fetchPublishedPostSummaries('id')
 if (postsResult.status === 'error') return new Response('Blog temporarily unavailable', { status: 503 })
 const postsData = postsResult.status === 'ok' ? postsResult.data : []
 
@@ -84,7 +84,7 @@ const blogSchema = {
 
   <Navigation t={(key: string) => t(key, locale)} currentLang={locale} />
 
-  <main class="blog-index relative z-0 flex min-h-screen flex-col pt-14 sm:pt-16 md:pt-20">
+  <main id="main-content" class="blog-index relative z-0 flex min-h-screen flex-col pt-14 sm:pt-16 md:pt-20">
     <div class="relative flex flex-col pb-16">
       <!-- Hero Section -->
       <section class="blog-masthead px-4 py-12 sm:py-16 md:py-20">
@@ -123,16 +123,16 @@ const blogSchema = {
           <!-- RSS Feed Link -->
           <div class="flex items-center justify-center gap-4">
             <a
-              href="/id/blog/rss.xml"
-              class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+              href="/blog/rss.xml"
+              class="inline-flex items-center gap-2 min-h-[44px] px-2 py-2 text-sm text-muted-foreground hover:text-primary transition-colors"
               title="Subscribe via RSS"
             >
               <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20C5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 6.83V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1Z"/></svg>
               RSS Feed
             </a>
             <a
-              href="/id/blog/feed.json"
-              class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+              href="/blog/feed.json"
+              class="inline-flex items-center gap-2 min-h-[44px] px-2 py-2 text-sm text-muted-foreground hover:text-primary transition-colors"
               title="Subscribe via JSON Feed"
             >
               <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm-1-13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-3 7a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm8 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-4 4a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>
@@ -277,7 +277,7 @@ const blogSchema = {
                       {post.data.tags.length > 0 && (
                         <div class="flex flex-wrap gap-1.5 mt-4">
                           {post.data.tags.slice(0, 3).map(tag => (
-                            <a href={tagPath(tag)} class="glass-pill rounded-full px-2 py-0.5 text-[0.6rem] text-muted-foreground border-border/10">
+                            <a href={tagPath(tag)} class="glass-pill rounded-full px-3 py-1.5 text-[0.7rem] text-muted-foreground border-border/10">
                               #{tag}
                             </a>
                           ))}
@@ -294,6 +294,13 @@ const blogSchema = {
               ))}
             </div>
           )}
+          <div id="blog-empty-state" hidden class="py-16 text-center">
+            <p class="text-lg font-medium text-foreground">{t('blog.empty.title', locale)}</p>
+            <p class="mt-2 text-sm text-muted-foreground">{t('blog.empty.hint', locale)}</p>
+            <button type="button" data-category="all" aria-pressed="false" class="category-btn rounded-full px-5 py-2.5 mt-6 text-sm font-medium transition-all bg-primary text-primary-foreground hover:bg-primary/90">
+              {t('blog.empty.showAll', locale)}
+            </button>
+          </div>
         </div>
       </section>
     </div>

@@ -19,8 +19,8 @@ const dir = getDir(locale)
 const FAQ_COUNT = 8
 const faqItems = []
 for (let i = 0; i < FAQ_COUNT; i++) {
-  const question = t(`faq.items[${i}].question`)
-  const answer = t(`faq.items[${i}].answer`)
+  const question = t(`faq.items[${i}].question`, locale)
+  const answer = t(`faq.items[${i}].answer`, locale)
   if (question && !question.includes('faq.items[')) {
     faqItems.push({ question, answer })
   }
@@ -37,7 +37,7 @@ for (let i = 0; i < FAQ_COUNT; i++) {
   <JsonLd locale={locale} faqItems={faqItems} />
   <Navigation t={(key: string) => t(key, locale)} currentLang={locale} />
 
-  <main class="relative z-0 flex min-h-screen flex-col pt-14 sm:pt-16 md:pt-20">
+  <main id="main-content" class="relative z-0 flex min-h-screen flex-col pt-14 sm:pt-16 md:pt-20">
     <Hero t={(key: string) => t(key, locale)} />
     <Services t={(key: string) => t(key, locale)} />
     <ProcessSteps t={(key: string) => t(key, locale)} />

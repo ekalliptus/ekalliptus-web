@@ -2,22 +2,26 @@
 import { ArrowUpRight, Mail, Phone, MapPin } from 'lucide-astro'
 import { t as translate } from '../i18n'
 import { waLink, WA_DISPLAY_PHONE } from '../lib/constants'
+import { localizedPath, type Locale } from '../lib/locale-routing'
 const locale = Astro.locals.locale ?? 'id'
 const t = translate
 const year = new Date().getFullYear()
+// Internal links follow the active locale; the blog exists only in
+// Indonesian, so its link always targets /id/blog (localized variants 404).
+const localized = (path: string) => localizedPath(path, locale as Locale)
 const serviceLinks = [
-  { label: t('services.cards.websiteDevelopment.title', locale), href: '/services/website' },
-  { label: t('services.cards.mobileAppDevelopment.title', locale), href: '/services/mobile-app' },
-  { label: t('services.cards.websiteMaintenance.title', locale), href: '/services/maintenance' },
+  { label: t('services.cards.websiteDevelopment.title', locale), href: localized('/services/website') },
+  { label: t('services.cards.mobileAppDevelopment.title', locale), href: localized('/services/mobile-app') },
+  { label: t('services.cards.websiteMaintenance.title', locale), href: localized('/services/maintenance') },
 ]
 ---
     <!-- Footer -->
-    <footer id="site-footer" class="safe-bottom mt-8 border-t border-border/20 bg-card/5 py-12 sm:mt-12">
+    <footer id="site-footer" class="safe-bottom mt-8 border-t border-border/20 bg-card/5 pt-12 sm:mt-12">
       <div class="mx-auto max-w-6xl px-4">
         <div class="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div class="col-span-2 md:col-span-1">
             <div class="mb-4 flex items-center gap-3">
-              <img src="/ekalliptus_rounded.webp" alt="Ekalliptus Digital" width="128" height="128" class="h-24 w-24 object-contain invert dark:invert-0" loading="lazy" decoding="async" />
+              <img src="/ekalliptus_rounded.webp" alt="Ekalliptus Digital" width="128" height="128" class="h-10 w-10 object-contain invert dark:invert-0 sm:h-12 sm:w-12" loading="lazy" decoding="async" />
             </div>
             <p class="max-w-xs text-sm leading-relaxed text-muted-foreground">{t('home.footer.tagline', locale)}</p>
           </div>
@@ -36,13 +40,13 @@ const serviceLinks = [
           <div>
             <h3 class="mb-4 text-sm font-semibold text-foreground">{t('home.footer.companyHeading', locale)}</h3>
             <ul class="space-y-2.5 text-sm">
-              <li><a href="/about" class="text-muted-foreground transition-colors hover:text-primary">{t('home.footer.aboutLink', locale)}</a></li>
+              <li><a href={localized('/about')} class="text-muted-foreground transition-colors hover:text-primary">{t('home.footer.aboutLink', locale)}</a></li>
               <li><a href="/id/blog" class="text-muted-foreground transition-colors hover:text-primary">{t('home.footer.blogLink', locale)}</a></li>
               <li><a href="https://bio.ekalliptus.com" target="_blank" rel="noopener noreferrer" class="text-muted-foreground transition-colors hover:text-primary">{t('home.footer.bioLink', locale)}</a></li>
-              <li><a href="/order" class="text-muted-foreground transition-colors hover:text-primary">{t('home.footer.orderLink', locale)}</a></li>
-              <li><a href="/editorial-policy" class="text-muted-foreground transition-colors hover:text-primary">Kebijakan Editorial</a></li>
-              <li><a href="/privacy-policy" class="text-muted-foreground transition-colors hover:text-primary">{t('home.footer.privacyLink', locale)}</a></li>
-              <li><a href="/terms-of-service" class="text-muted-foreground transition-colors hover:text-primary">{t('home.footer.termsLink', locale)}</a></li>
+              <li><a href={localized('/order')} class="text-muted-foreground transition-colors hover:text-primary">{t('home.footer.orderLink', locale)}</a></li>
+              <li><a href={localized('/editorial-policy')} class="text-muted-foreground transition-colors hover:text-primary">Kebijakan Editorial</a></li>
+              <li><a href={localized('/privacy-policy')} class="text-muted-foreground transition-colors hover:text-primary">{t('home.footer.privacyLink', locale)}</a></li>
+              <li><a href={localized('/terms-of-service')} class="text-muted-foreground transition-colors hover:text-primary">{t('home.footer.termsLink', locale)}</a></li>
             </ul>
           </div>
 
@@ -64,9 +68,9 @@ const serviceLinks = [
           </div>
         </div>
 
-        <div class="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border/20 pt-8 md:flex-row">
+        <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border/20 pt-10 pb-24 md:flex-row md:gap-8 md:pb-10 md:pr-24">
           <p class="text-sm text-muted-foreground">© {year} Ekalliptus Digital. {t('home.footer.rights', locale)}</p>
-          <a href="/order" class="group inline-flex items-center gap-2 text-sm font-semibold text-primary">
+          <a href={localized('/order')} class="group inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-primary">
             {t('home.cta.primary', locale)}
             <ArrowUpRight class="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>

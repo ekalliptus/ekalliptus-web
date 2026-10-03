@@ -12,7 +12,9 @@ const { t, currentLang = 'id' } = Astro.props
 const sectionLinks = [
   { key: 'home', hash: '#home' },
   { key: 'services', hash: '#services', dropdown: true },
-  { key: 'blog', href: '/blog', external: true },
+  // Blog exists only in Indonesian; localized blog URLs 404, so this link
+  // must always target /id/blog regardless of the active locale.
+  { key: 'blog', href: '/id/blog', external: true, fixedLocale: true },
   { key: 'about', href: '/about', external: true },
   { key: 'contact', hash: '#contact' }
 ]
@@ -38,6 +40,12 @@ const currentLanguage = languages.find(lang => lang.code === currentLang) || lan
 const currentPath = Astro.locals.publicPathname ?? Astro.url.pathname
 const publicPath = (path: string) => localizedPath(path, currentLang as Locale)
 const isHomePage = currentPath === publicPath('/')
+
+// Blog articles are Indonesian-only: every localized variant of a blog URL is a
+// dead end, so on blog routes only the Indonesian language option navigates.
+const barePath = currentPath.replace(/[?#].*$/, '')
+const isBlogRoute = barePath === '/id/blog' || barePath.startsWith('/id/blog/') || barePath === '/blog' || barePath.startsWith('/blog/')
+const blogUnavailableNotice = 'Artikel hanya tersedia dalam Bahasa Indonesia'
 ---
 
 <header class="site-header fixed inset-x-0 top-0 z-40 safe-top">
@@ -60,6 +68,8 @@ const isHomePage = currentPath === publicPath('/')
               type="button"
               class="nav-link cursor-interactive rounded-full px-3 py-1 text-[13px] font-medium text-foreground/80 transition hover:bg-foreground/10 hover:text-foreground"
               data-hash={item.hash}
+              aria-haspopup="true"
+              aria-expanded="false"
             >
               {t(`nav.${item.key}`)}
             </button>
@@ -76,7 +86,7 @@ const isHomePage = currentPath === publicPath('/')
           </div>
         ) : item.external ? (
           <a
-            href={publicPath(item.href!)}
+            href={item.fixedLocale ? item.href! : publicPath(item.href!)}
             class="nav-link cursor-interactive rounded-full px-3 py-1 text-[13px] font-medium text-foreground/80 transition hover:bg-foreground/10 hover:text-foreground"
           >
             {t(`nav.${item.key}`)}
@@ -134,9 +144,9 @@ const isHomePage = currentPath === publicPath('/')
 
 <div id="mobile-backdrop" class="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm md:hidden hidden"></div>
 
-<div id="mobile-menu" class="fixed inset-x-2 top-2 z-40 max-h-[calc(100vh-1rem)] overflow-y-auto rounded-2xl border border-border bg-card p-3 shadow-lg md:hidden hidden custom-scrollbar safe-top">
+<div id="mobile-menu" class="fixed inset-x-2 top-2 z-40 max-h-[calc(100dvh-1rem)] overflow-y-auto rounded-2xl border border-border bg-card p-3 shadow-lg md:hidden hidden custom-scrollbar safe-top">
     <div class="flex items-center justify-end mb-1">
-      <button id="mobile-menu-close" class="cursor-interactive flex h-8 w-8 items-center justify-center rounded-full transition hover:bg-accent" aria-label="Close menu">
+      <button id="mobile-menu-close" class="cursor-interactive flex h-11 w-11 items-center justify-center rounded-full transition hover:bg-accent" aria-label="Close menu">
         <X class="h-4 w-4" />
       </button>
     </div>
@@ -170,7 +180,7 @@ const isHomePage = currentPath === publicPath('/')
         </>
       ) : item.external ? (
         <a
-          href={publicPath(item.href!)}
+          href={item.fixedLocale ? item.href! : publicPath(item.href!)}
           class="nav-link cursor-interactive rounded-lg px-4 py-3 text-left text-sm font-medium text-foreground/80 transition hover:bg-accent hover:text-foreground active:bg-accent/80"
         >
           {t(`nav.${item.key}`)}
@@ -201,7 +211,20 @@ const isHomePage = currentPath === publicPath('/')
       {t('nav.language')}
     </span>
     <div class="grid grid-cols-2 gap-2 px-1">
-      {languages.map((lang) => (
+      {languages.map((lang) => (isBlogRoute && lang.code !== 'id') ? (
+        <button
+          type="button"
+          disabled
+          title={blogUnavailableNotice}
+          aria-label={blogUnavailableNotice}
+          aria-disabled="true"
+          data-lang={lang.code}
+          class="lang-btn flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm opacity-40 cursor-not-allowed"
+        >
+          <img src={lang.flag} alt="" width="24" height="18" class="shrink-0" />
+          <span class="text-xs truncate">{lang.name}</span>
+        </button>
+      ) : (
         <a
           href={localizedPath(currentPath, lang.code as Locale)}
           data-lang={lang.code}
@@ -248,14 +271,30 @@ const isHomePage = currentPath === publicPath('/')
       </h3>
       <button
         id="close-lang-modal" aria-label={t('nav.closeModal')}
-        class="h-8 w-8 rounded-full flex items-center justify-center cursor-interactive hover:bg-card/20"
+        class="h-11 w-11 rounded-full flex items-center justify-center cursor-interactive hover:bg-card/20"
       >
         <X class="h-4 w-4" />
       </button>
     </div>
 
     <div class="grid grid-cols-2 gap-3">
-      {languages.map((lang) => (
+      {languages.map((lang) => (isBlogRoute && lang.code !== 'id') ? (
+        <button
+          type="button"
+          disabled
+          title={blogUnavailableNotice}
+          aria-label={blogUnavailableNotice}
+          aria-disabled="true"
+          data-lang={lang.code}
+          class="lang-modal-btn language-button group flex flex-col items-center gap-2 rounded-xl px-3 py-4 text-center opacity-40 cursor-not-allowed"
+        >
+          <img src={lang.flag} alt="" width="40" height="30" class="shrink-0" />
+          <div class="flex flex-col items-center">
+            <span class="text-sm font-medium leading-tight">{lang.nativeName}</span>
+            <span class="text-xs text-muted-foreground leading-tight">{lang.name}</span>
+          </div>
+        </button>
+      ) : (
         <a
           href={localizedPath(currentPath, lang.code as Locale)}
           data-lang={lang.code}
@@ -337,21 +376,54 @@ const isHomePage = currentPath === publicPath('/')
     }
   }
   
+  // Keep the services dropdown's aria-expanded in sync with its CSS-driven
+  // hover/focus visibility so screen readers announce the state.
+  document.querySelectorAll('#desktop-nav .group').forEach(function (group) {
+    const trigger = group.querySelector('button[aria-haspopup]')
+    if (!trigger) return
+    const setOpen = function () { trigger.setAttribute('aria-expanded', 'true') }
+    const setClosed = function () { trigger.setAttribute('aria-expanded', 'false') }
+    group.addEventListener('mouseenter', setOpen)
+    group.addEventListener('mouseleave', setClosed)
+    group.addEventListener('focusin', setOpen)
+    group.addEventListener('focusout', setClosed)
+  })
+
   if (langToggle && langModal && langBackdrop && closeLangModal) {
+    const focusLangModal = () => {
+      const first = langModal.querySelector('button, a[href]')
+      if (!first) return
+      void langModal.offsetWidth
+      first.focus()
+    }
     langToggle.addEventListener('click', () => {
       langModalOpen = true
       langModal.classList.remove('hidden')
       langModal.classList.add('flex')
       langBackdrop.classList.remove('hidden')
+      focusLangModal()
     })
-    
+
     const closeModal = () => {
       langModalOpen = false
       langModal.classList.remove('flex')
       langModal.classList.add('hidden')
       langBackdrop.classList.add('hidden')
+      langToggle.focus()
     }
-    
+
+    // Keep Tab cycling inside the modal while it is open (standard focus trap).
+    langModal.addEventListener('keydown', (e) => {
+      if (!langModalOpen || e.key !== 'Tab') return
+      const focusables = Array.from(langModal.querySelectorAll('button:not([disabled]), a[href]')).filter(el => el.getClientRects().length)
+      if (focusables.length === 0) return
+      const first = focusables[0]
+      const last = focusables[focusables.length - 1]
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+      else if (!langModal.contains(document.activeElement)) { e.preventDefault(); first.focus() }
+    })
+
     closeLangModal.addEventListener('click', closeModal)
     langBackdrop.addEventListener('click', closeModal)
   }
@@ -445,8 +517,10 @@ const isHomePage = currentPath === publicPath('/')
     if (e.key === 'Escape') {
       if (langModalOpen && langModal && langBackdrop) {
         langModalOpen = false
+        langModal.classList.remove('flex')
         langModal.classList.add('hidden')
         langBackdrop.classList.add('hidden')
+        langToggle?.focus()
       }
       if (menuOpen && mobileMenu && mobileBackdrop) {
         menuOpen = false

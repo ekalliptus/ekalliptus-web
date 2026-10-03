@@ -23,17 +23,23 @@ const row = (overrides: Partial<BlogRow> = {}): BlogRow => ({
 const post = (overrides: Partial<BlogRow> = {}) => mapBlogPost(row(overrides))
 
 describe('blog category interaction', () => {
-  it('keeps selection accessible and rapid filtering synchronous', () => {
-    document.body.innerHTML = '<button class="category-btn" data-category="all" aria-pressed="true"></button><button class="category-btn" data-category="Web" aria-pressed="false"></button><article class="blog-card" data-category="Web"></article><article class="blog-card" data-category="App"></article><div class="ad-in-feed"></div>'
+  it('keeps selection accessible, synchronous, and surfaces empty state', () => {
+    document.body.innerHTML = '<button class="category-btn" data-category="all" aria-pressed="true"></button><button class="category-btn" data-category="Web" aria-pressed="false"></button><button class="category-btn" data-category="Kosong" aria-pressed="false"></button><article class="blog-card" data-category="Web"></article><article class="blog-card" data-category="App"></article><div class="ad-in-feed"></div><div id="blog-empty-state" hidden></div>'
     initCategoryFilter(document)
-    const buttons = document.querySelectorAll<HTMLButtonElement>('button')
+    const buttons = document.querySelectorAll<HTMLButtonElement>('.category-btn')
     const cards = document.querySelectorAll<HTMLElement>('article')
+    const empty = document.getElementById('blog-empty-state')!
     buttons[1].click()
     expect(buttons[1].getAttribute('aria-pressed')).toBe('true')
     expect(cards[0].hidden).toBe(false)
     expect(cards[1].hidden).toBe(true)
+    expect(empty.hidden).toBe(true)
+    buttons[2].click()
+    expect([...cards].every(card => card.hidden)).toBe(true)
+    expect(empty.hidden).toBe(false)
     buttons[0].click()
     expect([...cards].every(card => !card.hidden)).toBe(true)
+    expect(empty.hidden).toBe(true)
     expect(buttons[1].getAttribute('aria-pressed')).toBe('false')
     expect(document.querySelector<HTMLElement>('.ad-in-feed')!.hidden).toBe(false)
     document.body.innerHTML = ''

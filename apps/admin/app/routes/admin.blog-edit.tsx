@@ -11,6 +11,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { Trash2, ArrowLeft } from "lucide-react";
 import { 
   getAdminSession, 
+  requireRole,
   getPost, 
   updatePost, 
   deletePost, 
@@ -40,7 +41,7 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
+  const session = requireRole(await getAdminSession(request.headers.get("Cookie")), ["admin", "editor"]);
   if (!session) return redirect("/admin/login");
 
   const id = params.id;

@@ -1,16 +1,17 @@
 /** Shared client/server WhatsApp helpers. No DOM dependencies. */
 
-/** Strip non-digits and coerce to 62-prefixed international form. */
+// Only coerce a local leading 0 to the Indonesian prefix. Prefixing other
+// countries' digits with 62 silently produced unreachable leads (a German
+// +49 number became 6249...), so non-62 international input is kept as-is.
 export function normalizeWhatsapp(input: string): string {
   let cleaned = (input || '').replace(/\D/g, '')
   if (cleaned.startsWith('0')) cleaned = '62' + cleaned.slice(1)
-  if (!cleaned.startsWith('62')) cleaned = '62' + cleaned
   return cleaned
 }
 
-/** Loose validation: 9–15 digits after normalization. */
+/** 9–15 digits, optionally 62-prefixed (Indonesian local or international). */
 export function isValidWhatsapp(input: string): boolean {
   const normalized = normalizeWhatsapp(input)
-  const digits = normalized.replace(/\D/g, '')
-  return digits.length >= 9 && digits.length <= 15
+  if (!normalized.startsWith('62')) return false
+  return normalized.length >= 9 && normalized.length <= 15
 }

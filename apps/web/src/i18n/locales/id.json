@@ -21,6 +21,11 @@
     "title": "Blog & Insight",
     "description": "Kumpulan artikel tentang web development, mobile app, WordPress, dan multimedia editing untuk membantu bisnis Anda berkembang di era digital.",
     "readMore": "Baca Selengkapnya",
+    "empty": {
+      "title": "Belum ada artikel di kategori ini",
+      "hint": "Coba kategori lain atau lihat semua artikel.",
+      "showAll": "Lihat Semua Artikel"
+    },
     "badges": {
       "featured": "Unggulan"
     },

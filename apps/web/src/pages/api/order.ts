@@ -8,7 +8,7 @@ import { apiJson as json, readPublicJson, validText } from '../../lib/public-api
 const VALID_SERVICES = ['web', 'mobile', 'maintenance']
 export const POST: APIRoute = async ({ request }) => {
   try {
-    const body = await readPublicJson(request)
+    const body = await readPublicJson(request, { bucket: 'order', limit: 10 })
     if (body instanceof Response) return body
     const { service_type, customer_name, whatsapp, description } = body
 

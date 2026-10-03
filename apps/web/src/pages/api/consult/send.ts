@@ -7,7 +7,7 @@ import { apiJson, readPublicJson, validText, validSession } from '../../../lib/p
 
 export const POST: APIRoute = async ({ request, cookies }) => {
   try {
-    const body = await readPublicJson(request)
+    const body = await readPublicJson(request, { bucket: 'consult-send', limit: 20 })
     if (body instanceof Response) return body
     const { message, visitor_name } = body
     const session_id = cookies.get('consult-session')?.value
@@ -29,7 +29,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     const { data: consultation, error: consultError } = await supabase
       .from('consultations')
-      .select('id')
+      .select('id, unread_count')
       .eq('session_id', session_id)
       .single()
 
@@ -110,7 +110,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         .update({
           last_message: message.length > 200 ? message.slice(0, 200) + '...' : message,
           last_message_at: new Date().toISOString(),
-          unread_count: 1,
+          // Increment the unread counter (already read above) instead of
+          // resetting it; PostgREST cannot compute updates without rpc.
+          unread_count: (consultation.unread_count ?? 0) + 1,
           status: 'scheduled',
         })
         .eq('id', consultation.id)

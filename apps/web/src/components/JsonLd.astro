@@ -1,4 +1,6 @@
 ---
+import { serializeJsonLd } from '../lib/article-html'
+
 interface Props {
   locale?: string
   faqItems?: Array<{ question: string; answer: string }>
@@ -53,7 +55,9 @@ const webSite = {
   publisher: { '@id': organizationId }
 }
 
-const faqSchema = faqItems.length ? {
+// Translated pages are noindex, so the FAQ schema is only emitted for the
+// canonical Indonesian page (answers fall back to Indonesian elsewhere).
+const faqSchema = locale === 'id' && faqItems.length ? {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
   mainEntity: faqItems.map(item => ({
@@ -66,4 +70,4 @@ const faqSchema = faqItems.length ? {
 const schemas = [organization, webSite, ...(faqSchema ? [faqSchema] : [])]
 ---
 
-{schemas.map(schema => <script type="application/ld+json" set:html={JSON.stringify(schema)} />)}
+{schemas.map(schema => <script type="application/ld+json" set:html={serializeJsonLd(schema)} />)}

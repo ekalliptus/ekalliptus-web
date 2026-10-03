@@ -4,6 +4,7 @@ import Navigation from '../../components/Navigation.astro'
 import ConsultationDialog from '../../components/ConsultationDialog.astro'
 import { t, getLocaleFromRequest, getDir } from '../../i18n'
 import { waLink } from '../../lib/constants'
+import { serializeJsonLd } from '../../lib/article-html'
 import { Check, ArrowRight, Shield, Zap, Bell, Clock } from 'lucide-astro'
 
 export const prerender = false
@@ -56,14 +57,14 @@ const breadcrumbSchema = {
   dir={dir}
 >
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
-    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
-    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script type="application/ld+json" set:html={serializeJsonLd(serviceSchema)} />
+    <script type="application/ld+json" set:html={serializeJsonLd(faqSchema)} />
+    <script type="application/ld+json" set:html={serializeJsonLd(breadcrumbSchema)} />
   </Fragment>
 
   <Navigation t={(key: string) => t(key, locale)} currentLang={locale} />
 
-  <main class="relative z-0 flex min-h-screen flex-col pt-14 sm:pt-16 md:pt-20">
+  <main id="main-content" class="relative z-0 flex min-h-screen flex-col pt-14 sm:pt-16 md:pt-20">
     <div class="container mx-auto max-w-6xl px-4 py-8 sm:py-12">
 
       <nav class="text-sm mb-6" aria-label="Breadcrumb">

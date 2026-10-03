@@ -39,17 +39,17 @@ describe('locale middleware responses', () => {
     expect(response.headers.get('Cache-Control')).toBe('no-store')
   })
 
-  it('prevents caching for translated noindex pages', async () => {
+  it('still edge-caches translated noindex pages (noindex is a meta tag, not cacheability)', async () => {
     const response = await onRequest({
       url: new URL('https://ekalliptus.com/en/about'),
       locals: {},
-      rewrite: async () => new Response('about'),
+      rewrite: async () => new Response('about', { headers: { 'Content-Type': 'text/html' } }),
       redirect: () => { throw new Error('unexpected redirect') },
     } as never, async () => new Response('next'))
 
     expect(response).toBeInstanceOf(Response)
     if (!response) throw new Error('middleware returned no response')
     expect(response.status).toBe(200)
-    expect(response.headers.get('Cache-Control')).toBe('no-store')
+    expect(response.headers.get('Cache-Control')).toBe('public, s-maxage=60, stale-while-revalidate=30')
   })
 })

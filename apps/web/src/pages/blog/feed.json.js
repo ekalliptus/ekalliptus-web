@@ -1,4 +1,4 @@
-import { fetchPublishedPosts } from '../../lib/supabase'
+import { fetchPublishedPostSummaries } from '../../lib/supabase'
 import { absoluteUrl, blogPath } from '../../lib/blog'
 
 export const prerender = false
@@ -7,7 +7,8 @@ export async function GET(context) {
   const siteUrl = 'https://ekalliptus.com'
 
   // Fetch published posts from Supabase and map to JSON Feed format
-  const result = await fetchPublishedPosts('id')
+  // (metadata only, the JSON feed renders descriptions rather than HTML).
+  const result = await fetchPublishedPostSummaries('id')
   if (result.status === 'error') return new Response('Feed temporarily unavailable', { status: 503 })
   const posts = result.status === 'ok' ? result.data : []
 
@@ -49,7 +50,7 @@ export async function GET(context) {
   return new Response(JSON.stringify(feed, null, 2), {
     headers: {
       'Content-Type': 'application/feed+json',
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
+      'Cache-Control': 'public, max-age=600, s-maxage=300, stale-while-revalidate=600',
     },
   })
 }

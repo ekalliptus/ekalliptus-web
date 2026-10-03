@@ -3,7 +3,7 @@ import { getSupabase } from '../../../lib/supabase'
 import { apiJson, readPublicJson, validSession } from '../../../lib/public-api'
 
 export const POST: APIRoute = async ({ request, cookies }) => {
-  const body = await readPublicJson(request)
+  const body = await readPublicJson(request, { bucket: 'consult-replies', limit: 60 })
   if (body instanceof Response) return body
   const session = cookies.get('consult-session')?.value
   if (!validSession(session)) return apiJson({ error: 'Unauthorized' }, 403)
