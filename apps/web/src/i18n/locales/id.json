@@ -19,7 +19,7 @@
     "metaDescription": "Temukan artikel terbaru tentang web development, mobile app, WordPress, dan multimedia editing. Dapatkan insight dan tips teknologi untuk bisnis Anda.",
     "badge": "Artikel & Insight",
     "title": "Blog & Insight",
-    "description": "Kumpulan artikel tentang web development, mobile app, WordPress, dan multimedia editing untuk membantu bisnis Anda berkembang di era digital.",
+    "description": "Artikel praktis tentang web development, aplikasi mobile, WordPress, dan editing multimedia untuk kebutuhan digital bisnis Anda.",
     "readMore": "Baca Selengkapnya",
     "empty": {
       "title": "Belum ada artikel di kategori ini",
@@ -37,16 +37,6 @@
       "updated": "Diperbarui",
       "readTime": "5 menit baca"
     },
-    "share": {
-      "title": "Bagikan Artikel"
-    },
-    "author": {
-      "title": "Tim Digital",
-      "description": "Tim profesional Ekalliptus Digital berpengalaman dalam web development, mobile app, dan multimedia editing."
-    },
-    "related": {
-      "title": "Artikel Terkait"
-    },
     "backToBlog": "Kembali ke Blog",
     "categories": {
       "web-development": "Web Development",
@@ -56,18 +46,6 @@
       "tips": "Tips & Tutorial",
       "news": "Berita"
     }
-  },
-  "hero": {
-    "solusiDigital": "Solusi Digital",
-    "brand": "єкαℓℓιρтuѕ",
-    "description": "Kami hadir untuk menghadirkan produk digital yang terasa futuristik namun tetap humanis. Menggabungkan micro-interaction, elemen glassmorphism, dan animasi halus.",
-    "subdescription": "Dapatkan keuntungan lebih dan penawaran menarik dengan menggunakan jasa kami!",
-    "fokus": "Fokus kami saat ini:",
-    "digitalExperience": "Pengalaman Digital Imersif",
-    "web3d": "Website dengan Sentuhan 3D",
-    "branding": "Strategi Branding Holistik",
-    "startProject": "Mulai Proyek Anda",
-    "profile": "PROFIL KAMI"
   },
   "index": {
     "intro": {
@@ -81,11 +59,6 @@
       "commitmentTitle": "Komitmen Kualitas",
       "commitmentDesc": "Tim ekalliptus terdiri dari developer berpengalaman, designer kreatif, dan project manager yang siap mendampingi proyek Anda dari konsep hingga launch. Sebagai solusi digital terdepan, ekalliptus memastikan setiap proyek dioptimalkan untuk search engine Google."
     },
-    "stats": {
-      "experience": "Tahun Pengalaman",
-      "clients": "Klien Terpusat",
-      "support": "Dukungan Penuh"
-    },
     "cta": {
       "startProject": "Mulai Proyek Digital Anda",
       "viewServices": "Lihat Layanan Kami",
@@ -94,11 +67,6 @@
     }
   },
   "services": {
-    "pill": "Layanan Utama",
-    "title": "Transformasi digital dengan sentuhan berkelas",
-    "subtitle": "Kreasikan pengalaman digital yang berbeda dengan elemen 3D, glassmorphism, dan interaksi halus yang menjaga pengguna tetap terlibat di setiap langkah perjalanan mereka.",
-    "expertise": "Keahlian",
-    "orderNow": "Order Sekarang",
     "cards": {
       "websiteDevelopment": {
         "category": "Pengembangan",
@@ -177,7 +145,7 @@
   },
   "contactCTA": {
     "title": "Siap memulai proyek Anda?",
-    "description": "Ajak kami berdiskusi dan temukan bagaimana sentuhan desain immersive dapat meningkatkan persepsi brand serta mendekatkan pengguna dengan produk Anda.",
+    "description": "Ceritakan kebutuhan bisnis Anda. Kami balas dengan usulan solusi, estimasi waktu pengerjaan, dan biaya sebelum pekerjaan dimulai.",
     "buttons": {
       "whatsapp": "Konsultasi Gratis",
       "email": "Kirim Email"
@@ -217,7 +185,7 @@
       },
       {
         "question": "Apa yang membedakan layanan ekalliptus dengan digital agency lainnya?",
-        "answer": "ekalliptus menggabungkan teknologi terkini dengan desain yang user-centric. Kami tidak hanya fokus pada kode yang clean, tetapi juga user experience yang memorable dengan elemen 3D, glassmorphism, dan micro-interactions. Setiap proyek diperlakukan secara personal dengan tim dedicated yang siap support hingga proyek sukses."
+        "answer": "Setiap proyek ditangani langsung oleh pengembangnya tanpa perantara, sehingga diskusi teknis dan keputusan berjalan cepat. Ruang lingkup, jadwal, dan biaya tertulis di proposal sebelum pengerjaan, dan progres dipantau lewat satu kanal komunikasi yang sama hingga serah terima."
       },
       {
         "question": "Informasi apa yang diperlukan untuk memulai konsultasi?",
@@ -800,20 +768,7 @@
       "titleTail": "untuk Bisnis Anda",
       "subtitle": "Pengembangan website, aplikasi mobile, serta maintenance website dan server untuk bisnis di Indonesia.",
       "ctaPrimary": "Konsultasi Gratis",
-      "ctaSecondary": "Lihat Layanan",
-      "trustRating": "Rating klien",
-      "trustClients": "Klien terlayani",
-      "trustYears": "Tahun pengalaman",
-      "trustResponse": "Respons cepat"
-    },
-    "stats": {
-      "eyebrow": "Kenapa Ekalliptus",
-      "title": "Angka yang berbicara",
-      "subtitle": "Hasil nyata dari komitmen kami terhadap kualitas dan kepuasan klien.",
-      "yearsLabel": "Tahun Pengalaman",
-      "clientsLabel": "Klien Terlayani",
-      "projectsLabel": "Proyek Selesai",
-      "ratingLabel": "Kepuasan Klien"
+      "ctaSecondary": "Lihat Layanan"
     },
     "services": {
       "eyebrow": "Layanan Kami",

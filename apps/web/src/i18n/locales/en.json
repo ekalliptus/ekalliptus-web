@@ -37,16 +37,6 @@
       "updated": "Updated",
       "readTime": "5 min read"
     },
-    "share": {
-      "title": "Share Article"
-    },
-    "author": {
-      "title": "Digital Team",
-      "description": "Ekalliptus Digital professional team experienced in web development, mobile apps, and multimedia editing."
-    },
-    "related": {
-      "title": "Related Articles"
-    },
     "backToBlog": "Back to Blog",
     "categories": {
       "web-development": "Web Development",
@@ -56,18 +46,6 @@
       "tips": "Tips & Tutorials",
       "news": "News"
     }
-  },
-  "hero": {
-    "solusiDigital": "Digital Solutions",
-    "brand": "єкαℓℓιρтuѕ",
-    "description": "We are here to deliver digital products that feel futuristic yet human. Combining micro-interactions, glassmorphism elements, and smooth animations.",
-    "subdescription": "Get more benefits and attractive offers by using our services!",
-    "fokus": "Our current focus:",
-    "digitalExperience": "Immersive Digital Experience",
-    "web3d": "3D-Touched Websites",
-    "branding": "Holistic Branding Strategy",
-    "startProject": "Start Your Project",
-    "profile": "OUR PROFILE"
   },
   "index": {
     "intro": {
@@ -81,11 +59,6 @@
       "commitmentTitle": "Quality Commitment",
       "commitmentDesc": "The ekalliptus team is made up of experienced developers, creative designers, and project managers who accompany your project from concept to launch. As a leading digital partner, we ensure every project is optimized for Google search performance."
     },
-    "stats": {
-      "experience": "Years of Experience",
-      "clients": "Centralized Clients",
-      "support": "Full Support"
-    },
     "cta": {
       "startProject": "Start Your Digital Project",
       "viewServices": "View Our Services",
@@ -94,11 +67,6 @@
     }
   },
   "services": {
-    "pill": "Core Services",
-    "title": "Digital transformation with an elegant touch",
-    "subtitle": "Craft distinctive digital experiences with 3D elements, glassmorphism, and subtle interactions that keep users engaged at every step.",
-    "expertise": "Expertise",
-    "orderNow": "Order Now",
     "cards": {
       "websiteDevelopment": {
         "category": "Development",
@@ -114,7 +82,7 @@
       "mobileAppDevelopment": {
         "category": "Development",
         "title": "Mobile App Development",
-        "description": "Innovative Android & iOS applications designed for seamless experiences.",
+        "description": "Android and iOS applications built with one codebase, tested on real devices before release.",
         "features": [
           "Cross Platform",
           "Native Performance",
@@ -157,7 +125,7 @@
     "insights": "Insights",
     "customerJourney": "Customer Journey",
     "statusActive": "Active",
-    "insightsDesc": "From interactive landing pages to dynamic dashboards, we design every detail to feel immersive and stand out from competitors.",
+    "insightsDesc": "From landing pages to dashboards, we build each project to load fast, stay maintainable, and fit how your team actually works.",
     "experience": "Experience",
     "clients": "Centralized Clients",
     "rating": "Client Rating",
@@ -177,7 +145,7 @@
   },
   "contactCTA": {
     "title": "Ready to launch your project?",
-    "description": "Start a conversation with us and see how immersive design can elevate your brand perception and bring users closer to your product.",
+    "description": "Tell us about your business needs. We reply with a proposed solution, timeline, and cost before any work begins.",
     "buttons": {
       "whatsapp": "Free Consultation",
       "email": "Send Email"
@@ -217,7 +185,7 @@
       },
       {
         "question": "What sets ekalliptus apart from other digital agencies?",
-        "answer": "We combine cutting-edge technology with user-centric design. Beyond clean code, we focus on memorable experiences through 3D elements, glassmorphism, and micro-interactions. Every project is handled personally by a dedicated team committed to your success."
+        "answer": "Each project is handled directly by its developer with no middlemen, so technical decisions move fast. Scope, schedule, and cost are written into the proposal before work starts, and progress flows through one communication channel until handover."
       },
       {
         "question": "What information is needed to start a consultation?",
@@ -1048,20 +1016,7 @@
       "titleTail": "for Your Business",
       "subtitle": "Website development, mobile apps, and website and server maintenance for businesses in Indonesia.",
       "ctaPrimary": "Free Consultation",
-      "ctaSecondary": "View Services",
-      "trustRating": "Client rating",
-      "trustClients": "Clients served",
-      "trustYears": "Years of experience",
-      "trustResponse": "Fast response"
-    },
-    "stats": {
-      "eyebrow": "Why Ekalliptus",
-      "title": "Numbers that speak",
-      "subtitle": "Real results from our commitment to quality and client satisfaction.",
-      "yearsLabel": "Years of Experience",
-      "clientsLabel": "Clients Served",
-      "projectsLabel": "Projects Completed",
-      "ratingLabel": "Client Satisfaction"
+      "ctaSecondary": "View Services"
     },
     "services": {
       "eyebrow": "Our Services",
