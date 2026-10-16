@@ -78,6 +78,29 @@
 @keyframes loading-shimmer { to { background-position: -170% 0; } }
 @media (prefers-reduced-motion: reduce) { .image-pending, .async-pending { animation: none; } }
 
+/* Theme switch: circular reveal from the toggle (View Transitions API).
+   The new-theme snapshot expands as a circle from --theme-x/--theme-y,
+   which toggleTheme() sets to the button's center; direction-agnostic
+   because "new" is whichever theme was switched to. */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 999; }
+::view-transition-new(root) { animation: theme-reveal 520ms cubic-bezier(.4, 0, .2, 1); }
+@keyframes theme-reveal {
+  from { clip-path: circle(0% at var(--theme-x, 50%) var(--theme-y, 50%)); }
+  to { clip-path: circle(150% at var(--theme-x, 50%) var(--theme-y, 50%)); }
+}
+
+/* Fallback for browsers without View Transitions (Firefox, Safari < 18):
+   quick fade on the surfaces that carry the theme. */
+.theme-transitioning, .theme-transitioning *, .theme-transitioning *::before, .theme-transitioning *::after {
+  transition: background-color .22s ease, color .22s ease, border-color .22s ease, fill .22s ease, stroke .22s ease !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none !important; }
+  .theme-transitioning, .theme-transitioning *, .theme-transitioning *::before, .theme-transitioning *::after { transition: none !important; }
+}
+
 .skip-link { position: fixed; inset-block-start: .5rem; inset-inline-start: 1rem; z-index: 100; padding: 1rem; background: hsl(var(--card)); transform: translateY(-200%); }
 .skip-link:focus { transform: none; }
 .site-header { background: hsl(var(--background)); border-bottom: 1px solid hsl(var(--border)); }
