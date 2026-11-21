@@ -11,20 +11,19 @@ const { t } = Astro.props
 <div id="consult-dialog" class="fixed inset-0 z-50 hidden">
   <div id="consult-backdrop" class="fixed inset-0 modal-backdrop transition-opacity duration-300"></div>
 
-  <!-- Panel anchored bottom-right near the FAB -->
   <div class="fixed inset-0 flex items-end justify-end p-0 sm:p-0 pointer-events-none">
-    <div id="consult-panel" role="dialog" aria-modal="true" aria-labelledby="consult-title" class="pointer-events-auto relative w-full sm:w-[400px] h-[100dvh] sm:h-[600px] sm:max-h-[calc(100dvh-7rem)] flex flex-col bg-card border border-border rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300 translate-y-full opacity-0 sm:mb-2 sm:mr-2 mb-safe">
+    <div id="consult-panel" role="dialog" aria-modal="true" aria-labelledby="consult-title" class="pointer-events-auto relative w-full sm:w-[400px] flex flex-col bg-card border border-border rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300 translate-y-full opacity-0 sm:mb-2 sm:mr-2 mb-safe max-h-[100dvh] sm:max-h-[calc(100dvh-7rem)]">
 
       <div class="flex items-center justify-between p-4 border-b border-border bg-card/80 backdrop-blur-xl">
         <div class="flex items-center gap-3">
-          <div class="h-9 w-9 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden">
-            <img src="/ekalliptus_rounded.webp" alt="eBot" width="24" height="24" class="h-6 w-6 object-cover" />
+          <div class="h-9 w-9 rounded-full bg-green-500/20 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 text-green-600" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.51 14.94L2 22l5.2-1.5A9.9 9.9 0 1 0 12.04 2Zm5.8 14.04c-.24.68-1.4 1.3-1.96 1.35-.5.05-1.13.07-3.23-.9-2.7-1.24-4.4-4.02-4.54-4.21-.13-.19-1.07-1.47-1.07-2.8 0-1.34.7-2 .95-2.27.24-.27.52-.34.7-.34h.5c.16 0 .38-.06.59.45.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.3.38-.42.5-.14.14-.29.3-.13.58.17.28.74 1.23 1.6 1.99 1.1.99 2.03 1.3 2.32 1.44.29.14.46.12.63-.07.17-.2.72-.85.91-1.14.19-.29.38-.24.64-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.7-.17 1.38Z"/></svg>
           </div>
           <div>
-            <h3 id="consult-title" class="text-sm font-semibold text-foreground">eBot</h3>
+            <h3 id="consult-title" class="text-sm font-semibold text-foreground">{t('waForm.title')}</h3>
             <div class="flex items-center gap-1.5">
               <span class="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"></span>
-              <span class="text-[0.65rem] text-muted-foreground">{t('consultation.statusOnline')}</span>
+              <span class="text-[0.65rem] text-muted-foreground">{t('waForm.statusNote')}</span>
             </div>
           </div>
         </div>
@@ -33,66 +32,79 @@ const { t } = Astro.props
         </button>
       </div>
 
-      <div id="consult-messages" role="log" aria-live="polite" aria-relevant="additions" class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-        <div class="flex gap-2.5">
-          <div class="flex-shrink-0 h-7 w-7 rounded-full bg-primary/15 flex items-center justify-center mt-0.5 overflow-hidden">
-            <img src="/ekalliptus_rounded.webp" alt="eBot" width="20" height="20" class="h-5 w-5 object-cover" />
-          </div>
-          <div class="glass-panel rounded-2xl rounded-tl-md px-4 py-3 max-w-[80%]">
-            <p class="text-sm text-foreground leading-relaxed">{t('consultation.greeting')}</p>
-          </div>
+      <form id="wa-form" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar" novalidate>
+        <div>
+          <label for="wa-name" class="mb-1 block text-xs font-medium text-muted-foreground">{t('waForm.name')}</label>
+          <input
+            id="wa-name"
+            type="text"
+            required
+            maxlength="60"
+            autocomplete="name"
+            placeholder={t('waForm.namePlaceholder')}
+            class="w-full glass-input rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none"
+          />
         </div>
-        <!-- Quick action: chat with admin -->
-        <div id="consult-quick-actions" class="flex flex-wrap gap-2 pt-1">
-          <button type="button" data-quick-admin class="quick-pill glass-panel rounded-full px-3 py-1.5 text-xs font-medium text-foreground transition hover:bg-accent/40 cursor-interactive border border-border">
-            💬 Chat dengan Admin
-          </button>
-          <a href="/order" class="quick-pill glass-panel rounded-full px-3 py-1.5 text-xs font-medium text-foreground transition hover:bg-accent/40 border border-border">
-            📋 Buat Order
-          </a>
-          <a href="https://wa.me/6281999900306" target="_blank" rel="noopener" class="quick-pill glass-panel rounded-full px-3 py-1.5 text-xs font-medium text-foreground transition hover:bg-accent/40 border border-border">
-            🟢 WhatsApp
-          </a>
+        <div>
+          <label for="wa-need" class="mb-1 block text-xs font-medium text-muted-foreground">{t('waForm.need')}</label>
+          <select
+            id="wa-need"
+            class="w-full glass-input rounded-xl px-4 py-2.5 text-sm text-foreground outline-none"
+          >
+            <option value="website">{t('waForm.needWebsite')}</option>
+            <option value="mobile">{t('waForm.needMobile')}</option>
+            <option value="maintenance">{t('waForm.needMaintenance')}</option>
+            <option value="other">{t('waForm.needOther')}</option>
+          </select>
         </div>
-      </div>
 
-      <div id="consult-admin-banner" class="hidden px-4 pb-2">
-        <div class="flex items-center gap-2 rounded-xl bg-green-500/10 border border-green-500/20 px-3 py-2">
-          <span class="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
-          <span class="text-xs text-green-500 font-medium">{t('consultation.adminConnected')}</span>
+        <div>
+          <label for="wa-message" class="mb-1 block text-xs font-medium text-muted-foreground">{t('waForm.message')}</label>
+          <textarea
+            id="wa-message"
+            rows="3"
+            maxlength="500"
+            placeholder={t('waForm.messagePlaceholder')}
+            class="w-full glass-input rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none resize-none"
+          ></textarea>
         </div>
-      </div>
+        <div>
+          <p id="wa-preview-label" class="mb-1 block text-xs font-medium text-muted-foreground">{t('waForm.previewLabel')}</p>
+          <div class="flex justify-end" aria-hidden="true">
+            <div class="rounded-2xl rounded-tr-md bg-green-600/15 border border-green-600/25 px-4 py-3 max-w-[90%]">
+              <p id="wa-preview" class="text-sm text-foreground leading-relaxed whitespace-pre-line"></p>
+            </div>
+          </div>
+        </div>
+      </form>
 
       <div class="p-3 border-t border-border bg-card/80 backdrop-blur-xl">
-        <form id="consult-form" class="flex gap-2">
-          <input
-            id="consult-input"
-            type="text"
-            autocomplete="off"
-            maxlength="500"
-            aria-label="Pesan konsultasi"
-            placeholder={t('consultation.placeholder')}
-            class="flex-1 min-w-0 glass-input rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none"
-          />
-          <button
-            type="submit"
-            id="consult-send"
-            class="h-10 w-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground transition hover:bg-primary/90 active:scale-[0.95] cursor-interactive flex-shrink-0"
-            aria-label="Send"
-          >
-            <Send class="h-4 w-4" />
-          </button>
-        </form>
-        <p class="mt-1.5 text-[0.6rem] text-center text-muted-foreground/60">
-          {t('consultation.disclaimer')}
+        <button
+          type="button"
+          id="wa-submit"
+          class="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-green-600/90 active:scale-[0.98] cursor-interactive disabled:opacity-50"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.51 14.94L2 22l5.2-1.5A9.9 9.9 0 1 0 12.04 2Zm5.8 14.04c-.24.68-1.4 1.3-1.96 1.35-.5.05-1.13.07-3.23-.9-2.7-1.24-4.4-4.02-4.54-4.21-.13-.19-1.07-1.47-1.07-2.8 0-1.34.7-2 .95-2.27.24-.27.52-.34.7-.34h.5c.16 0 .38-.06.59.45.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.3.38-.42.5-.14.14-.29.3-.13.58.17.28.74 1.23 1.6 1.99 1.1.99 2.03 1.3 2.32 1.44.29.14.46.12.63-.07.17-.2.72-.85.91-1.14.19-.29.38-.24.64-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.7-.17 1.38Z"/></svg>
+
+        <p class="mt-2 text-[0.6rem] text-center text-muted-foreground/70">
+          {t('waForm.privacyNote')}
         </p>
       </div>
     </div>
   </div>
 </div>
 
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    #consult-dialog *, #consult-dialog *::before, #consult-dialog *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+
 <script>
-import { escapeHtml, formatChatResponse } from '../lib/chat-format'
+import { buildWaConsultMessage, waConsultUrl } from '../lib/wa-consult'
 
 let _dialogInited = false
 ;(window as any).consultDialog = {
@@ -112,28 +124,18 @@ function _doInitDialog() {
   const backdrop = document.getElementById('consult-backdrop')
   const panel = document.getElementById('consult-panel')
   const closeBtn = document.getElementById('consult-close')
-  const messagesEl = document.getElementById('consult-messages')
-  const form = document.getElementById('consult-form') as HTMLFormElement | null
-  const input = document.getElementById('consult-input') as HTMLInputElement | null
-  const sendBtn = document.getElementById('consult-send')
-  const adminBanner = document.getElementById('consult-admin-banner')
+  const formEl = document.getElementById('wa-form') as HTMLFormElement | null
+  const nameEl = document.getElementById('wa-name') as HTMLInputElement | null
+  const needEl = document.getElementById('wa-need') as HTMLSelectElement | null
+  const messageEl = document.getElementById('wa-message') as HTMLTextAreaElement | null
+  const previewEl = document.getElementById('wa-preview')
+  const submitBtn = document.getElementById('wa-submit')
 
-  if (!dialog || !panel || !messagesEl || !form || !input) return
+  if (!dialog || !panel || !formEl || !nameEl || !needEl || !messageEl || !previewEl || !submitBtn) return
 
   const dialogEl = dialog
   const panelEl = panel
-  const messagesContainer = messagesEl
-  const formEl = form
-  const inputEl = input
-
   let isOpen = false
-  let isAdmin = false
-  let isSending = false
-  let conversationHistory: Array<{role: string; content: string}> = []
-  let pollTimer: ReturnType<typeof setTimeout> | undefined
-  let pollController: AbortController | null = null
-  let replyOffset = 0
-  let pollErrorShown = false
   let previousFocus: HTMLElement | null = null
 
   function open() {
@@ -145,9 +147,8 @@ function _doInitDialog() {
       panelEl.classList.remove('translate-y-full', 'sm:translate-y-8', 'opacity-0')
       panelEl.classList.add('translate-y-0', 'opacity-100')
     })
-    inputEl.focus()
+    nameEl!.focus()
     document.body.style.overflow = 'hidden'
-    startReplyPolling()
   }
 
   function close() {
@@ -159,256 +160,37 @@ function _doInitDialog() {
     setTimeout(() => {
       if (!isOpen) dialogEl.classList.add('hidden')
     }, 300)
-    stopReplyPolling()
   }
 
-  function scrollToBottom() {
-    messagesContainer.scrollTop = messagesContainer.scrollHeight
+  function updatePreview() {
+    previewEl!.textContent = buildWaConsultMessage({
+      name: nameEl!.value || '...',
+      need: (needEl!.value as 'website' | 'mobile' | 'maintenance' | 'other'),
+      message: messageEl!.value,
+      source: window.location.host + window.location.pathname,
+    })
   }
 
-  function addMessage(content: string, isUser: boolean, senderLabel?: string) {
-    const wrapper = document.createElement('div')
-    wrapper.className = isUser ? 'flex gap-2.5 justify-end' : 'flex gap-2.5'
+  formEl.addEventListener('input', updatePreview)
+  updatePreview()
 
-    if (isUser) {
-      wrapper.innerHTML = `
-        <div class="rounded-2xl rounded-tr-md px-4 py-3 max-w-[80%] bg-primary text-primary-foreground">
-          <p class="text-sm leading-relaxed">${escapeHtml(content)}</p>
-        </div>
-        <div class="flex-shrink-0 h-7 w-7 rounded-full bg-foreground/10 flex items-center justify-center mt-0.5">
-          <svg xmlns="http://www.w3.org/2000/svg" stroke-width="2" width="16" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none" viewBox="0 0 24 24" class="text-foreground/60"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </div>`
-    } else {
-      const label = senderLabel || ''
-      const isBot = !senderLabel
-      const avatarHtml = isBot
-        ? `<div class="flex-shrink-0 h-7 w-7 rounded-full bg-primary/15 flex items-center justify-center mt-0.5 overflow-hidden"><img src="/ekalliptus_rounded.webp" alt="eBot" width="20" height="20" class="h-5 w-5 object-cover" /></div>`
-        : `<div class="flex-shrink-0 h-7 w-7 rounded-full bg-foreground/10 flex items-center justify-center mt-0.5"><svg xmlns="http://www.w3.org/2000/svg" stroke-width="2" width="16" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none" viewBox="0 0 24 24" class="text-foreground/60"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>`
-      const bgClass = isBot ? 'glass-panel rounded-2xl rounded-tl-md' : 'rounded-2xl rounded-tl-md border border-border bg-card'
-      wrapper.innerHTML = `
-        ${avatarHtml}
-        <div class="${bgClass} px-4 py-3 max-w-[80%]">
-          ${label ? `<p class="text-[11px] font-medium text-muted-foreground mb-1">${escapeHtml(label)}</p>` : ''}
-          <p class="text-sm text-foreground leading-relaxed">${formatChatResponse(content)}</p>
-        </div>`
-    }
-
-    messagesContainer.appendChild(wrapper)
-    scrollToBottom()
-  }
-
-  function addTypingIndicator() {
-    const wrapper = document.createElement('div')
-    if (document.getElementById('typing-indicator')) return
-    messagesContainer.setAttribute('aria-busy', 'true')
-    wrapper.setAttribute('role', 'status')
-    wrapper.setAttribute('aria-label', 'Menunggu balasan')
-    wrapper.id = 'typing-indicator'
-    wrapper.className = 'flex gap-2.5'
-    wrapper.innerHTML = `
-      <div class="flex-shrink-0 h-7 w-7 rounded-full bg-primary/15 flex items-center justify-center mt-0.5 overflow-hidden">
-        <img src="/ekalliptus_rounded.webp" alt="eBot" width="20" height="20" class="h-5 w-5 object-cover" />
-      </div>
-      <div class="glass-panel async-pending rounded-2xl rounded-tl-md px-4 py-3">
-        <div class="flex gap-1 items-center h-5">
-          <span class="h-1.5 w-1.5 rounded-full bg-muted-foreground/50 animate-bounce" style="animation-delay:0ms"></span>
-          <span class="h-1.5 w-1.5 rounded-full bg-muted-foreground/50 animate-bounce" style="animation-delay:150ms"></span>
-          <span class="h-1.5 w-1.5 rounded-full bg-muted-foreground/50 animate-bounce" style="animation-delay:300ms"></span>
-        </div>
-      </div>`
-    messagesContainer.appendChild(wrapper)
-    scrollToBottom()
-  }
-
-  function removeTypingIndicator() {
-    const indicator = document.getElementById('typing-indicator')
-    if (indicator) indicator.remove()
-    messagesContainer.setAttribute('aria-busy', 'false')
-  }
-
-  function shouldHandoffToAdmin(text: string): boolean {
-    const lower = text.toLowerCase().trim()
-    const handoffPhrases = [
-      'chat admin', 'bicara admin', 'bicara dengan admin', 'hubungkan admin',
-      'saya mau bicara admin', 'mau chat admin', 'bicara langsung',
-      'talk to admin', 'speak to admin', 'connect admin', 'chat dengan admin',
-      'mau ngobrol admin', 'pengen ketemu admin', 'bicara sama admin',
-      'mau tanya admin', 'adminnya mana', 'panggil admin'
-    ]
-    return handoffPhrases.some(p => lower.includes(p))
-  }
-
-  async function sendToAI(message: string) {
-    conversationHistory.push({ role: 'user', content: message })
-
-    if (shouldHandoffToAdmin(message)) {
-      const handoffMsg = 'Baik, saya akan menghubungkan Anda dengan admin Ekalliptus. Mohon tunggu sebentar...'
-      addMessage(handoffMsg, false)
-      conversationHistory.push({ role: 'assistant', content: handoffMsg })
-      if (await sendToAdmin(message)) switchToAdmin()
-      return
-    }
-
-    addTypingIndicator()
-
-    try {
-      const response = await fetch('/api/consult', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        signal: AbortSignal.timeout(65000),
-        body: JSON.stringify({
-          messages: [
-            ...conversationHistory.slice(-10)
-          ]
-        })
-      })
-
-      removeTypingIndicator()
-
-      if (!response.ok) {
-        const fallback = 'Maaf, sedang ada gangguan. Silakan coba lagi atau hubungi kami langsung via WhatsApp di +62 819-9990-0306.'
-        addMessage(fallback, false)
-        conversationHistory.push({ role: 'assistant', content: fallback })
-        return
-      }
-
-      const data = await response.json()
-      const reply = (typeof data.reply === 'string' && data.reply) || 'Maaf, saya tidak bisa memproses permintaan Anda saat ini.'
-
-      addMessage(reply, false)
-      conversationHistory.push({ role: 'assistant', content: reply })
-
-      if (data.handoff) {
-        if (await sendToAdmin(message)) switchToAdmin()
-      }
-    } catch (err) {
-      removeTypingIndicator()
-      const errorMsg = 'Maaf, koneksi bermasalah. Silakan coba lagi atau hubungi kami via WhatsApp.'
-      addMessage(errorMsg, false)
-      conversationHistory.push({ role: 'assistant', content: errorMsg })
+  function trackEvent(eventName: string, params?: Record<string, unknown>) {
+    if (typeof (window as any).gtag === 'function') {
+      (window as any).gtag('event', eventName, params || {})
     }
   }
 
-  function switchToAdmin() {
-    isAdmin = true
-    adminBanner?.classList.remove('hidden')
-    inputEl.placeholder = 'Menulis ke Admin Ekalliptus...'
-    startReplyPolling()
-  }
-
-  async function sendToAdmin(message: string): Promise<boolean> {
-    addTypingIndicator()
-    try {
-      const response = await fetch('/api/consult/admin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, history: conversationHistory.slice(-10) }),
-        signal: AbortSignal.timeout(20000),
-      })
-      if (!response.ok) throw new Error('Handoff failed')
-      const data = await response.json()
-      if (data.success !== true) throw new Error('Handoff failed')
-      addMessage('Pesan tersimpan untuk admin. Untuk percakapan langsung, hubungi WhatsApp +62 819-9990-0306.', false)
-      return true
-    } catch {
-      addMessage('Pesan belum terkirim ke admin. Coba lagi atau hubungi WhatsApp +62 819-9990-0306.', false)
-      return false
-    } finally {
-      removeTypingIndicator()
-    }
-  }
-
-  async function sendVisitorMessage(message: string) {
-    addTypingIndicator()
-    try {
-      const response = await fetch('/api/consult/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message }),
-        signal: AbortSignal.timeout(20000),
-      })
-      if (!response.ok) throw new Error('Send failed')
-    } catch {
-      addMessage('Pesan belum terkirim. Coba lagi atau hubungi WhatsApp +62 819-9990-0306.', false)
-    } finally {
-      removeTypingIndicator()
-    }
-  }
-
-  function stopReplyPolling() {
-    clearTimeout(pollTimer)
-    pollTimer = undefined
-    pollController?.abort()
-    pollController = null
-  }
-
-  function startReplyPolling() {
-    if (!isOpen || !isAdmin || document.hidden || pollTimer || pollController) return
-    void pollReplies()
-  }
-
-  async function pollReplies() {
-    if (!isOpen || !isAdmin || document.hidden) return
-    const controller = new AbortController()
-    pollController = controller
-    const timeout = setTimeout(() => controller.abort(), 12000)
-    let delay = 5000
-    try {
-      const response = await fetch('/api/consult/replies', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ offset: replyOffset }), signal: controller.signal,
-      })
-      if (!response.ok) throw new Error('Replies unavailable')
-      const data = await response.json()
-      if (!Array.isArray(data.messages) || !Number.isSafeInteger(data.offset)) throw new Error('Invalid replies')
-      if (pollController !== controller || !isOpen || document.hidden) return
-      for (const message of data.messages) {
-        if (typeof message.content === 'string') addMessage(message.content, false, 'Admin')
-      }
-      replyOffset = data.offset
-      pollErrorShown = false
-    } catch {
-      delay = 15000
-      if (pollController === controller && isOpen && !document.hidden && !pollErrorShown) {
-        addMessage('Balasan admin belum dapat dimuat. Mencoba lagi otomatis; WhatsApp tersedia jika mendesak.', false)
-        pollErrorShown = true
-      }
-    } finally {
-      clearTimeout(timeout)
-      if (pollController === controller) {
-        pollController = null
-        if (isOpen && isAdmin && !document.hidden) pollTimer = setTimeout(() => {
-          pollTimer = undefined
-          startReplyPolling()
-        }, delay)
-      }
-    }
-  }
-
-  document.addEventListener('visibilitychange', () => document.hidden ? stopReplyPolling() : startReplyPolling())
-  window.addEventListener('pagehide', stopReplyPolling)
-  window.addEventListener('pageshow', startReplyPolling)
-
-  formEl.addEventListener('submit', async (e) => {
-    e.preventDefault()
-    const message = inputEl.value.trim()
-    if (!message || isSending) return
-
-    isSending = true
-    sendBtn?.setAttribute('disabled', '')
-    const cleanMessage = message.substring(0, 500)
-    inputEl.value = ''
-    addMessage(cleanMessage, true)
-
-    if (isAdmin) {
-      await sendVisitorMessage(cleanMessage)
-    } else {
-      await sendToAI(cleanMessage)
-    }
-    isSending = false
-    sendBtn?.removeAttribute('disabled')
+  submitBtn.addEventListener('click', () => {
+    if (!formEl.reportValidity()) return
+    const url = waConsultUrl({
+      name: nameEl!.value.trim(),
+      need: (needEl!.value as 'website' | 'mobile' | 'maintenance' | 'other'),
+      message: messageEl!.value.trim(),
+      source: window.location.host + window.location.pathname,
+    })
+    trackEvent('whatsapp_click', { source: window.location.pathname })
+    window.open(url, '_blank', 'noopener')
+    close()
   })
 
   backdrop?.addEventListener('click', close)
@@ -418,7 +200,7 @@ function _doInitDialog() {
     if (!isOpen) return
     if (e.key === 'Escape') close()
     if (e.key === 'Tab') {
-      const controls = Array.from(panelEl.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], input:not([disabled])')).filter(el => el.getClientRects().length)
+      const controls = Array.from(panelEl.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])')).filter(el => el.getClientRects().length)
       const first = controls[0], last = controls[controls.length - 1]
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus() }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus() }
@@ -432,55 +214,26 @@ function _doInitDialog() {
     })
   })
 
-  // Quick action: chat with admin (explicit handoff, no need to type "chat admin").
-  document.querySelectorAll('[data-quick-admin]').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      e.preventDefault()
-      const handoffMsg = 'Baik, saya akan menghubungkan Anda dengan admin Ekalliptus. Mohon tunggu sebentar...'
-      addMessage(handoffMsg, false)
-      conversationHistory.push({ role: 'assistant', content: handoffMsg })
-      if (!await sendToAdmin('Halo, saya ingin chat dengan admin.')) return
-      switchToAdmin()
-      // Hide quick actions once handed off to admin.
-      document.getElementById('consult-quick-actions')?.classList.add('hidden')
-    })
-  })
-
-  // Re-bind window.consultDialog to the full open/close now that init ran.
   ;(window as any).consultDialog = { open, close }
-  // If the dialog was opened before init finished, open it now.
-
 })()
-} // end _doInitDialog
+}
 
-// GA4 Custom Events
+// GA4: lacak tombol konsultasi, link WhatsApp, dan tombol order di luar dialog.
 function trackEvent(eventName: string, params?: Record<string, unknown>) {
   if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
     (window as any).gtag('event', eventName, params || {})
   }
 }
 
-// Track consultation button clicks
 document.querySelectorAll('[data-track="consultation"]').forEach(function(btn) {
   btn.addEventListener('click', function() { trackEvent('consultation_click', { source: 'button' }) })
 })
 
-// Track WhatsApp link clicks
 document.querySelectorAll('a[data-track="whatsapp"]').forEach(function(link) {
   link.addEventListener('click', function() { trackEvent('whatsapp_click', { source: window.location.pathname }) })
 })
 
-// Track order button clicks
 document.querySelectorAll('a[data-track="order"], button[data-track="order"]').forEach(function(el) {
   el.addEventListener('click', function() { trackEvent('order_click', { source: window.location.pathname }) })
 })
 </script>
-
-<style>
-  @media (prefers-reduced-motion: reduce) {
-    #consult-dialog *, #consult-dialog *::before, #consult-dialog *::after {
-      animation: none !important;
-      transition: none !important;
-    }
-  }
-</style>
