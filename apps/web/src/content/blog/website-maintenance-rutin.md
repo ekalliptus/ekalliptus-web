@@ -326,7 +326,7 @@ Jangan sampai website Anda menjadi "liability" bukan "asset" untuk bisnis. Profe
 
 ### Hubungi Kami:
 - **WhatsApp:** 0819-9990-0306
-- **Email:** salam@ekalliptus.com
+- **Email:** alul@ekalliptus.com
 
 ### Dapatkan:
 - ✅ Free website health check

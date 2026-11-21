@@ -14,7 +14,7 @@ ${posts.slice(0, 20).map(post => {
     const url = absoluteUrl(blogPath(post.slug), siteUrl)
     const image = post.image ? `<img src="${escapeXml(absoluteUrl(post.image, siteUrl))}" alt="${escapeXml(post.image_alt || post.title)}" />` : ''
     const content = `${sanitizeArticleHtml(post.body_html || '') || `<p>${escapeXml(post.description)}</p>`}${image}<p>Baca selengkapnya di: <a href="${escapeXml(url)}">${escapeXml(post.title)}</a></p>`
-    return `<item><title>${escapeXml(post.title)}</title><link>${escapeXml(url)}</link><guid isPermaLink="true">${escapeXml(url)}</guid><description>${escapeXml(post.description)}</description><content:encoded>${cdata(content)}</content:encoded><category>${escapeXml(post.category)}</category>${post.tags.map(tag => `<category>${escapeXml(tag)}</category>`).join('')}<pubDate>${new Date(post.publish_date).toUTCString()}</pubDate><author>salam@ekalliptus.com (Ekalliptus Digital)</author></item>`
+    return `<item><title>${escapeXml(post.title)}</title><link>${escapeXml(url)}</link><guid isPermaLink="true">${escapeXml(url)}</guid><description>${escapeXml(post.description)}</description><content:encoded>${cdata(content)}</content:encoded><category>${escapeXml(post.category)}</category>${post.tags.map(tag => `<category>${escapeXml(tag)}</category>`).join('')}<pubDate>${new Date(post.publish_date).toUTCString()}</pubDate><author>alul@ekalliptus.com (Ekalliptus Digital)</author></item>`
   }).join('')}
 </channel></rss>`
 }

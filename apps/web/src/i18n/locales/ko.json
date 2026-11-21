@@ -2,7 +2,7 @@
   "nav": {
     "home": "홈",
     "services": "서비스",
-"blog": "블로그",
+    "blog": "블로그",
     "about": "회사 소개",
     "contact": "문의",
     "consultation": "지금 상담",
@@ -141,7 +141,7 @@
     },
     "contact": {
       "phone": "+62 819-9990-0306",
-      "email": "ekalliptus{'@'}gmail.com"
+      "email": "alul@ekalliptus.com"
     },
     "whatsappMessage": "안녕하세요 ekalliptus, 제공 중인 서비스에 대해 상담하고 싶습니다. 도와주실 수 있을까요?",
     "emailSubject": "무료 상담 - ekalliptus",
@@ -496,5 +496,21 @@
       "termsLink": "Terms of Service",
       "rights": "All rights reserved."
     }
+  },
+  "waForm": {
+    "title": "WhatsApp 상담",
+    "statusNote": "WhatsApp에서 빠른 답변",
+    "name": "이름",
+    "namePlaceholder": "이름",
+    "need": "필요한 서비스",
+    "needWebsite": "신규 웹사이트",
+    "needMobile": "모바일 앱",
+    "needMaintenance": "유지보수 및 수정",
+    "needOther": "기타",
+    "message": "메시지",
+    "messagePlaceholder": "필요한 내용을 적어주세요 (선택)",
+    "previewLabel": "메시지 미리보기",
+    "submit": "WhatsApp으로 보내기",
+    "privacyNote": "입력한 내용은 여러분의 WhatsApp 앱으로 열립니다. 이 사이트에는 저장되지 않습니다."
   }
 }

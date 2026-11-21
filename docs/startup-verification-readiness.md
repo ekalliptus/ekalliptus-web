@@ -14,7 +14,7 @@ representasi bisnis yang dapat diverifikasi untuk aplikasi program startup
 | Rebranding menjadi Ekalliptus | 2025 (tanggal pasti belum dikonfirmasi) | Perlu konfirmasi owner |
 | Domain ekalliptus.com | Terdaftar 3 Desember 2025 | Owner-confirmed |
 | Badan hukum (NIB/PT/CV) | Belum ada | Owner-confirmed — jangan diklaim |
-| Email bisnis | salam@ekalliptus.com | Ada di seluruh situs; **deliverability belum diverifikasi** (perlu uji kirim/terima) |
+| Email bisnis | alul@ekalliptus.com | Ada di seluruh situs; **deliverability belum diverifikasi** (perlu uji kirim/terima) |
 | Pendiri | Haikal Akhalul Azhar (bio.ekalliptus.com ditautkan dari footer) | Publik via tautan bio; tidak ada klaim tim fiktif di situs |
 
 Kontinuitas sejarah kini dinyatakan eksplisit di halaman `/id/about` (seksi "Sejarah Kami"):
@@ -52,7 +52,7 @@ sebagai tanggal pendirian baru.
 ## 4. Gap yang butuh bukti manusia / keputusan owner
 
 1. Konfirmasi tanggal rebranding persis (untuk konsistensi semua materi).
-2. Uji deliverability salam@ekalliptus.com (kirim/terima, spam filter).
+2. Uji deliverability alul@ekalliptus.com (kirim/terima, spam filter).
 3. Keputusan: tampilkan nama pendiri secara eksplisit di About? (bio sudah ditautkan).
 4. Portofolio: kumpulkan 1-2 studi kasus nyata dengan izin tertulis klien.
 5. Visibilitas repo GitHub (publik/privat) sebagai bukti aktivitas teknis.

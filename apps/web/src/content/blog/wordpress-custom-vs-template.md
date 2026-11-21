@@ -298,7 +298,7 @@ Konsultasikan kebutuhan bisnis Anda dengan kami. Kami akan merekomendasikan pend
 
 ### Hubungi Kami:
 - **WhatsApp:** 0819-9990-0306
-- **Email:** salam@ekalliptus.com
+- **Email:** alul@ekalliptus.com
 
 ### Dapatkan:
 - ✅ Free consultation 30 menit

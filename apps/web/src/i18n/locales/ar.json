@@ -2,7 +2,7 @@
   "nav": {
     "home": "الرئيسية",
     "services": "الخدمات",
-"blog": "المدونة",
+    "blog": "المدونة",
     "about": "من نحن",
     "contact": "اتصل بنا",
     "consultation": "استشر الآن",
@@ -141,7 +141,7 @@
     },
     "contact": {
       "phone": "+62 819-9990-0306",
-      "email": "ekalliptus{'@'}gmail.com"
+      "email": "alul@ekalliptus.com"
     },
     "whatsappMessage": "مرحبًا ekalliptus، أرغب في الاستفسار عن الخدمات المتاحة لديكم. هل يمكنكم مساعدتي؟",
     "emailSubject": "استشارة مجانية - ekalliptus",
@@ -496,5 +496,21 @@
       "termsLink": "Terms of Service",
       "rights": "All rights reserved."
     }
+  },
+  "waForm": {
+    "title": "استشارة عبر واتساب",
+    "statusNote": "يرد المسؤول بسرعة على واتساب",
+    "name": "الاسم",
+    "namePlaceholder": "اكتب اسمك",
+    "need": "ما الذي تحتاجه؟",
+    "needWebsite": "موقع جديد",
+    "needMobile": "تطبيق جوال",
+    "needMaintenance": "صيانة وإصلاح",
+    "needOther": "أخرى",
+    "message": "الرسالة",
+    "messagePlaceholder": "اكتب احتياجك (اختياري)",
+    "previewLabel": "معاينة الرسالة",
+    "submit": "إرسال عبر واتساب",
+    "privacyNote": "تفتح الرسالة في تطبيق واتساب الخاص بك، ولا يتم حفظ أي بيانات على هذا الموقع."
   }
 }

@@ -2,7 +2,7 @@
   "nav": {
     "home": "Ana Sayfa",
     "services": "Hizmetler",
-"blog": "Blog",
+    "blog": "Blog",
     "about": "Hakkımızda",
     "contact": "İletişim",
     "consultation": "Danışmanlık Alın",
@@ -141,7 +141,7 @@
     },
     "contact": {
       "phone": "+62 819-9990-0306",
-      "email": "ekalliptus{'@'}gmail.com"
+      "email": "alul@ekalliptus.com"
     },
     "whatsappMessage": "Merhaba ekalliptus, sunduğunuz hizmetler hakkında danışmak istiyorum. Yardımcı olabilir misiniz?",
     "emailSubject": "Ücretsiz Danışmanlık - ekalliptus",
@@ -496,5 +496,21 @@
       "termsLink": "Terms of Service",
       "rights": "All rights reserved."
     }
+  },
+  "waForm": {
+    "title": "WhatsApp Danışma",
+    "statusNote": "WhatsApp'ta hızlı yanıt",
+    "name": "Adınız",
+    "namePlaceholder": "Adınız",
+    "need": "İhtiyacınız",
+    "needWebsite": "Yeni web sitesi",
+    "needMobile": "Mobil uygulama",
+    "needMaintenance": "Bakım ve düzeltme",
+    "needOther": "Diğer",
+    "message": "Mesaj",
+    "messagePlaceholder": "İhtiyacınızı yazın (isteğe bağlı)",
+    "previewLabel": "Mesaj önizlemesi",
+    "submit": "WhatsApp ile gönder",
+    "privacyNote": "Mesaj kendi WhatsApp uygulamanızda açılır; sitede hiçbir veri saklanmaz."
   }
 }

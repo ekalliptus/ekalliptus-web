@@ -2,7 +2,7 @@
   "nav": {
     "home": "ホーム",
     "services": "サービス",
-"blog": "ブログ",
+    "blog": "ブログ",
     "about": "会社概要",
     "contact": "お問い合わせ",
     "consultation": "今すぐ相談",
@@ -141,7 +141,7 @@
     },
     "contact": {
       "phone": "+62 819-9990-0306",
-      "email": "ekalliptus{'@'}gmail.com"
+      "email": "alul@ekalliptus.com"
     },
     "whatsappMessage": "こんにちは、ekalliptusさん。提供中のサービスについて相談したいです。ご対応をお願いいたします。",
     "emailSubject": "無料相談 - ekalliptus",
@@ -496,5 +496,21 @@
       "termsLink": "Terms of Service",
       "rights": "All rights reserved."
     }
+  },
+  "waForm": {
+    "title": "WhatsAppで相談",
+    "statusNote": "WhatsAppですぐご対応いたします",
+    "name": "お名前",
+    "namePlaceholder": "お名前",
+    "need": "ご要望",
+    "needWebsite": "新規ウェブサイト",
+    "needMobile": "モバイルアプリ",
+    "needMaintenance": "保守・修正",
+    "needOther": "その他",
+    "message": "メッセージ",
+    "messagePlaceholder": "ご要望をご記入ください（任意）",
+    "previewLabel": "メッセージプレビュー",
+    "submit": "WhatsAppで送信",
+    "privacyNote": "入力内容はあなたのWhatsAppアプリで開きます。このサイトには保存されません。"
   }
 }

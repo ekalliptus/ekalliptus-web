@@ -303,7 +303,7 @@ Video yang engaging = lebih views = lebih engagement = lebih followers = lebih s
 
 ### Hubungi Kami Sekarang:
 - **WhatsApp:** 0819-9990-0306
-- **Email:** salam@ekalliptus.com
+- **Email:** alul@ekalliptus.com
 
 ### Dapatkan:
 - ✅ Free consultation

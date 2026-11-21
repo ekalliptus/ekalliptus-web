@@ -2,7 +2,7 @@
   "nav": {
     "home": "Главная",
     "services": "Услуги",
-"blog": "Блог",
+    "blog": "Блог",
     "about": "О нас",
     "contact": "Контакты",
     "consultation": "Получить консультацию",
@@ -141,7 +141,7 @@
     },
     "contact": {
       "phone": "+62 819-9990-0306",
-      "email": "ekalliptus{'@'}gmail.com"
+      "email": "alul@ekalliptus.com"
     },
     "whatsappMessage": "Здравствуйте, ekalliptus. Хотел бы обсудить доступные услуги. Помогите, пожалуйста.",
     "emailSubject": "Бесплатная консультация - ekalliptus",
@@ -496,5 +496,21 @@
       "termsLink": "Terms of Service",
       "rights": "All rights reserved."
     }
+  },
+  "waForm": {
+    "title": "Консультация в WhatsApp",
+    "statusNote": "Администратор быстро ответит в WhatsApp",
+    "name": "Имя",
+    "namePlaceholder": "Ваше имя",
+    "need": "Что вам нужно",
+    "needWebsite": "Новый сайт",
+    "needMobile": "Мобильное приложение",
+    "needMaintenance": "Поддержка и правки",
+    "needOther": "Другое",
+    "message": "Сообщение",
+    "messagePlaceholder": "Опишите потребность (необязательно)",
+    "previewLabel": "Предпросмотр сообщения",
+    "submit": "Отправить через WhatsApp",
+    "privacyNote": "Сообщение откроется в вашем WhatsApp; на сайте ничего не сохраняется."
   }
 }

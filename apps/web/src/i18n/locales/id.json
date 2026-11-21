@@ -152,7 +152,7 @@
     },
     "contact": {
       "phone": "+62 819-9990-0306",
-      "email": "ekalliptus{'@'}gmail.com"
+      "email": "alul@ekalliptus.com"
     },
     "whatsappMessage": "Halo ekalliptus, saya ingin berkonsultasi mengenai layanan yang tersedia. Mohon bantuannya ya.",
     "emailSubject": "Konsultasi Gratis - ekalliptus",
@@ -540,7 +540,7 @@
       "contact": {
         "title": "13. Informasi Kontak",
         "content": "Jika Anda memiliki pertanyaan tentang Kebijakan Privasi ini atau ingin menggunakan hak Anda, harap hubungi kami:",
-        "email": "Email: privacy{'@'}ekalliptus.com",
+        "email": "Email: alul@ekalliptus.com",
         "website": "Website: www.ekalliptus.com",
         "responseTime": "Waktu Respons: Kami akan merespons pertanyaan Anda dalam 30 hari setelah penerimaan."
       }
@@ -694,7 +694,7 @@
       "contact": {
         "title": "17. Informasi Kontak",
         "content": "Jika Anda memiliki pertanyaan tentang Syarat dan Ketentuan Layanan ini, harap hubungi kami:",
-        "email": "Email: legal{'@'}ekalliptus.com",
+        "email": "Email: alul@ekalliptus.com",
         "website": "Website: www.ekalliptus.com",
         "businessHours": "Jam Kerja: Senin - Jumat, 09:00 - 18:00 WIB (Waktu Indonesia Barat)"
       }
@@ -825,5 +825,21 @@
       "termsLink": "Syarat & Ketentuan",
       "rights": "Hak cipta dilindungi."
     }
+  },
+  "waForm": {
+    "title": "Konsultasi WhatsApp",
+    "statusNote": "Admin siap membalas di WhatsApp",
+    "name": "Nama",
+    "namePlaceholder": "Nama kamu",
+    "need": "Kebutuhan",
+    "needWebsite": "Website Baru",
+    "needMobile": "Aplikasi Mobile",
+    "needMaintenance": "Maintenance & Perbaikan",
+    "needOther": "Konsultasi Lainnya",
+    "message": "Pesan",
+    "messagePlaceholder": "Ceritakan kebutuhanmu (opsional)",
+    "previewLabel": "Pratinjau pesan",
+    "submit": "Kirim via WhatsApp",
+    "privacyNote": "Pesan dibuka di aplikasi WhatsApp kamu, tidak ada data yang disimpan di situs ini."
   }
 }

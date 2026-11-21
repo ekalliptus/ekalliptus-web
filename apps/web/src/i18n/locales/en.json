@@ -152,7 +152,7 @@
     },
     "contact": {
       "phone": "+62 819-9990-0306",
-      "email": "ekalliptus{'@'}gmail.com"
+      "email": "alul@ekalliptus.com"
     },
     "whatsappMessage": "Hello ekalliptus, I’d like to consult about the services you offer. Could you please assist me?",
     "emailSubject": "Free Consultation - ekalliptus",
@@ -655,12 +655,12 @@
       "contact": {
         "title": "15. Contact Information",
         "content": "If you have any questions about this Privacy Policy or wish to exercise your rights, please contact us:",
-        "email": "Email: privacy{'@'}ekalliptus.com",
+        "email": "Email: alul@ekalliptus.com",
         "website": "Website: www.ekalliptus.com",
         "responseTime": "Response Time: We will respond to your inquiry within 30 days of receipt as required by GDPR.",
         "dpo": {
           "title": "15.1 Data Protection Officer",
-          "content": "Our Data Protection Officer can be contacted at dpo{'@'}ekalliptus.com for privacy-related concerns."
+          "content": "Our Data Protection Officer can be contacted at alul@ekalliptus.com for privacy-related concerns."
         },
         "complaints": {
           "title": "15.2 Regulatory Complaints",
@@ -903,7 +903,7 @@
       "contact": {
         "title": "18. Contact Information",
         "content": "If you have any questions about these Terms of Service, please contact us:",
-        "email": "Email: legal{'@'}ekalliptus.com",
+        "email": "Email: alul@ekalliptus.com",
         "website": "Website: www.ekalliptus.com",
         "businessHours": "Business Hours: Monday - Friday, 9:00 AM - 6:00 PM WIB (Western Indonesia Time)",
         "address": {
@@ -1073,5 +1073,21 @@
       "termsLink": "Terms of Service",
       "rights": "All rights reserved."
     }
+  },
+  "waForm": {
+    "title": "WhatsApp Consultation",
+    "statusNote": "An admin replies fast on WhatsApp",
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "need": "What do you need",
+    "needWebsite": "New website",
+    "needMobile": "Mobile app",
+    "needMaintenance": "Maintenance & fixes",
+    "needOther": "Other inquiry",
+    "message": "Message",
+    "messagePlaceholder": "Tell us what you need (optional)",
+    "previewLabel": "Message preview",
+    "submit": "Send via WhatsApp",
+    "privacyNote": "The message opens in your own WhatsApp app; nothing is stored on this site."
   }
 }
