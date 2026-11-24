@@ -4,6 +4,8 @@ import type { LoaderFunctionArgs } from "react-router";
 import { Plus } from "lucide-react";
 import { 
   getAdminSession, 
+  requireRole,
+  ADMIN_LEAD_ROLES,
   listLeadsByStage, 
   countLeadsByStage, 
   totalEstimatedValueOpen, 
@@ -16,8 +18,9 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session) return redirect("/admin/login");
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) return redirect("/admin/login");
+  if (!requireRole(rawSession, ADMIN_LEAD_ROLES)) return redirect("/admin");
 
   const board = await listLeadsByStage();
   const counts = await countLeadsByStage();

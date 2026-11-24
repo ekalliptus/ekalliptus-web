@@ -11,12 +11,12 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
 
   # CSP, Google Fonts removed (self-hosted), worker-src added for SW
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' blob: https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com; worker-src 'self' blob:; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' blob: https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com https://www.google.com; worker-src 'self' blob:; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
 
 # ── HTML pages, allow Cloudflare edge cache (60s) + always revalidate ──────
 /
   Cache-Control: public, s-maxage=60, stale-while-revalidate=30, no-cache
-  Link: </fonts/inter-latin-400-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
+  Link: </fonts/inter-latin-400-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </fonts/inter-latin-700-normal.woff2>; rel=preload; as=font; type=font/woff2; crossorigin
 
 /*.html
   Cache-Control: public, s-maxage=60, stale-while-revalidate=30, no-cache

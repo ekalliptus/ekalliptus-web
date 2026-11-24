@@ -1,5 +1,5 @@
 import React from "react";
-import { useLoaderData, Link } from "react-router";
+import { useLoaderData, Link, redirect } from "react-router";
 import type { LoaderFunctionArgs } from "react-router";
 import { Package, MessageSquare, Users, TrendingUp, ArrowUpRight, ShoppingCart } from "lucide-react";
 import { 
@@ -34,7 +34,8 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     return redirect("/admin/login");
   }
 
-  const supabase = getSupabase(true);
+  const canViewBusiness = session.role !== "editor";
+  const supabase = canViewBusiness ? getSupabase(true) : null;
   
   const now = new Date();
   const todayStart = new Date(now); todayStart.setHours(0, 0, 0, 0);

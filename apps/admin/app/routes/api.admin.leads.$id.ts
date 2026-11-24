@@ -2,6 +2,9 @@ import type { ActionFunctionArgs } from "react-router";
 import { 
   getAdminSession, 
   requireRole,
+  ADMIN_LEAD_ROLES,
+  ADMIN_LEAD_DELETE_ROLES,
+  LEAD_STAGE_ORDER,
   getLead, 
   updateLead, 
   deleteLead, 
@@ -10,17 +13,17 @@ import {
   captureRuntimeEnv 
 } from "@ekalliptus/core";
 
-// Matches the sidebar: the Pipeline (leads) page is visible to every admin
-// role, so all known roles may mutate leads; anything else fails closed.
-const LEAD_ROLES = ["admin", "finance", "cs", "tech", "editor"];
-
 export const action = async ({ params, request, context }: ActionFunctionArgs) => {
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = requireRole(await getAdminSession(request.headers.get("Cookie")), LEAD_ROLES);
-  if (!session) {
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const session = requireRole(rawSession, ADMIN_LEAD_ROLES);
+  if (!session) {
+    return Response.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const id = params.id;
@@ -38,20 +41,43 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
 
   if (request.method === "PATCH") {
     try {
-      const body = await request.json();
-      
-      if (body.stage) {
-        if (!isValidStageTransition(current.stage, body.stage)) {
+      const body = await request.json().catch(() => null);
+      if (!body || typeof body !== "object" || Array.isArray(body)) {
+        return Response.json({ error: "Invalid request body" }, { status: 400 });
+      }
+
+      const updatePayload: Record<string, unknown> = {};
+      if (typeof body.name === "string" && body.name.trim()) updatePayload.name = body.name.trim().slice(0, 120);
+      if (body.whatsapp === null || typeof body.whatsapp === "string") updatePayload.whatsapp = body.whatsapp;
+      if (body.email === null || typeof body.email === "string") updatePayload.email = body.email;
+      if (body.company === null || typeof body.company === "string") updatePayload.company = body.company;
+      if (body.service_interest === null || typeof body.service_interest === "string") {
+        updatePayload.service_interest = body.service_interest;
+      }
+      if (body.notes === null || typeof body.notes === "string") updatePayload.notes = body.notes;
+      if (body.stage !== undefined) {
+        if (!LEAD_STAGE_ORDER.includes(body.stage) || !isValidStageTransition(current.stage, body.stage)) {
           return Response.json({ error: "Transition status tidak valid" }, { status: 400 });
+        }
+        updatePayload.stage = body.stage;
+      }
+      if (body.estimated_value !== undefined) {
+        if (body.estimated_value === null || body.estimated_value === "") {
+          updatePayload.estimated_value = null;
+        } else {
+          const parsedVal = Number(body.estimated_value);
+          if (!Number.isFinite(parsedVal) || parsedVal < 0) {
+            return Response.json({ error: "Estimasi nilai tidak valid" }, { status: 400 });
+          }
+          updatePayload.estimated_value = parsedVal;
         }
       }
 
-      // Convert value to number if present
-      if (body.estimated_value !== undefined) {
-        body.estimated_value = body.estimated_value ? Number(body.estimated_value) : null;
+      if (Object.keys(updatePayload).length === 0) {
+        return Response.json({ error: "Tidak ada field valid untuk diperbarui" }, { status: 400 });
       }
 
-      const updated = await updateLead(id, body);
+      const updated = await updateLead(id, updatePayload as any);
       if (!updated) {
         return Response.json({ error: "Failed to update lead" }, { status: 500 });
       }
@@ -69,11 +95,15 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
 
       return Response.json({ lead: updated }, { status: 200 });
     } catch (err: any) {
-      return Response.json({ error: err.message || "Internal server error" }, { status: 500 });
+      console.error("Update lead API error:", err);
+      return Response.json({ error: "Internal server error" }, { status: 500 });
     }
   }
 
   if (request.method === "DELETE") {
+    if (!requireRole(rawSession, ADMIN_LEAD_DELETE_ROLES)) {
+      return Response.json({ error: "Forbidden" }, { status: 403 });
+    }
     try {
       const ok = await deleteLead(id);
       if (ok) {
@@ -89,7 +119,8 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
       }
       return Response.json({ success: ok }, { status: ok ? 200 : 500 });
     } catch (err: any) {
-      return Response.json({ error: err.message || "Internal server error" }, { status: 500 });
+      console.error("Delete lead API error:", err);
+      return Response.json({ error: "Internal server error" }, { status: 500 });
     }
   }
 

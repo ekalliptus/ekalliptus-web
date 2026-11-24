@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { flushSync } from "react-dom";
 import { 
   Outlet, 
   useLoaderData, 
@@ -29,7 +30,7 @@ import {
   Moon, 
   Sun 
 } from "lucide-react";
-import { getAdminSession, ADMIN_COOKIE_NAME } from "@ekalliptus/core";
+import { getAdminSession, captureRuntimeEnv } from "@ekalliptus/core";
 
 // Define navigation links
 const primaryLinks = [
@@ -50,7 +51,10 @@ const businessLinks = [
   { key: "settings", href: "/admin/settings", icon: Settings, label: "Settings", disabled: false }
 ];
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const env = (context as any).cloudflare?.env;
+  if (env) captureRuntimeEnv(env);
+
   const session = await getAdminSession(request.headers.get("Cookie"));
   if (!session) {
     const url = new URL(request.url);
@@ -69,14 +73,17 @@ export default function AdminLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
 
-  const role = session?.role ?? "admin";
+  const role = session.role;
 
   function canSee(key: string): boolean {
     if (role === "owner" || role === "admin") return true;
+    if (key === "dashboard") return true;
     if (key === "blog") return role === "editor";
     if (key === "vouchers" || key === "payments" || key === "reports") return role === "finance";
     if (key === "consultations") return role === "cs";
-    if (key === "orders" || key === "customers" || key === "pipeline" || key === "activities" || key === "dashboard") return true;
+    if (key === "orders" || key === "customers" || key === "pipeline" || key === "activities") {
+      return role === "finance" || role === "cs" || role === "tech";
+    }
     return false;
   }
 
@@ -96,21 +103,157 @@ export default function AdminLayout() {
     }
   };
 
+  const isDarkRef = useRef(isDark);
+  const pendingPersistRef = useRef<string | null>(null);
+  const activeAnimationRef = useRef<Animation | null>(null);
+  const fallbackTimerRef = useRef<number | null>(null);
+  const transitionSeqRef = useRef(0);
+
+  isDarkRef.current = isDark;
+
+  const persistTheme = (mode: string) => {
+    try {
+      localStorage.setItem("ekal-theme", mode);
+    } catch {
+      // Ignore storage failures in private browsing.
+    }
+  };
+
   // Sync and toggle theme
   useEffect(() => {
     const initialTheme = localStorage.getItem("ekal-theme") || "dark";
-    setIsDark(initialTheme === "dark");
-    document.documentElement.classList.toggle("dark", initialTheme === "dark");
+    const initialDark = initialTheme === "dark";
+    isDarkRef.current = initialDark;
+    setIsDark(initialDark);
+    document.documentElement.classList.toggle("dark", initialDark);
+
+    const flushPendingPersist = () => {
+      if (pendingPersistRef.current !== null) {
+        persistTheme(pendingPersistRef.current);
+        pendingPersistRef.current = null;
+      }
+    };
+
+    window.addEventListener("pagehide", flushPendingPersist);
+    return () => {
+      window.removeEventListener("pagehide", flushPendingPersist);
+      flushPendingPersist();
+      if (fallbackTimerRef.current !== null) {
+        window.clearTimeout(fallbackTimerRef.current);
+        fallbackTimerRef.current = null;
+      }
+      try {
+        activeAnimationRef.current?.cancel();
+      } catch {
+        // Ignore animation cancellation errors on teardown.
+      }
+      activeAnimationRef.current = null;
+      document.documentElement.classList.remove("theme-switching");
+    };
   }, []);
 
-  const toggleTheme = () => {
-    const nextDark = !isDark;
-    setIsDark(nextDark);
+  const toggleTheme = (event: MouseEvent<HTMLButtonElement>) => {
+    const nextDark = !isDarkRef.current;
+    const nextMode = nextDark ? "dark" : "light";
+    isDarkRef.current = nextDark;
+
     const root = document.documentElement;
+    const doc = document as Document & {
+      startViewTransition?: (updateCallback: () => void) => {
+        ready: Promise<void>;
+        finished: Promise<void>;
+      };
+    };
+
+    const vw = Math.max(window.innerWidth, root.clientWidth);
+    const vh = Math.max(
+      window.innerHeight,
+      root.clientHeight,
+      window.visualViewport?.height ?? 0,
+    );
+    const rect = event?.currentTarget?.getBoundingClientRect?.();
+    const x = Math.round(rect ? rect.left + rect.width / 2 : vw - 40);
+    const y = Math.round(rect ? rect.top + rect.height / 2 : 32);
+    const baseRadius = Math.hypot(Math.max(x, vw - x), Math.max(y, vh - y));
+    const maxRadius = Math.ceil(baseRadius * 1.1 + 48);
+
+    if (typeof doc.startViewTransition === "function") {
+      const seq = ++transitionSeqRef.current;
+      try {
+        try {
+          activeAnimationRef.current?.cancel();
+        } catch {
+          // Ignore animation cancellation errors on aborted transitions.
+        }
+        activeAnimationRef.current = null;
+        pendingPersistRef.current = nextMode;
+
+        const transition = doc.startViewTransition(() => {
+          root.classList.add("theme-switching");
+          root.classList.toggle("dark", nextDark);
+          flushSync(() => {
+            setIsDark(nextDark);
+          });
+        });
+
+        void transition.ready
+          .then(() => {
+            if (transitionSeqRef.current !== seq) return;
+            activeAnimationRef.current = root.animate(
+              {
+                clipPath: [
+                  `circle(0px at ${x}px ${y}px)`,
+                  `circle(${maxRadius}px at ${x}px ${y}px)`,
+                ],
+              },
+              {
+                duration: 420,
+                easing: "cubic-bezier(0.32, 0, 0.68, 1)",
+                fill: "both",
+                pseudoElement: "::view-transition-new(root)",
+              },
+            );
+          })
+          .catch(() => {
+            // Ignore aborted view transitions on rapid repeated clicks.
+          });
+
+        void transition.finished
+          .catch(() => {
+            // Ignore aborted view transitions on rapid repeated clicks.
+          })
+          .finally(() => {
+            if (transitionSeqRef.current === seq) {
+              root.classList.remove("theme-switching");
+              activeAnimationRef.current = null;
+              if (pendingPersistRef.current !== null) {
+                persistTheme(pendingPersistRef.current);
+                pendingPersistRef.current = null;
+              }
+            }
+          });
+        return;
+      } catch {
+        if (transitionSeqRef.current === seq) {
+          root.classList.remove("theme-switching");
+          activeAnimationRef.current = null;
+        }
+      }
+    }
+
+    root.classList.remove("theme-switching");
+    if (fallbackTimerRef.current !== null) {
+      window.clearTimeout(fallbackTimerRef.current);
+    }
     root.classList.add("theme-transitioning");
     root.classList.toggle("dark", nextDark);
-    localStorage.setItem("ekal-theme", nextDark ? "dark" : "light");
-    setTimeout(() => root.classList.remove("theme-transitioning"), 320);
+    setIsDark(nextDark);
+    persistTheme(nextMode);
+    pendingPersistRef.current = null;
+    fallbackTimerRef.current = window.setTimeout(() => {
+      root.classList.remove("theme-transitioning");
+      fallbackTimerRef.current = null;
+    }, 300);
   };
 
   return (
@@ -320,7 +463,7 @@ export default function AdminLayout() {
                 </button>
                 
                 <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full glass-pill">
-                  <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse"></div>
+                  <div className="h-1.5 w-1.5 rounded-full bg-primary"></div>
                   <span className="text-[11px] font-medium">Online</span>
                 </div>
               </div>

@@ -1,10 +1,13 @@
 import React from "react";
-import { useLoaderData, useLocation, Link } from "react-router";
+import { useLoaderData, useLocation, Link, redirect } from "react-router";
 import type { LoaderFunctionArgs } from "react-router";
 import { ShoppingCart, Eye } from "lucide-react";
 import { 
   getSupabase, 
   getAdminSession, 
+  requireRole,
+  ADMIN_ORDER_ROLES,
+  sanitizePostgrestSearch,
   captureRuntimeEnv 
 } from "@ekalliptus/core";
 import SearchFilter from "../components/SearchFilter";
@@ -25,13 +28,17 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session) {
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) {
     return redirect("/admin/login");
+  }
+  if (!requireRole(rawSession, ADMIN_ORDER_ROLES)) {
+    return redirect("/admin");
   }
 
   const url = new URL(request.url);
   const search = url.searchParams.get("search") ?? "";
+  const safeSearch = sanitizePostgrestSearch(search);
   const service = url.searchParams.get("service") ?? "";
   const status = url.searchParams.get("status") ?? "";
   const page = Math.max(1, Number(url.searchParams.get("page") ?? "1"));
@@ -45,7 +52,7 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
 
   if (supabase) {
     let q = supabase.from("orders").select("*", { count: "exact" }).order("created_at", { ascending: false }).range(from, to);
-    if (search) q = q.or(`customer_name.ilike.%${search}%,whatsapp.ilike.%${search}%`);
+    if (safeSearch) q = q.or(`customer_name.ilike.%${safeSearch}%,whatsapp.ilike.%${safeSearch}%`);
     if (service) q = q.eq("service_type", service);
     if (status) q = q.eq("status", status);
     

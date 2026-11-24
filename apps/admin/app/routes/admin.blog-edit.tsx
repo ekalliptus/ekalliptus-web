@@ -12,22 +12,23 @@ import { Trash2, ArrowLeft } from "lucide-react";
 import { 
   getAdminSession, 
   requireRole,
+  ADMIN_BLOG_ROLES,
   getPost, 
   updatePost, 
   deletePost, 
   writeAudit, 
   captureRuntimeEnv 
 } from "@ekalliptus/core";
-import BlogEditor from "../components/editor/BlogEditor";
+
+const BlogEditor = React.lazy(() => import("../components/editor/BlogEditor"));
 
 export const loader = async ({ params, request, context }: LoaderFunctionArgs) => {
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session || (session.role !== "owner" && session.role !== "admin" && session.role !== "editor")) {
-    return redirect("/admin/login");
-  }
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) return redirect("/admin/login");
+  if (!requireRole(rawSession, ADMIN_BLOG_ROLES)) return redirect("/admin");
 
   if (!params.id) return redirect("/admin/blog");
 
@@ -41,8 +42,10 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = requireRole(await getAdminSession(request.headers.get("Cookie")), ["admin", "editor"]);
-  if (!session) return redirect("/admin/login");
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) return redirect("/admin/login");
+  const session = requireRole(rawSession, ADMIN_BLOG_ROLES);
+  if (!session) return Response.json({ error: "Forbidden" }, { status: 403 });
 
   const id = params.id;
   if (!id) return redirect("/admin/blog");
@@ -71,7 +74,8 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
       }
       return redirect("/admin/blog");
     } catch (err: any) {
-      return { error: err.message || "Gagal menghapus post." };
+      console.error("Delete blog error:", err);
+      return { error: "Gagal menghapus post." };
     }
   }
 
@@ -130,7 +134,7 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
     return redirect("/admin/blog");
   } catch (err: any) {
     console.error("Update blog error:", err);
-    return { error: err.message || "Terjadi kesalahan sistem." };
+    return { error: "Terjadi kesalahan sistem." };
   }
 };
 
@@ -229,7 +233,15 @@ export default function BlogEdit() {
         
         <div className="block">
           <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1.5 block">Konten</span>
-          <BlogEditor initialContent={post.body_html || ""} />
+          <React.Suspense
+            fallback={
+              <div className="h-64 rounded-lg border border-border bg-input/40 p-4 text-xs text-muted-foreground">
+                Memuat editor konten...
+              </div>
+            }
+          >
+            <BlogEditor initialContent={post.body_html || ""} />
+          </React.Suspense>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">

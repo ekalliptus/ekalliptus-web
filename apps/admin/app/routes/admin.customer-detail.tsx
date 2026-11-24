@@ -4,6 +4,8 @@ import type { LoaderFunctionArgs } from "react-router";
 import { Mail, Phone, Building2, Calendar, ArrowLeft } from "lucide-react";
 import { 
   getAdminSession, 
+  requireRole,
+  ADMIN_CUSTOMER_ROLES,
   getCustomerDetail, 
   formatIDR, 
   captureRuntimeEnv 
@@ -13,8 +15,9 @@ export const loader = async ({ params, request, context }: LoaderFunctionArgs) =
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session) return redirect("/admin/login");
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) return redirect("/admin/login");
+  if (!requireRole(rawSession, ADMIN_CUSTOMER_ROLES)) return redirect("/admin");
 
   if (!params.id) return redirect("/admin/customers");
   

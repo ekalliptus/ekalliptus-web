@@ -125,7 +125,7 @@ const blogUnavailableNotice = 'Artikel hanya tersedia dalam Bahasa Indonesia'
         class="cursor-interactive hidden items-center gap-1.5 rounded-full px-2.5 py-1.5 text-sm font-medium transition hover:bg-card/20 md:flex"
         aria-label="Change language"
       >
-        <img src={currentLanguage.flag} alt="" width="20" height="15" class="shrink-0" />
+        <img src={currentLanguage.flag} alt="" width="20" height="15" class="shrink-0" decoding="async" />
         <span class="hidden lg:inline text-xs">{currentLanguage.nativeName}</span>
         <Languages class="h-3.5 w-3.5" />
       </button>
@@ -221,7 +221,7 @@ const blogUnavailableNotice = 'Artikel hanya tersedia dalam Bahasa Indonesia'
           data-lang={lang.code}
           class="lang-btn flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm opacity-40 cursor-not-allowed"
         >
-          <img src={lang.flag} alt="" width="24" height="18" class="shrink-0" />
+          <img src={lang.flag} alt="" width="24" height="18" class="shrink-0" loading="lazy" decoding="async" />
           <span class="text-xs truncate">{lang.name}</span>
         </button>
       ) : (
@@ -234,7 +234,7 @@ const blogUnavailableNotice = 'Artikel hanya tersedia dalam Bahasa Indonesia'
           ]}
           data-active={lang.code === currentLang}
         >
-          <img src={lang.flag} alt="" width="24" height="18" class="shrink-0" />
+          <img src={lang.flag} alt="" width="24" height="18" class="shrink-0" loading="lazy" decoding="async" />
           <span class="text-xs truncate">{lang.name}</span>
         </a>
       ))}
@@ -288,7 +288,7 @@ const blogUnavailableNotice = 'Artikel hanya tersedia dalam Bahasa Indonesia'
           data-lang={lang.code}
           class="lang-modal-btn language-button group flex flex-col items-center gap-2 rounded-xl px-3 py-4 text-center opacity-40 cursor-not-allowed"
         >
-          <img src={lang.flag} alt="" width="40" height="30" class="shrink-0" />
+          <img src={lang.flag} alt="" width="40" height="30" class="shrink-0" loading="lazy" decoding="async" />
           <div class="flex flex-col items-center">
             <span class="text-sm font-medium leading-tight">{lang.nativeName}</span>
             <span class="text-xs text-muted-foreground leading-tight">{lang.name}</span>
@@ -304,7 +304,7 @@ const blogUnavailableNotice = 'Artikel hanya tersedia dalam Bahasa Indonesia'
           ]}
           data-active={lang.code === currentLang}
         >
-          <img src={lang.flag} alt="" width="40" height="30" class="shrink-0 group-hover:scale-110 transition-transform duration-300" />
+          <img src={lang.flag} alt="" width="40" height="30" class="shrink-0 group-hover:scale-110 transition-transform duration-300" loading="lazy" decoding="async" />
           <div class="flex flex-col items-center">
             <span class="text-sm font-medium leading-tight">{lang.nativeName}</span>
             <span class="text-xs text-muted-foreground leading-tight">{lang.name}</span>
@@ -428,42 +428,128 @@ const blogUnavailableNotice = 'Artikel hanya tersedia dalam Bahasa Indonesia'
     langBackdrop.addEventListener('click', closeModal)
   }
   
+  let themeTransitionSeq = 0
+  let activeThemeAnimation = null
+  let pendingThemePersist = null
+  let themeFallbackTimer = null
+
+  function persistTheme(mode) {
+    try {
+      localStorage.setItem('ekal-theme', mode)
+    } catch {
+      // Ignore storage failures in private browsing.
+    }
+  }
+
+  window.addEventListener('pagehide', function () {
+    if (pendingThemePersist !== null) {
+      persistTheme(pendingThemePersist)
+      pendingThemePersist = null
+    }
+  })
+
   function toggleTheme(event) {
     const root = document.documentElement
     const isDark = root.classList.contains('dark')
     const newDark = !isDark
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const nextMode = newDark ? 'dark' : 'light'
 
-    // Capture click origin for circular reveal
+    const vw = Math.max(window.innerWidth, document.documentElement.clientWidth)
+    const vh = Math.max(
+      window.innerHeight,
+      document.documentElement.clientHeight,
+      window.visualViewport ? window.visualViewport.height : 0
+    )
     const target = event && event.currentTarget
-    let cx = '50%', cy = '50%'
+    let x = vw - 40
+    let y = 32
     if (target && target.getBoundingClientRect) {
       const r = target.getBoundingClientRect()
-      cx = (r.left + r.width / 2) + 'px'
-      cy = (r.top + r.height / 2) + 'px'
+      x = r.left + r.width / 2
+      y = r.top + r.height / 2
     }
-    root.style.setProperty('--theme-x', cx)
-    root.style.setProperty('--theme-y', cy)
+    x = Math.round(x)
+    y = Math.round(y)
+    const baseRadius = Math.hypot(Math.max(x, vw - x), Math.max(y, vh - y))
+    const maxRadius = Math.ceil(baseRadius * 1.1 + 48)
 
-    const apply = () => {
-      root.classList.toggle('dark', newDark)
-      localStorage.setItem('ekal-theme', newDark ? 'dark' : 'light')
-      updateThemeIcons(newDark)
+    if (typeof document.startViewTransition === 'function') {
+      const seq = ++themeTransitionSeq
+      try {
+        if (activeThemeAnimation) {
+          try {
+            activeThemeAnimation.cancel()
+          } catch {
+            // Ignore animation cancellation errors on aborted transitions.
+          }
+          activeThemeAnimation = null
+        }
+        pendingThemePersist = nextMode
+
+        const transition = document.startViewTransition(function () {
+          root.classList.add('theme-switching')
+          root.classList.toggle('dark', newDark)
+          updateThemeIcons(newDark)
+        })
+
+        void transition.ready
+          .then(function () {
+            if (themeTransitionSeq !== seq) return
+            activeThemeAnimation = root.animate(
+              {
+                clipPath: [
+                  `circle(0px at ${x}px ${y}px)`,
+                  `circle(${maxRadius}px at ${x}px ${y}px)`
+                ]
+              },
+              {
+                duration: 420,
+                easing: 'cubic-bezier(0.32, 0, 0.68, 1)',
+                fill: 'both',
+                pseudoElement: '::view-transition-new(root)'
+              }
+            )
+          })
+          .catch(function () {
+            // Ignore aborted view transitions on rapid repeated clicks.
+          })
+
+        void transition.finished
+          .catch(function () {
+            // Ignore aborted view transitions on rapid repeated clicks.
+          })
+          .finally(function () {
+            if (themeTransitionSeq === seq) {
+              root.classList.remove('theme-switching')
+              activeThemeAnimation = null
+              if (pendingThemePersist !== null) {
+                persistTheme(pendingThemePersist)
+                pendingThemePersist = null
+              }
+            }
+          })
+        return
+      } catch {
+        if (themeTransitionSeq === seq) {
+          root.classList.remove('theme-switching')
+          activeThemeAnimation = null
+        }
+      }
     }
 
-    // Modern path: View Transitions API (Chrome/Edge/Safari 18+)
-    if (!reduced && document.startViewTransition) {
-      const transition = document.startViewTransition(apply)
-      transition.finished.catch(() => {})
-      return
+    root.classList.remove('theme-switching')
+    if (themeFallbackTimer !== null) {
+      window.clearTimeout(themeFallbackTimer)
     }
-
-    // Fallback: scoped CSS transitions
     root.classList.add('theme-transitioning')
-    apply()
-    window.setTimeout(function () {
+    root.classList.toggle('dark', newDark)
+    updateThemeIcons(newDark)
+    persistTheme(nextMode)
+    pendingThemePersist = null
+    themeFallbackTimer = window.setTimeout(function () {
       root.classList.remove('theme-transitioning')
-    }, 360)
+      themeFallbackTimer = null
+    }, 300)
   }
   
   function updateThemeIcons(isDark) {

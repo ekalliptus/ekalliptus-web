@@ -1,13 +1,17 @@
 import type { LoaderFunctionArgs } from "react-router";
-import { getAdminSession, listAudit, captureRuntimeEnv } from "@ekalliptus/core";
+import { getAdminSession, requireRole, ADMIN_AUDIT_ROLES, listAudit, captureRuntimeEnv } from "@ekalliptus/core";
 
 export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session || (session.role !== "owner" && session.role !== "admin")) {
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const session = requireRole(rawSession, ADMIN_AUDIT_ROLES);
+  if (!session) {
+    return Response.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const url = new URL(request.url);

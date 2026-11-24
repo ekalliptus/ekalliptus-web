@@ -1,6 +1,8 @@
 import type { ActionFunctionArgs } from "react-router";
 import { 
   getAdminSession, 
+  requireRole,
+  ADMIN_CONSULTATION_ROLES,
   getSupabase, 
   writeAudit, 
   captureRuntimeEnv 
@@ -10,9 +12,13 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session || (session.role !== "owner" && session.role !== "admin" && session.role !== "editor")) {
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const session = requireRole(rawSession, ADMIN_CONSULTATION_ROLES);
+  if (!session) {
+    return Response.json({ error: "Forbidden" }, { status: 403 });
   }
 
   if (request.method !== "POST") {
@@ -92,6 +98,6 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
     return Response.json({ message: insertedMessage }, { status: 201 });
   } catch (error: any) {
     console.error("Admin consultation reply error:", error);
-    return Response.json({ error: error.message || "Internal server error" }, { status: 500 });
+    return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 };

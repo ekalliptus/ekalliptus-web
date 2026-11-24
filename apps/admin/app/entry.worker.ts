@@ -1,6 +1,7 @@
 import { createRequestHandler, RouterContextProvider } from "react-router";
 // @ts-ignore
 import * as build from "virtual:react-router/server-build";
+import { applyAdminSecurityHeaders } from "./lib/security-headers";
 
 let handler: any = null;
 
@@ -13,6 +14,7 @@ export default {
     const context = new RouterContextProvider();
     (context as any).cloudflare = { env, ctx };
 
-    return handler(request, context);
+    const response = await handler(request, context);
+    return applyAdminSecurityHeaders(response);
   }
 } satisfies ExportedHandler;

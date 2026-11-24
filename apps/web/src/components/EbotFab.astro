@@ -21,10 +21,9 @@ import { X, MessageCircle } from 'lucide-astro'
   <!-- Floating button -->
   <button
     id="ebot-trigger"
-    class="group relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 transition-all duration-300 hover:scale-105 hover:bg-primary/90 active:scale-95 cursor-interactive"
+    class="group relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 ring-4 ring-primary/15 transition-all duration-300 hover:scale-105 hover:bg-primary/90 active:scale-95 cursor-interactive"
     aria-label="Buka konsultasi WhatsApp"
   >
-    <span class="absolute inset-0 rounded-full bg-primary animate-ping opacity-20"></span>
     <MessageCircle class="relative h-6 w-6 sm:h-7 sm:w-7" />
     <span class="sr-only">WhatsApp</span>
   </button>

@@ -44,7 +44,7 @@ scripts/.superpowers/
 # Brainstorm session content (visual companion)
 .superpowers/
 *.sql
-!supabase/migrations/20260908000001_restrict_public_consultation_access.sql
+!supabase/migrations/*.sql
 
 # Astro content-layer local cache
 apps/web/.astro/data-store.json

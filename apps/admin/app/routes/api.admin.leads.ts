@@ -2,22 +2,23 @@ import type { ActionFunctionArgs } from "react-router";
 import { 
   getAdminSession, 
   requireRole,
+  ADMIN_LEAD_ROLES,
   createLead, 
   writeAudit, 
   captureRuntimeEnv 
 } from "@ekalliptus/core";
 
-// Matches the sidebar: the Pipeline (leads) page is visible to every admin
-// role, so all known roles may mutate leads; anything else fails closed.
-const LEAD_ROLES = ["admin", "finance", "cs", "tech", "editor"];
-
 export const action = async ({ request, context }: ActionFunctionArgs) => {
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = requireRole(await getAdminSession(request.headers.get("Cookie")), LEAD_ROLES);
-  if (!session) {
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const session = requireRole(rawSession, ADMIN_LEAD_ROLES);
+  if (!session) {
+    return Response.json({ error: "Forbidden" }, { status: 403 });
   }
 
   if (request.method !== "POST") {
@@ -60,6 +61,6 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     return Response.json({ lead }, { status: 201 });
   } catch (err: any) {
     console.error("Create lead API error:", err);
-    return Response.json({ error: err.message || "Internal server error" }, { status: 500 });
+    return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 };

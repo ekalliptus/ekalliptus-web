@@ -62,28 +62,90 @@ async function sendTelegramNotification(order: any): Promise<void> {
   }
 }
 
-function escapeMarkdown(text: string): string {
-  return text.replace(/[_*[\]()~`>#+\-=|{}.!\\]/g, '\\$&')
+function escapeMarkdown(text: unknown): string {
+  return String(text ?? '').replace(/[_*[\]()~`>#+\-=|{}.!\\]/g, '\\$&')
+}
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+function timingSafeEqual(a: string, b: string): boolean {
+  const enc = new TextEncoder()
+  const aBytes = enc.encode(a)
+  const bBytes = enc.encode(b)
+  const maxLen = Math.max(aBytes.length, bBytes.length)
+  let diff = aBytes.length ^ bBytes.length
+  for (let i = 0; i < maxLen; i += 1) {
+    diff |= (aBytes[i] ?? 0) ^ (bBytes[i] ?? 0)
+  }
+  return diff === 0
 }
 
 Deno.serve(async (req) => {
-  try {
-    const payload = await req.json()
-    const order = payload.record
+  if (req.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  }
 
-    if (!order || !order.id) {
-      return new Response(JSON.stringify({ error: 'Invalid payload' }), { status: 400 })
+  const expectedSecret = Deno.env.get('ORDER_WEBHOOK_SECRET')?.trim()
+  if (!expectedSecret) {
+    console.error('[order-webhook] ORDER_WEBHOOK_SECRET is not configured')
+    return new Response(JSON.stringify({ error: 'Webhook not configured' }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  }
+
+  const providedSecret = req.headers.get('x-webhook-secret')?.trim() ?? ''
+  if (!providedSecret || !timingSafeEqual(providedSecret, expectedSecret)) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  }
+
+  try {
+    const payload = await req.json().catch(() => null)
+    const order = payload?.record
+
+    if (!order || typeof order.id !== 'string' || !UUID_RE.test(order.id)) {
+      return new Response(JSON.stringify({ error: 'Invalid payload' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      })
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const supabase = createClient(supabaseUrl, supabaseKey)
 
-    const result = await withRetry(() => sendTelegramNotification(order))
+    const { data: verifiedOrder, error: orderErr } = await supabase
+      .from('orders')
+      .select('id, customer_name, whatsapp, service_type, price, pricing, description, scope')
+      .eq('id', order.id)
+      .maybeSingle()
+
+    if (orderErr) {
+      console.error('[order-webhook] Order lookup error:', orderErr)
+      return new Response(JSON.stringify({ error: 'Internal server error' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+
+    if (!verifiedOrder) {
+      return new Response(JSON.stringify({ error: 'Order not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+
+    const result = await withRetry(() => sendTelegramNotification(verifiedOrder))
 
     if (!result.success) {
       await supabase.from('order_sync_failures').insert({
-        order_id: order.id,
+        order_id: verifiedOrder.id,
         target: 'telegram',
         error_message: result.error || 'Unknown error',
         attempts: result.attempts
@@ -95,6 +157,9 @@ Deno.serve(async (req) => {
     }), { status: 200, headers: { 'Content-Type': 'application/json' } })
   } catch (err) {
     console.error('Edge function error:', err)
-    return new Response(JSON.stringify({ error: String(err) }), { status: 500 })
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    })
   }
 })

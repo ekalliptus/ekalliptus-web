@@ -11,6 +11,8 @@ import { ArrowLeft, Phone } from "lucide-react";
 import { 
   getSupabase, 
   getAdminSession, 
+  requireRole,
+  ADMIN_ORDER_ROLES,
   captureRuntimeEnv,
   writeAudit
 } from "@ekalliptus/core";
@@ -24,12 +26,21 @@ const SERVICE_LABEL: Record<string, string> = {
   editing: "Other" 
 };
 
+const ALLOWED_ORDER_STATUSES = new Set([
+  "new",
+  "contacted",
+  "in_progress",
+  "done",
+  "cancelled"
+]);
+
 export const loader = async ({ params, request, context }: LoaderFunctionArgs) => {
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session) return redirect("/admin/login");
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) return redirect("/admin/login");
+  if (!requireRole(rawSession, ADMIN_ORDER_ROLES)) return redirect("/admin");
 
   const supabase = getSupabase(true);
   if (!supabase || !params.id) return { order: null };
@@ -47,8 +58,10 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session) return redirect("/admin/login");
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) return redirect("/admin/login");
+  const session = requireRole(rawSession, ADMIN_ORDER_ROLES);
+  if (!session) return Response.json({ error: "Forbidden" }, { status: 403 });
 
   try {
     const form = await request.formData();
@@ -57,6 +70,9 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
 
     if (!supabase || !params.id || !status) {
       return { error: "Parameter tidak lengkap." };
+    }
+    if (!ALLOWED_ORDER_STATUSES.has(status)) {
+      return { error: "Status order tidak valid." };
     }
 
     // Get old values for audit
@@ -72,7 +88,8 @@ export const action = async ({ params, request, context }: ActionFunctionArgs) =
       .eq("id", params.id);
 
     if (error) {
-      return { error: error.message };
+      console.error("Order status update error:", error);
+      return { error: "Gagal memperbarui status." };
     }
 
     // Write audit log

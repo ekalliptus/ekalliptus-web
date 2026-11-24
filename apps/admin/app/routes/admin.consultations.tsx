@@ -4,6 +4,8 @@ import type { LoaderFunctionArgs } from "react-router";
 import { MessageSquare, RefreshCw, Send } from "lucide-react";
 import { 
   getAdminSession, 
+  requireRole,
+  ADMIN_CONSULTATION_ROLES,
   getSupabase, 
   captureRuntimeEnv 
 } from "@ekalliptus/core";
@@ -12,8 +14,9 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session) return redirect("/admin/login");
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) return redirect("/admin/login");
+  if (!requireRole(rawSession, ADMIN_CONSULTATION_ROLES)) return redirect("/admin");
 
   const supabaseUrl = env?.PUBLIC_SUPABASE_URL || "";
   const supabaseAnonKey = env?.PUBLIC_SUPABASE_ANON_KEY || "";

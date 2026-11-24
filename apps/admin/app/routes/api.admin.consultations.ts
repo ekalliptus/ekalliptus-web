@@ -1,6 +1,8 @@
 import type { LoaderFunctionArgs } from "react-router";
 import { 
   getAdminSession, 
+  requireRole,
+  ADMIN_CONSULTATION_ROLES,
   getSupabase, 
   captureRuntimeEnv 
 } from "@ekalliptus/core";
@@ -9,9 +11,12 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session || (session.role !== "owner" && session.role !== "admin" && session.role !== "editor")) {
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+  if (!requireRole(rawSession, ADMIN_CONSULTATION_ROLES)) {
+    return Response.json({ error: "Forbidden" }, { status: 403 });
   }
 
   try {
@@ -61,6 +66,6 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
     return Response.json({ consultations: formatted }, { status: 200 });
   } catch (error: any) {
     console.error("Consultations API error:", error);
-    return Response.json({ error: error.message || "Internal server error" }, { status: 500 });
+    return Response.json({ error: "Internal server error" }, { status: 500 });
   }
 };

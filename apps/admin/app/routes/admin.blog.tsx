@@ -4,6 +4,8 @@ import type { LoaderFunctionArgs } from "react-router";
 import { FileText, Plus } from "lucide-react";
 import { 
   getAdminSession, 
+  requireRole,
+  ADMIN_BLOG_ROLES,
   listPosts, 
   captureRuntimeEnv 
 } from "@ekalliptus/core";
@@ -26,8 +28,9 @@ export const loader = async ({ request, context }: LoaderFunctionArgs) => {
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session) return redirect("/admin/login");
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) return redirect("/admin/login");
+  if (!requireRole(rawSession, ADMIN_BLOG_ROLES)) return redirect("/admin");
 
   const url = new URL(request.url);
   const search = url.searchParams.get("search") ?? "";

@@ -9,7 +9,7 @@ import { PAGE_CACHE_CONTROL, sMaxageTtl, isCacheableRequest } from './lib/cache-
 // all pages are SSR). Script-src additionally allows the AdSense origins the
 // site loads (pagead2/tpc.googlesyndication.com) and frame-src the ad iframes,
 // which the static _headers policy never had to cover.
-const HTML_CSP = "default-src 'self'; script-src 'self' 'unsafe-inline' blob: https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com; worker-src 'self' blob:; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.googlesyndication.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+const HTML_CSP = "default-src 'self'; script-src 'self' 'unsafe-inline' blob: https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com https://pagead2.googlesyndication.com https://tpc.googlesyndication.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com https://www.google.com; worker-src 'self' blob:; frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.googlesyndication.com; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
 const MINIMAL_CSP = "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
 
 type RateLimitBinding = { limit(input: { key: string }): Promise<{ success: boolean }> }
@@ -37,7 +37,12 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
   }
   if (ctx.url.pathname.startsWith('/api/')) secured.headers.set('Cache-Control', 'no-store')
 
-  await cacheStore(ctx, secured)
+  const cfContext = (ctx.locals as { cfContext?: { waitUntil?: (promise: Promise<unknown>) => void } }).cfContext
+  if (cfContext && typeof cfContext.waitUntil === 'function') {
+    cfContext.waitUntil(cacheStore(ctx, secured))
+  } else {
+    await cacheStore(ctx, secured)
+  }
   if (!secured.headers.has('X-Cache') && sMaxageTtl(secured.headers.get('Cache-Control')) > 0) {
     secured.headers.set('X-Cache', 'MISS')
   }

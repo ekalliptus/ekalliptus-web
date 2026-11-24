@@ -4,17 +4,22 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { 
   getAdminSession, 
+  requireRole,
+  ADMIN_BLOG_ROLES,
   createPost, 
   writeAudit, 
   captureRuntimeEnv 
 } from "@ekalliptus/core";
-import BlogEditor from "../components/editor/BlogEditor";
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session || (session.role !== "owner" && session.role !== "admin" && session.role !== "editor")) {
-    return redirect("/admin/login");
-  }
+const BlogEditor = React.lazy(() => import("../components/editor/BlogEditor"));
+
+export const loader = async ({ request, context }: LoaderFunctionArgs) => {
+  const env = (context as any).cloudflare?.env;
+  if (env) captureRuntimeEnv(env);
+
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) return redirect("/admin/login");
+  if (!requireRole(rawSession, ADMIN_BLOG_ROLES)) return redirect("/admin");
   return null;
 };
 
@@ -22,8 +27,10 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
   const env = (context as any).cloudflare?.env;
   if (env) captureRuntimeEnv(env);
 
-  const session = await getAdminSession(request.headers.get("Cookie"));
-  if (!session) return redirect("/admin/login");
+  const rawSession = await getAdminSession(request.headers.get("Cookie"));
+  if (!rawSession) return redirect("/admin/login");
+  const session = requireRole(rawSession, ADMIN_BLOG_ROLES);
+  if (!session) return Response.json({ error: "Forbidden" }, { status: 403 });
 
   try {
     const form = await request.formData();
@@ -78,7 +85,7 @@ export const action = async ({ request, context }: ActionFunctionArgs) => {
     return redirect("/admin/blog");
   } catch (err: any) {
     console.error("Create blog error:", err);
-    return { error: err.message || "Terjadi kesalahan sistem." };
+    return { error: "Terjadi kesalahan sistem." };
   }
 };
 
@@ -147,7 +154,15 @@ export default function BlogNew() {
         
         <div className="block">
           <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide mb-1.5 block">Konten</span>
-          <BlogEditor />
+          <React.Suspense
+            fallback={
+              <div className="h-64 rounded-lg border border-border bg-input/40 p-4 text-xs text-muted-foreground">
+                Memuat editor konten...
+              </div>
+            }
+          >
+            <BlogEditor />
+          </React.Suspense>
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
