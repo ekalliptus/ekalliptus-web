@@ -4,11 +4,15 @@ export const defaultLocale: Locale = 'id'
 
 const localeSet = new Set<string>(locales)
 const translatedRoutes = new Set([
-  '/', '/about', '/order', '/editorial-policy', '/privacy-policy', '/terms-of-service',
+  '/', '/about', '/order', '/portfolio', '/editorial-policy', '/privacy-policy', '/terms-of-service',
   '/services/website', '/services/mobile-app', '/services/maintenance',
 ])
-const bypassExact = new Set(['/robots.txt', '/sitemap.xml', '/sitemap-index.xml', '/sitemap-pages.xml', '/blog/rss.xml', '/blog/feed.json', '/blog/sitemap.xml'])
+const bypassExact = new Set(['/robots.txt', '/sitemap.xml', '/sitemap-index.xml', '/sitemap-pages.xml', '/portfolio/sitemap.xml', '/blog/rss.xml', '/blog/feed.json', '/blog/sitemap.xml'])
 const assetExtension = /\.[a-z0-9]{2,8}$/i
+
+export function isPortfolioDetailPath(pathname: string): boolean {
+  return /^\/portfolio\/[a-z0-9]+(?:-[a-z0-9]+)*\/?$/i.test(pathname)
+}
 
 export const indexablePages = [...translatedRoutes, '/blog'].map(path => localizedPath(path, 'id'))
 
@@ -50,7 +54,7 @@ export function routePolicy(pathname: string): RoutePolicy {
   if (stripped.locale !== 'id' && (stripped.pathname === '/blog' || stripped.pathname.startsWith('/blog/'))) {
     return { action: 'not-found', status: 404, locale: stripped.locale, publicPathname: pathname, indexable: false }
   }
-  if (stripped.locale !== 'id' && !translatedRoutes.has(stripped.pathname)) {
+  if (stripped.locale !== 'id' && !translatedRoutes.has(stripped.pathname) && !isPortfolioDetailPath(stripped.pathname)) {
     return { action: 'not-found', status: 404, locale: stripped.locale, publicPathname: pathname, indexable: false }
   }
   return {

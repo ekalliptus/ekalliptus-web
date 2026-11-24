@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro'
 import Hero from '../components/Hero.astro'
 import Services from '../components/Services.astro'
+import PortfolioShowcase from '../components/PortfolioShowcase.astro'
 import ProcessSteps from '../components/ProcessSteps.astro'
 import TrustBand from '../components/TrustBand.astro'
 import FAQ from '../components/FAQ.astro'
@@ -40,6 +41,7 @@ for (let i = 0; i < FAQ_COUNT; i++) {
   <main id="main-content" class="relative z-0 flex min-h-screen flex-col pt-14 sm:pt-16 md:pt-20">
     <Hero t={(key: string) => t(key, locale)} />
     <Services t={(key: string) => t(key, locale)} />
+    <PortfolioShowcase t={(key: string) => t(key, locale)} locale={locale} />
     <ProcessSteps t={(key: string) => t(key, locale)} />
     <TrustBand t={(key: string) => t(key, locale)} />
     <FAQ t={(key: string) => t(key, locale)} />

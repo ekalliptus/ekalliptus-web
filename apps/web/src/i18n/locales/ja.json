@@ -2,6 +2,7 @@
   "nav": {
     "home": "ホーム",
     "services": "サービス",
+    "portfolio": "ポートフォリオ",
     "blog": "ブログ",
     "about": "会社概要",
     "contact": "お問い合わせ",
@@ -512,5 +513,18 @@
     "previewLabel": "メッセージプレビュー",
     "submit": "WhatsAppで送信",
     "privacyNote": "入力内容はあなたのWhatsAppアプリで開きます。このサイトには保存されません。"
+  },
+  "portfolio": {
+    "homeTitle": "導入可能な実績プロジェクト",
+    "homeSubtitle": "すぐに導入できるWebサイト・アプリやカスタム開発のご相談をWhatsAppで直接承ります。",
+    "homeViewAll": "ポートフォリオ一覧を見る",
+    "title": "ポートフォリオ",
+    "subtitle": "そのまま購入・導入できる制作実績や、業務に合わせたカスタム開発をWhatsAppから直接ご依頼いただけます。",
+    "allCategories": "すべて",
+    "buyViaWa": "WhatsAppで購入を相談",
+    "customViaWa": "WhatsAppでカスタム相談",
+    "soldViaWa": "類似案件をWhatsAppで相談",
+    "viewDemo": "ライブデモを見る",
+    "viewDetail": "詳細を見る"
   }
 }

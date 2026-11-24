@@ -24,3 +24,6 @@ simple = { limit = 60, period = 60 }
 
 [observability]
 enabled = true
+
+[vars]
+ERP_API_BASE_URL = "https://br-odd-frog-aoghf6vq-erpapi.compute.c-2.ap-southeast-1.aws.neon.tech"

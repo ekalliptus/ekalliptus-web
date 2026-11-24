@@ -1,0 +1,381 @@
+---
+import { ArrowUpRight, ExternalLink, MessageCircle } from 'lucide-astro'
+import Navigation from '../components/Navigation.astro'
+import Layout from '../layouts/Layout.astro'
+import { getDir, t } from '../i18n'
+import { serializeJsonLd } from '../lib/article-html'
+import { waLink } from '../lib/constants'
+import { localizedPath, type Locale } from '../lib/locale-routing'
+import { fetchPublicPortfolio, type PublicPortfolioProject } from '../lib/portfolio'
+import { buildPortfolioWaUrl, formatPortfolioPrice } from '../lib/portfolio-wa'
+
+export const prerender = false
+
+const locale = Astro.locals.locale ?? 'id'
+const dir = getDir(locale)
+const tr = (key: string) => t(key, locale)
+const publicPath = (path: string) => localizedPath(path, locale as Locale)
+
+const res = await fetchPublicPortfolio({ limit: 50 })
+const hasError = res.status === 'error'
+const items: PublicPortfolioProject[] = res.status === 'ok' ? res.items : []
+const featured = items[0] ?? null
+const restItems = items.slice(1)
+const availableCategories = [...new Set(items.map((item) => item.category))]
+
+const siteUrl = 'https://ekalliptus.com'
+const canonical = new URL(Astro.locals.publicPathname ?? Astro.url.pathname, siteUrl).toString()
+
+const buildCardWa = (item: PublicPortfolioProject) => {
+  const priceLabel = formatPortfolioPrice(item, locale)
+  const intent = item.offer_type === 'custom_similar' ? 'custom_similar' : 'buy_ready'
+  return buildPortfolioWaUrl({
+    title: item.title,
+    slug: item.slug,
+    priceLabel,
+    intent,
+    pageUrl: `${siteUrl}${publicPath(`/portfolio/${item.slug}`)}`,
+    customIntro: item.whatsapp_prefill,
+    locale,
+  })
+}
+
+const ctaLabel = (item: PublicPortfolioProject) => {
+  if (item.availability_status === 'sold') return tr('portfolio.soldViaWa')
+  if (item.offer_type === 'custom_similar') return tr('portfolio.customViaWa')
+  return tr('portfolio.buyViaWa')
+}
+
+const catalogSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: tr('portfolio.title'),
+  description: tr('portfolio.metaDescription'),
+  url: canonical,
+  publisher: { '@id': `${siteUrl}#organization` },
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: items.map((item, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      name: item.title,
+      url: `${siteUrl}${publicPath(`/portfolio/${item.slug}`)}`,
+    })),
+  },
+}
+---
+
+<Layout
+  title={tr('portfolio.metaTitle')}
+  description={tr('portfolio.metaDescription')}
+  lang={locale}
+  dir={dir}
+>
+  <script type="application/ld+json" set:html={serializeJsonLd(catalogSchema)} />
+  <Navigation t={tr} currentLang={locale} />
+
+  <main id="main-content" class="relative z-0 min-h-screen pt-14 sm:pt-16 md:pt-20">
+    <div class="portfolio-shell">
+      <header class="portfolio-masthead">
+        <h1>{tr('portfolio.title')}</h1>
+        <p>{tr('portfolio.subtitle')}</p>
+
+        {items.length > 0 ? (
+          <div class="portfolio-filters" role="group" aria-label={tr('portfolio.allCategories')}>
+            <button
+              type="button"
+              class="portfolio-filter-btn"
+              data-portfolio-filter="all"
+              aria-pressed="true"
+            >
+              {tr('portfolio.allCategories')}
+            </button>
+            {availableCategories.map((cat) => (
+              <button
+                type="button"
+                class="portfolio-filter-btn"
+                data-portfolio-filter={cat}
+                aria-pressed="false"
+              >
+                {tr(`portfolio.categories.${cat}`)}
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </header>
+
+      {hasError ? (
+        <section class="rounded-2xl border border-border bg-card p-6 sm:p-8">
+          <h2 class="text-xl font-bold text-foreground">{tr('portfolio.errorTitle')}</h2>
+          <p class="mt-2 max-w-2xl text-sm text-muted-foreground">{tr('portfolio.errorBody')}</p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a href={Astro.url.pathname} class="portfolio-btn-secondary">
+              <span>{tr('portfolio.retryButton')}</span>
+            </a>
+            <a
+              href={waLink('Halo Ekalliptus, saya ingin menanyakan katalog project portofolio.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="portfolio-btn-primary"
+            >
+              <MessageCircle size={17} aria-hidden="true" />
+              <span>{tr('portfolio.homeEmptyCta')}</span>
+            </a>
+          </div>
+        </section>
+      ) : items.length === 0 ? (
+        <section class="rounded-2xl border border-border bg-card p-6 sm:p-8">
+          <h2 class="text-xl font-bold text-foreground">{tr('portfolio.emptyTitle')}</h2>
+          <p class="mt-2 max-w-2xl text-sm text-muted-foreground">{tr('portfolio.emptyBody')}</p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a
+              href={waLink('Halo Ekalliptus, saya ingin melihat demo project portofolio terbaru.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="portfolio-btn-primary"
+            >
+              <MessageCircle size={17} aria-hidden="true" />
+              <span>{tr('portfolio.homeEmptyCta')}</span>
+            </a>
+            <a href={publicPath('/order')} class="portfolio-btn-secondary">
+              <span>{tr('portfolio.sendOrderForm')}</span>
+            </a>
+          </div>
+        </section>
+      ) : (
+        <div id="portfolio-catalog-content">
+          {featured ? (
+            <article class="portfolio-flagship" data-portfolio-card data-category={featured.category}>
+              <a href={publicPath(`/portfolio/${featured.slug}`)} class="portfolio-media-frame">
+                {featured.cover_image_url ? (
+                  <img
+                    src={featured.cover_image_url}
+                    alt={featured.title}
+                    width="1280"
+                    height="800"
+                    loading="eager"
+                    fetchpriority="high"
+                    decoding="async"
+                  />
+                ) : (
+                  <div class="portfolio-cover-fallback">
+                    <span class="text-xs font-semibold uppercase tracking-wider">
+                      {tr(`portfolio.categories.${featured.category}`)}
+                    </span>
+                    <strong class="text-2xl font-bold leading-tight">{featured.title}</strong>
+                  </div>
+                )}
+              </a>
+
+              <div class="flex flex-col gap-4">
+                <div class="portfolio-badge-row">
+                  <span class="portfolio-status-pill" data-status={featured.availability_status}>
+                    {tr(`portfolio.status.${featured.availability_status}`)}
+                  </span>
+                  <span class="portfolio-category-tag">
+                    {tr(`portfolio.categories.${featured.category}`)}
+                  </span>
+                </div>
+
+                <h2 class="text-2xl font-bold leading-tight text-foreground sm:text-3xl">
+                  <a href={publicPath(`/portfolio/${featured.slug}`)} class="hover:underline">
+                    {featured.title}
+                  </a>
+                </h2>
+
+                {featured.tagline ? (
+                  <p class="text-sm leading-relaxed text-muted-foreground sm:text-base">
+                    {featured.tagline}
+                  </p>
+                ) : null}
+
+                {featured.tech_stack.length > 0 ? (
+                  <div class="portfolio-tech-list">
+                    {featured.tech_stack.slice(0, 6).map((tech) => (
+                      <span class="portfolio-tech-chip">{tech}</span>
+                    ))}
+                  </div>
+                ) : null}
+
+                <div class="flex flex-wrap items-baseline gap-3 pt-1">
+                  <p class="text-2xl font-bold text-foreground">
+                    {formatPortfolioPrice(featured, locale)}
+                  </p>
+                  {featured.original_price_amount && featured.price_type !== 'negotiable' ? (
+                    <span class="text-sm text-muted-foreground line-through">
+                      {formatPortfolioPrice(
+                        { price_type: 'fixed', price_amount: featured.original_price_amount },
+                        locale,
+                      )}
+                    </span>
+                  ) : null}
+                </div>
+
+                <div class="portfolio-actions">
+                  <a
+                    href={buildCardWa(featured)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="portfolio-btn-primary"
+                  >
+                    <MessageCircle size={17} aria-hidden="true" />
+                    <span>{ctaLabel(featured)}</span>
+                  </a>
+                  <a href={publicPath(`/portfolio/${featured.slug}`)} class="portfolio-btn-secondary">
+                    <span>{tr('portfolio.viewDetail')}</span>
+                    <ArrowUpRight size={17} aria-hidden="true" />
+                  </a>
+                  {featured.demo_url ? (
+                    <a
+                      href={featured.demo_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="portfolio-btn-secondary"
+                    >
+                      <span>{tr('portfolio.viewDemo')}</span>
+                      <ExternalLink size={16} aria-hidden="true" />
+                    </a>
+                  ) : null}
+                </div>
+              </div>
+            </article>
+          ) : null}
+
+          {restItems.length > 0 ? (
+            <div class="portfolio-grid">
+              {restItems.map((item) => (
+                <article class="portfolio-card" data-portfolio-card data-category={item.category}>
+                  <a href={publicPath(`/portfolio/${item.slug}`)} class="portfolio-media-frame">
+                    {item.cover_image_url ? (
+                      <img
+                        src={item.cover_image_url}
+                        alt={item.title}
+                        width="960"
+                        height="600"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ) : (
+                      <div class="portfolio-cover-fallback">
+                        <span class="text-xs font-semibold uppercase tracking-wider">
+                          {tr(`portfolio.categories.${item.category}`)}
+                        </span>
+                        <strong class="text-xl font-bold leading-tight">{item.title}</strong>
+                      </div>
+                    )}
+                  </a>
+
+                  <div class="portfolio-card-body">
+                    <div class="portfolio-badge-row">
+                      <span class="portfolio-status-pill" data-status={item.availability_status}>
+                        {tr(`portfolio.status.${item.availability_status}`)}
+                      </span>
+                      <span class="portfolio-category-tag">
+                        {tr(`portfolio.categories.${item.category}`)}
+                      </span>
+                    </div>
+
+                    <h2 class="text-xl font-bold text-foreground">
+                      <a href={publicPath(`/portfolio/${item.slug}`)} class="hover:underline">
+                        {item.title}
+                      </a>
+                    </h2>
+
+                    {item.tagline ? (
+                      <p class="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                        {item.tagline}
+                      </p>
+                    ) : null}
+
+                    {item.tech_stack.length > 0 ? (
+                      <div class="portfolio-tech-list">
+                        {item.tech_stack.slice(0, 4).map((tech) => (
+                          <span class="portfolio-tech-chip">{tech}</span>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    <div class="flex flex-wrap items-baseline gap-2.5 pt-1">
+                      <p class="text-lg font-bold text-foreground">
+                        {formatPortfolioPrice(item, locale)}
+                      </p>
+                      {item.original_price_amount && item.price_type !== 'negotiable' ? (
+                        <span class="text-xs text-muted-foreground line-through">
+                          {formatPortfolioPrice(
+                            { price_type: 'fixed', price_amount: item.original_price_amount },
+                            locale,
+                          )}
+                        </span>
+                      ) : null}
+                    </div>
+
+                    <div class="portfolio-actions">
+                      <a
+                        href={buildCardWa(item)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="portfolio-btn-primary"
+                      >
+                        <MessageCircle size={16} aria-hidden="true" />
+                        <span>{ctaLabel(item)}</span>
+                      </a>
+                      <a href={publicPath(`/portfolio/${item.slug}`)} class="portfolio-btn-secondary">
+                        <span>{tr('portfolio.viewDetail')}</span>
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : null}
+
+          <div
+            id="portfolio-empty-filter"
+            hidden
+            class="rounded-2xl border border-border bg-card p-6 sm:p-8"
+          >
+            <h2 class="text-lg font-bold text-foreground">{tr('portfolio.emptyFilterTitle')}</h2>
+            <p class="mt-2 text-sm text-muted-foreground">{tr('portfolio.emptyFilterBody')}</p>
+            <button
+              type="button"
+              id="portfolio-reset-filter"
+              class="portfolio-btn-secondary mt-4"
+            >
+              {tr('portfolio.resetFilter')}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  </main>
+
+  <script>
+    const buttons = Array.from(document.querySelectorAll('[data-portfolio-filter]'))
+    const cards = Array.from(document.querySelectorAll('[data-portfolio-card]'))
+    const emptyNotice = document.getElementById('portfolio-empty-filter')
+    const resetBtn = document.getElementById('portfolio-reset-filter')
+
+    function applyFilter(selected: string) {
+      let visibleCount = 0
+      for (const btn of buttons) {
+        const val = btn.getAttribute('data-portfolio-filter')
+        btn.setAttribute('aria-pressed', String(val === selected))
+      }
+      for (const card of cards) {
+        const match = selected === 'all' || card.getAttribute('data-category') === selected
+        card.toggleAttribute('hidden', !match)
+        if (match) visibleCount += 1
+      }
+      if (emptyNotice) {
+        emptyNotice.toggleAttribute('hidden', visibleCount > 0)
+      }
+    }
+
+    for (const btn of buttons) {
+      btn.addEventListener('click', () => {
+        applyFilter(btn.getAttribute('data-portfolio-filter') || 'all')
+      })
+    }
+    resetBtn?.addEventListener('click', () => applyFilter('all'))
+  </script>
+</Layout>

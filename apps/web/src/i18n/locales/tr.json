@@ -2,6 +2,7 @@
   "nav": {
     "home": "Ana Sayfa",
     "services": "Hizmetler",
+    "portfolio": "Portfolyo",
     "blog": "Blog",
     "about": "Hakkımızda",
     "contact": "İletişim",
@@ -512,5 +513,18 @@
     "previewLabel": "Mesaj önizlemesi",
     "submit": "WhatsApp ile gönder",
     "privacyNote": "Mesaj kendi WhatsApp uygulamanızda açılır; sitede hiçbir veri saklanmaz."
+  },
+  "portfolio": {
+    "homeTitle": "Hazır ve Özelleştirilebilir Projeler",
+    "homeSubtitle": "Doğrudan satın alabileceğiniz veya işletmenize göre uyarlayabileceğiniz projeler için WhatsApp ile iletişime geçin.",
+    "homeViewAll": "Tüm Portfolyoyu Gör",
+    "title": "Proje Portfolyosu",
+    "subtitle": "Hazır olarak satın alabileceğiniz veya iş akışınıza göre özelleştirebileceğiniz dijital projeler.",
+    "allCategories": "Tüm Kategoriler",
+    "buyViaWa": "WhatsApp ile Projeyi Satın Al",
+    "customViaWa": "WhatsApp ile Özel Sürüm İste",
+    "soldViaWa": "Benzer Proje İçin WhatsApp",
+    "viewDemo": "Canlı Demoyu Aç",
+    "viewDetail": "Proje Detayları"
   }
 }

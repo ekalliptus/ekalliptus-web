@@ -12,6 +12,7 @@ const { t, currentLang = 'id' } = Astro.props
 const sectionLinks = [
   { key: 'home', hash: '#home' },
   { key: 'services', hash: '#services', dropdown: true },
+  { key: 'portfolio', href: '/portfolio', external: true },
   // Blog exists only in Indonesian; localized blog URLs 404, so this link
   // must always target /id/blog regardless of the active locale.
   { key: 'blog', href: '/id/blog', external: true, fixedLocale: true },

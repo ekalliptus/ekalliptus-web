@@ -1,0 +1,486 @@
+---
+import { ArrowLeft, ArrowUpRight, Check, ExternalLink, MessageCircle } from 'lucide-astro'
+import Navigation from '../../components/Navigation.astro'
+import Layout from '../../layouts/Layout.astro'
+import { getDir, t } from '../../i18n'
+import { serializeJsonLd } from '../../lib/article-html'
+import { waLink } from '../../lib/constants'
+import { localizedPath, type Locale } from '../../lib/locale-routing'
+import {
+  fetchPublicPortfolio,
+  fetchPublicPortfolioBySlug,
+  type PublicPortfolioProject,
+} from '../../lib/portfolio'
+import {
+  buildPortfolioWaUrl,
+  formatPortfolioPrice,
+  type PortfolioPurchaseIntent,
+} from '../../lib/portfolio-wa'
+
+export const prerender = false
+
+const locale = Astro.locals.locale ?? 'id'
+const dir = getDir(locale)
+const tr = (key: string) => t(key, locale)
+const publicPath = (path: string) => localizedPath(path, locale as Locale)
+const slugParam = String(Astro.params.slug ?? '')
+
+const detailRes = await fetchPublicPortfolioBySlug(slugParam)
+if (detailRes.status === 'not_found') {
+  return new Response(
+    `<!DOCTYPE html><html lang="${locale}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${tr('portfolio.notFoundTitle')}</title></head><body><main style="font-family:system-ui,sans-serif;max-width:640px;margin:4rem auto;padding:1.5rem"><h1>${tr('portfolio.notFoundTitle')}</h1><p>${tr('portfolio.notFoundBody')}</p><p><a href="${publicPath('/portfolio')}">${tr('portfolio.backToCatalog')}</a></p></main></body></html>`,
+    {
+      status: 404,
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-store',
+      },
+    },
+  )
+}
+if (detailRes.status === 'error') {
+  return new Response('Portfolio service temporarily unavailable', {
+    status: 503,
+    headers: { 'Cache-Control': 'no-store', 'Retry-After': '120' },
+  })
+}
+
+const item = detailRes.item
+const listRes = await fetchPublicPortfolio({ limit: 4 })
+const relatedItems: PublicPortfolioProject[] =
+  listRes.status === 'ok'
+    ? listRes.items.filter((other) => other.slug !== item.slug).slice(0, 3)
+    : []
+
+const siteUrl = 'https://ekalliptus.com'
+const canonicalPath = publicPath(`/portfolio/${item.slug}`)
+const canonical = `${siteUrl}${canonicalPath}`
+
+const mediaImages = [
+  ...(item.cover_image_url ? [item.cover_image_url] : []),
+  ...item.gallery_image_urls.filter((u) => u !== item.cover_image_url),
+]
+const primaryImage = mediaImages[0] ?? null
+
+const priceLabel = formatPortfolioPrice(item, locale)
+const originalPriceLabel =
+  item.original_price_amount && item.price_type !== 'negotiable'
+    ? formatPortfolioPrice(
+        { price_type: 'fixed', price_amount: item.original_price_amount },
+        locale,
+      )
+    : null
+
+const buyReadyWaHref = buildPortfolioWaUrl({
+  title: item.title,
+  slug: item.slug,
+  priceLabel,
+  intent: 'buy_ready',
+  pageUrl: canonical,
+  customIntro: item.whatsapp_prefill,
+  locale,
+})
+
+const customWaHref = buildPortfolioWaUrl({
+  title: item.title,
+  slug: item.slug,
+  priceLabel,
+  intent: 'custom_similar',
+  pageUrl: canonical,
+  customIntro: item.whatsapp_prefill,
+  locale,
+})
+
+const defaultIntent: PortfolioPurchaseIntent =
+  item.offer_type === 'custom_similar' ? 'custom_similar' : 'buy_ready'
+const defaultWaHref = defaultIntent === 'custom_similar' ? customWaHref : buyReadyWaHref
+
+const defaultCtaLabel =
+  item.availability_status === 'sold'
+    ? tr('portfolio.soldViaWa')
+    : defaultIntent === 'custom_similar'
+      ? tr('portfolio.customViaWa')
+      : tr('portfolio.buyViaWa')
+
+const paragraphs = item.summary
+  .split(/\r?\n{2,}/)
+  .map((p) => p.trim())
+  .filter(Boolean)
+
+const numericPriceDigits = item.price_amount?.replace(/\D/g, '') ?? ''
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: item.title,
+  description: item.tagline || item.summary.slice(0, 220),
+  url: canonical,
+  ...(primaryImage ? { image: mediaImages } : {}),
+  brand: { '@id': `${siteUrl}#organization` },
+  ...(numericPriceDigits && item.price_type !== 'negotiable'
+    ? {
+        offers: {
+          '@type': 'Offer',
+          priceCurrency: item.currency || 'IDR',
+          price: numericPriceDigits,
+          availability:
+            item.availability_status === 'sold'
+              ? 'https://schema.org/OutOfStock'
+              : 'https://schema.org/InStock',
+          url: canonical,
+        },
+      }
+    : {}),
+}
+---
+
+<Layout
+  title={`${item.title} | ${tr('portfolio.detailMetaSuffix')}`}
+  description={item.tagline || tr('portfolio.metaDescription')}
+  lang={locale}
+  dir={dir}
+  image={primaryImage ?? '/og-image.webp'}
+  imageAlt={item.title}
+>
+  <script type="application/ld+json" set:html={serializeJsonLd(productSchema)} />
+  <Navigation t={tr} currentLang={locale} />
+
+  <main id="main-content" class="relative z-0 min-h-screen pt-14 sm:pt-16 md:pt-20">
+    <div class="portfolio-shell">
+      <header class="portfolio-detail-header">
+        <nav aria-label="Breadcrumb" class="mb-4 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+          <a href={publicPath('/')} class="hover:text-foreground hover:underline">
+            {tr('portfolio.breadcrumbHome')}
+          </a>
+          <span aria-hidden="true">/</span>
+          <a href={publicPath('/portfolio')} class="hover:text-foreground hover:underline">
+            {tr('portfolio.breadcrumbPortfolio')}
+          </a>
+          <span aria-hidden="true">/</span>
+          <span class="font-medium text-foreground">{item.title}</span>
+        </nav>
+
+        <div class="portfolio-badge-row mb-3">
+          <span class="portfolio-status-pill" data-status={item.availability_status}>
+            {tr(`portfolio.status.${item.availability_status}`)}
+          </span>
+          <span class="portfolio-category-tag">
+            {tr(`portfolio.categories.${item.category}`)}
+          </span>
+        </div>
+
+        <h1 class="max-w-4xl text-3xl font-bold leading-tight text-foreground sm:text-4xl lg:text-5xl">
+          {item.title}
+        </h1>
+        {item.tagline ? (
+          <p class="mt-3 max-w-3xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            {item.tagline}
+          </p>
+        ) : null}
+      </header>
+
+      <div class="portfolio-detail-layout">
+        <!-- Left Column: Visual Showcase & Details -->
+        <div class="space-y-8">
+          <section aria-label={tr('portfolio.galleryLabel')} class="space-y-3">
+            <div class="portfolio-media-frame">
+              {primaryImage ? (
+                <img
+                  id="portfolio-main-image"
+                  src={primaryImage}
+                  alt={item.title}
+                  width="1280"
+                  height="800"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
+                />
+              ) : (
+                <div class="portfolio-cover-fallback">
+                  <span class="text-xs font-semibold uppercase tracking-wider">
+                    {tr(`portfolio.categories.${item.category}`)}
+                  </span>
+                  <strong class="text-3xl font-bold leading-tight">{item.title}</strong>
+                </div>
+              )}
+            </div>
+
+            {mediaImages.length > 1 ? (
+              <div class="flex gap-2.5 overflow-x-auto pb-1" role="group" aria-label={tr('portfolio.galleryLabel')}>
+                {mediaImages.map((imgUrl, idx) => (
+                  <button
+                    type="button"
+                    class="portfolio-thumb-btn"
+                    data-gallery-src={imgUrl}
+                    data-gallery-alt={`${item.title} (${idx + 1}/${mediaImages.length})`}
+                    aria-pressed={idx === 0 ? 'true' : 'false'}
+                    aria-label={`${tr('portfolio.galleryLabel')} ${idx + 1}`}
+                  >
+                    <img
+                      src={imgUrl}
+                      alt=""
+                      width="192"
+                      height="120"
+                      loading="lazy"
+                      decoding="async"
+                      class="h-full w-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </section>
+
+          {item.demo_url ? (
+            <section class="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-card px-5 py-4">
+              <div class="min-w-0">
+                <p class="text-sm font-semibold text-foreground">{tr('portfolio.viewDemo')}</p>
+                <p class="truncate font-mono text-xs text-muted-foreground">{item.demo_url}</p>
+              </div>
+              <a
+                href={item.demo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="portfolio-btn-secondary"
+              >
+                <span>{tr('portfolio.viewDemo')}</span>
+                <ExternalLink size={16} aria-hidden="true" />
+              </a>
+            </section>
+          ) : null}
+
+          {paragraphs.length > 0 ? (
+            <section class="space-y-3">
+              <h2 class="text-2xl font-bold text-foreground">{tr('portfolio.aboutProject')}</h2>
+              <div class="space-y-3 text-base leading-relaxed text-muted-foreground">
+                {paragraphs.map((paragraph) => (
+                  <p class="whitespace-pre-line">{paragraph}</p>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          {item.highlights.length > 0 ? (
+            <section class="space-y-3">
+              <h2 class="text-2xl font-bold text-foreground">
+                {tr('portfolio.deliverablesTitle')}
+              </h2>
+              <ul class="space-y-2.5">
+                {item.highlights.map((point) => (
+                  <li class="flex items-start gap-3 text-sm leading-relaxed text-foreground sm:text-base">
+                    <Check size={18} class="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+
+          {item.tech_stack.length > 0 ? (
+            <section class="space-y-3">
+              <h2 class="text-2xl font-bold text-foreground">{tr('portfolio.techStackTitle')}</h2>
+              <div class="portfolio-tech-list">
+                {item.tech_stack.map((tech) => (
+                  <span class="portfolio-tech-chip">{tech}</span>
+                ))}
+              </div>
+            </section>
+          ) : null}
+        </div>
+
+        <!-- Right Column: Sticky WhatsApp Buy-Box -->
+        <aside class="portfolio-buybox" aria-label={tr('portfolio.priceLabel')}>
+          <div class="portfolio-badge-row">
+            <span class="portfolio-status-pill" data-status={item.availability_status}>
+              {tr(`portfolio.status.${item.availability_status}`)}
+            </span>
+            <span class="portfolio-category-tag">
+              {tr(`portfolio.offer.${item.offer_type}`)}
+            </span>
+          </div>
+
+          <div>
+            <p class="text-xs font-medium text-muted-foreground">{tr('portfolio.priceLabel')}</p>
+            <div class="mt-1 flex flex-wrap items-baseline gap-2.5">
+              <p class="text-3xl font-bold text-foreground">{priceLabel}</p>
+              {originalPriceLabel ? (
+                <span class="text-sm text-muted-foreground line-through">
+                  {originalPriceLabel}
+                </span>
+              ) : null}
+            </div>
+          </div>
+
+          {item.offer_type === 'hybrid' && item.availability_status !== 'sold' ? (
+            <div class="portfolio-intent-group" role="group" aria-label={tr('portfolio.buyReadyOption')}>
+              <button
+                type="button"
+                class="portfolio-intent-btn"
+                data-wa-intent="buy_ready"
+                data-wa-href={buyReadyWaHref}
+                data-wa-label={tr('portfolio.buyViaWa')}
+                aria-pressed="true"
+              >
+                {tr('portfolio.buyReadyOption')}
+              </button>
+              <button
+                type="button"
+                class="portfolio-intent-btn"
+                data-wa-intent="custom_similar"
+                data-wa-href={customWaHref}
+                data-wa-label={tr('portfolio.customViaWa')}
+                aria-pressed="false"
+              >
+                {tr('portfolio.customOption')}
+              </button>
+            </div>
+          ) : null}
+
+          <div class="flex flex-col gap-2.5">
+            <a
+              id="portfolio-wa-cta"
+              href={defaultWaHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="portfolio-btn-primary w-full"
+            >
+              <MessageCircle size={18} aria-hidden="true" />
+              <span id="portfolio-wa-cta-label">{defaultCtaLabel}</span>
+            </a>
+
+            {item.demo_url ? (
+              <a
+                href={item.demo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="portfolio-btn-secondary w-full"
+              >
+                <ExternalLink size={17} aria-hidden="true" />
+                <span>{tr('portfolio.viewDemo')}</span>
+              </a>
+            ) : null}
+          </div>
+
+          {(item.delivery_estimate || item.client_name) ? (
+            <dl class="space-y-2.5 border-t border-border pt-4 text-sm">
+              {item.delivery_estimate ? (
+                <div class="flex items-center justify-between gap-3">
+                  <dt class="text-muted-foreground">{tr('portfolio.deliveryLabel')}</dt>
+                  <dd class="font-semibold text-foreground">{item.delivery_estimate}</dd>
+                </div>
+              ) : null}
+              {item.client_name ? (
+                <div class="flex items-center justify-between gap-3">
+                  <dt class="text-muted-foreground">{tr('portfolio.clientLabel')}</dt>
+                  <dd class="font-semibold text-foreground">{item.client_name}</dd>
+                </div>
+              ) : null}
+            </dl>
+          ) : null}
+
+          <div class="border-t border-border pt-4 text-xs">
+            <a href={publicPath('/order')} class="font-semibold text-primary hover:underline">
+              {tr('portfolio.sendOrderForm')}
+            </a>
+          </div>
+        </aside>
+      </div>
+
+      {relatedItems.length > 0 ? (
+        <section class="mt-16 border-t border-border pt-12">
+          <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+            <h2 class="text-2xl font-bold text-foreground">{tr('portfolio.moreProjects')}</h2>
+            <a href={publicPath('/portfolio')} class="portfolio-btn-secondary">
+              <ArrowLeft size={16} aria-hidden="true" />
+              <span>{tr('portfolio.backToCatalog')}</span>
+            </a>
+          </div>
+
+          <div class="portfolio-grid">
+            {relatedItems.map((rel) => (
+              <article class="portfolio-card">
+                <a href={publicPath(`/portfolio/${rel.slug}`)} class="portfolio-media-frame">
+                  {rel.cover_image_url ? (
+                    <img
+                      src={rel.cover_image_url}
+                      alt={rel.title}
+                      width="960"
+                      height="600"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <div class="portfolio-cover-fallback">
+                      <span class="text-xs font-semibold uppercase tracking-wider">
+                        {tr(`portfolio.categories.${rel.category}`)}
+                      </span>
+                      <strong class="text-xl font-bold leading-tight">{rel.title}</strong>
+                    </div>
+                  )}
+                </a>
+
+                <div class="portfolio-card-body">
+                  <h3 class="text-lg font-bold text-foreground">
+                    <a href={publicPath(`/portfolio/${rel.slug}`)} class="hover:underline">
+                      {rel.title}
+                    </a>
+                  </h3>
+                  <p class="text-base font-bold text-foreground">
+                    {formatPortfolioPrice(rel, locale)}
+                  </p>
+                  <div class="portfolio-actions">
+                    <a href={publicPath(`/portfolio/${rel.slug}`)} class="portfolio-btn-secondary">
+                      <span>{tr('portfolio.viewDetail')}</span>
+                      <ArrowUpRight size={16} aria-hidden="true" />
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : (
+        <div class="mt-12 border-t border-border pt-8">
+          <a href={publicPath('/portfolio')} class="portfolio-btn-secondary">
+            <ArrowLeft size={16} aria-hidden="true" />
+            <span>{tr('portfolio.backToCatalog')}</span>
+          </a>
+        </div>
+      )}
+    </div>
+  </main>
+
+  <script>
+    const mainImage = document.getElementById('portfolio-main-image') as HTMLImageElement | null
+    const thumbButtons = Array.from(document.querySelectorAll('[data-gallery-src]'))
+
+    for (const btn of thumbButtons) {
+      btn.addEventListener('click', () => {
+        const src = btn.getAttribute('data-gallery-src')
+        const alt = btn.getAttribute('data-gallery-alt')
+        if (mainImage && src) {
+          mainImage.src = src
+          if (alt) mainImage.alt = alt
+        }
+        for (const tBtn of thumbButtons) {
+          tBtn.setAttribute('aria-pressed', String(tBtn === btn))
+        }
+      })
+    }
+
+    const intentButtons = Array.from(document.querySelectorAll('[data-wa-intent]'))
+    const waCta = document.getElementById('portfolio-wa-cta') as HTMLAnchorElement | null
+    const waLabel = document.getElementById('portfolio-wa-cta-label')
+
+    for (const btn of intentButtons) {
+      btn.addEventListener('click', () => {
+        const href = btn.getAttribute('data-wa-href')
+        const label = btn.getAttribute('data-wa-label')
+        if (waCta && href) waCta.href = href
+        if (waLabel && label) waLabel.textContent = label
+        for (const iBtn of intentButtons) {
+          iBtn.setAttribute('aria-pressed', String(iBtn === btn))
+        }
+      })
+    }
+  </script>
+</Layout>

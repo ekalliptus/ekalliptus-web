@@ -1,0 +1,236 @@
+---
+import { ArrowUpRight, ExternalLink, MessageCircle } from 'lucide-astro'
+import { waLink } from '../lib/constants'
+import { localizedPath, type Locale } from '../lib/locale-routing'
+import { fetchPublicPortfolio, type PublicPortfolioProject } from '../lib/portfolio'
+import { buildPortfolioWaUrl, formatPortfolioPrice } from '../lib/portfolio-wa'
+
+interface Props {
+  t: (key: string) => string
+  locale: string
+}
+
+const { t, locale } = Astro.props
+const publicPath = (path: string) => localizedPath(path, locale as Locale)
+
+const res = await fetchPublicPortfolio({ limit: 3 })
+const items: PublicPortfolioProject[] = res.status === 'ok' ? res.items : []
+const featured = items[0] ?? null
+const companions = items.slice(1, 3)
+
+const buildCardWa = (item: PublicPortfolioProject) => {
+  const priceLabel = formatPortfolioPrice(item, locale)
+  const intent = item.offer_type === 'custom_similar' ? 'custom_similar' : 'buy_ready'
+  return buildPortfolioWaUrl({
+    title: item.title,
+    slug: item.slug,
+    priceLabel,
+    intent,
+    pageUrl: `https://ekalliptus.com${publicPath(`/portfolio/${item.slug}`)}`,
+    customIntro: item.whatsapp_prefill,
+    locale,
+  })
+}
+
+const statusLabel = (item: PublicPortfolioProject) =>
+  t(`portfolio.status.${item.availability_status}`)
+
+const ctaLabel = (item: PublicPortfolioProject) => {
+  if (item.availability_status === 'sold') return t('portfolio.soldViaWa')
+  if (item.offer_type === 'custom_similar') return t('portfolio.customViaWa')
+  return t('portfolio.buyViaWa')
+}
+---
+
+<section id="portfolio" class="portfolio-showcase-band content-vis scroll-mt-24">
+  <div class="portfolio-band-head">
+    <div>
+      <h2>{t('portfolio.homeTitle')}</h2>
+      <p>{t('portfolio.homeSubtitle')}</p>
+    </div>
+    <a href={publicPath('/portfolio')} class="portfolio-btn-secondary">
+      <span>{t('portfolio.homeViewAll')}</span>
+      <ArrowUpRight size={18} aria-hidden="true" />
+    </a>
+  </div>
+
+  {featured ? (
+    <div>
+      <article class="portfolio-flagship">
+        <a href={publicPath(`/portfolio/${featured.slug}`)} class="portfolio-media-frame">
+          {featured.cover_image_url ? (
+            <img
+              src={featured.cover_image_url}
+              alt={featured.title}
+              width="1280"
+              height="800"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div class="portfolio-cover-fallback">
+              <span class="text-xs font-semibold uppercase tracking-wider">
+                {t(`portfolio.categories.${featured.category}`)}
+              </span>
+              <strong class="text-2xl font-bold leading-tight">{featured.title}</strong>
+            </div>
+          )}
+        </a>
+
+        <div class="flex flex-col gap-4">
+          <div class="portfolio-badge-row">
+            <span class="portfolio-status-pill" data-status={featured.availability_status}>
+              {statusLabel(featured)}
+            </span>
+            <span class="portfolio-category-tag">
+              {t(`portfolio.categories.${featured.category}`)}
+            </span>
+          </div>
+
+          <h3 class="text-2xl font-bold leading-tight text-foreground sm:text-3xl">
+            <a href={publicPath(`/portfolio/${featured.slug}`)} class="hover:underline">
+              {featured.title}
+            </a>
+          </h3>
+
+          {featured.tagline ? (
+            <p class="text-sm leading-relaxed text-muted-foreground sm:text-base">
+              {featured.tagline}
+            </p>
+          ) : null}
+
+          {featured.tech_stack.length > 0 ? (
+            <div class="portfolio-tech-list">
+              {featured.tech_stack.slice(0, 5).map((tech) => (
+                <span class="portfolio-tech-chip">{tech}</span>
+              ))}
+            </div>
+          ) : null}
+
+          <div class="pt-1">
+            <p class="text-xs font-medium text-muted-foreground">{t('portfolio.priceLabel')}</p>
+            <p class="text-2xl font-bold text-foreground">
+              {formatPortfolioPrice(featured, locale)}
+            </p>
+          </div>
+
+          <div class="portfolio-actions">
+            <a
+              href={buildCardWa(featured)}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="portfolio-btn-primary"
+            >
+              <MessageCircle size={17} aria-hidden="true" />
+              <span>{ctaLabel(featured)}</span>
+            </a>
+            <a href={publicPath(`/portfolio/${featured.slug}`)} class="portfolio-btn-secondary">
+              <span>{t('portfolio.viewDetail')}</span>
+              <ArrowUpRight size={17} aria-hidden="true" />
+            </a>
+            {featured.demo_url ? (
+              <a
+                href={featured.demo_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="portfolio-btn-secondary"
+              >
+                <span>{t('portfolio.viewDemo')}</span>
+                <ExternalLink size={16} aria-hidden="true" />
+              </a>
+            ) : null}
+          </div>
+        </div>
+      </article>
+
+      {companions.length > 0 ? (
+        <div class="portfolio-grid">
+          {companions.map((item) => (
+            <article class="portfolio-card">
+              <a href={publicPath(`/portfolio/${item.slug}`)} class="portfolio-media-frame">
+                {item.cover_image_url ? (
+                  <img
+                    src={item.cover_image_url}
+                    alt={item.title}
+                    width="960"
+                    height="600"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <div class="portfolio-cover-fallback">
+                    <span class="text-xs font-semibold uppercase tracking-wider">
+                      {t(`portfolio.categories.${item.category}`)}
+                    </span>
+                    <strong class="text-xl font-bold leading-tight">{item.title}</strong>
+                  </div>
+                )}
+              </a>
+
+              <div class="portfolio-card-body">
+                <div class="portfolio-badge-row">
+                  <span class="portfolio-status-pill" data-status={item.availability_status}>
+                    {statusLabel(item)}
+                  </span>
+                  <span class="portfolio-category-tag">
+                    {t(`portfolio.categories.${item.category}`)}
+                  </span>
+                </div>
+
+                <h3 class="text-xl font-bold text-foreground">
+                  <a href={publicPath(`/portfolio/${item.slug}`)} class="hover:underline">
+                    {item.title}
+                  </a>
+                </h3>
+
+                {item.tagline ? (
+                  <p class="line-clamp-2 text-sm text-muted-foreground">{item.tagline}</p>
+                ) : null}
+
+                <p class="text-lg font-bold text-foreground">
+                  {formatPortfolioPrice(item, locale)}
+                </p>
+
+                <div class="portfolio-actions">
+                  <a
+                    href={buildCardWa(item)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="portfolio-btn-primary"
+                  >
+                    <MessageCircle size={16} aria-hidden="true" />
+                    <span>{ctaLabel(item)}</span>
+                  </a>
+                  <a href={publicPath(`/portfolio/${item.slug}`)} class="portfolio-btn-secondary">
+                    <span>{t('portfolio.viewDetail')}</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  ) : (
+    <div class="mx-auto max-w-[1216px] rounded-2xl border border-border bg-card p-6 sm:p-8">
+      <h3 class="text-lg font-bold text-foreground">{t('portfolio.homeEmptyTitle')}</h3>
+      <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+        {t('portfolio.homeEmptyBody')}
+      </p>
+      <div class="mt-5 flex flex-wrap gap-3">
+        <a
+          href={waLink('Halo Ekalliptus, saya ingin menanyakan daftar project portofolio terbaru.')}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="portfolio-btn-primary"
+        >
+          <MessageCircle size={17} aria-hidden="true" />
+          <span>{t('portfolio.homeEmptyCta')}</span>
+        </a>
+        <a href={publicPath('/portfolio')} class="portfolio-btn-secondary">
+          <span>{t('portfolio.homeViewAll')}</span>
+        </a>
+      </div>
+    </div>
+  )}
+</section>
