@@ -135,10 +135,17 @@
   },
   "consultation": {
     "statusOnline": "Online",
-    "greeting": "Halo! Saya eBot, asisten AI Ekalliptus. Ada yang bisa saya bantu? Tanyakan tentang layanan kami, harga, atau ketik \"chat admin\" untuk bicara langsung dengan tim kami.",
-    "placeholder": "Ketik pesan Anda...",
-    "disclaimer": "Didukung AI - untuk respons lebih personal, ketik \"chat admin\"",
-    "adminConnected": "Terhubung dengan Admin Ekalliptus"
+    "greeting": "Halo! Saya eBot, asisten konsultasi Ekalliptus. Tanyakan tentang website, aplikasi mobile, sistem ERP, estimasi biaya, atau beralih ke tab WhatsApp kapan saja.",
+    "placeholder": "Tanyakan kebutuhan digital Anda...",
+    "disclaimer": "Asisten AI dikelola dari Ekalliptus ERP. Lanjut ke WhatsApp kapan saja.",
+    "adminConnected": "Siap diteruskan ke Admin WhatsApp",
+    "tabAi": "Chat AI",
+    "tabWhatsapp": "WhatsApp",
+    "quickWebsite": "Estimasi Website",
+    "quickMobile": "Aplikasi Mobile",
+    "continueWa": "Lanjut ke WhatsApp",
+    "sending": "Mengetik balasan...",
+    "errorReply": "Maaf, koneksi AI sedang sibuk. Silakan lanjutkan lewat tab WhatsApp."
   },
   "footer": {
     "contact": "Hubungi Kami",

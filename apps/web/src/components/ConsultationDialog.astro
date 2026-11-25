@@ -8,87 +8,218 @@ interface Props {
 const { t } = Astro.props
 ---
 
-<div id="consult-dialog" class="fixed inset-0 z-50 hidden">
+<div
+  id="consult-dialog"
+  class="fixed inset-0 z-50 hidden"
+  data-default-greeting={t('consultation.greeting')}
+  data-error-reply={t('consultation.errorReply')}
+  data-sending-label={t('consultation.sending')}
+  data-continue-wa={t('consultation.continueWa')}
+>
   <div id="consult-backdrop" class="fixed inset-0 modal-backdrop transition-opacity duration-300"></div>
 
   <div class="fixed inset-0 flex items-end justify-end p-0 sm:p-0 pointer-events-none">
-    <div id="consult-panel" role="dialog" aria-modal="true" aria-labelledby="consult-title" class="pointer-events-auto relative w-full sm:w-[400px] flex flex-col bg-card border border-border rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300 translate-y-full opacity-0 sm:mb-2 sm:mr-2 mb-safe max-h-[100dvh] sm:max-h-[calc(100dvh-7rem)]">
-
-      <div class="flex items-center justify-between p-4 border-b border-border bg-card/80 backdrop-blur-xl">
-        <div class="flex items-center gap-3">
-          <div class="h-9 w-9 rounded-full bg-green-500/20 flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 text-green-600" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.51 14.94L2 22l5.2-1.5A9.9 9.9 0 1 0 12.04 2Zm5.8 14.04c-.24.68-1.4 1.3-1.96 1.35-.5.05-1.13.07-3.23-.9-2.7-1.24-4.4-4.02-4.54-4.21-.13-.19-1.07-1.47-1.07-2.8 0-1.34.7-2 .95-2.27.24-.27.52-.34.7-.34h.5c.16 0 .38-.06.59.45.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.3.38-.42.5-.14.14-.29.3-.13.58.17.28.74 1.23 1.6 1.99 1.1.99 2.03 1.3 2.32 1.44.29.14.46.12.63-.07.17-.2.72-.85.91-1.14.19-.29.38-.24.64-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.7-.17 1.38Z"/></svg>
+    <div
+      id="consult-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="consult-title"
+      class="pointer-events-auto relative w-full sm:w-[410px] flex flex-col bg-card border border-border rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300 translate-y-full opacity-0 sm:mb-2 sm:mr-2 mb-safe max-h-[100dvh] sm:max-h-[min(640px,calc(100dvh-6.5rem))]"
+    >
+      <!-- Header -->
+      <div class="flex items-center justify-between p-4 border-b border-border bg-card">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="h-9 w-9 shrink-0 rounded-full bg-green-700/15 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 text-green-700 dark:text-green-400" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.51 14.94L2 22l5.2-1.5A9.9 9.9 0 1 0 12.04 2Zm5.8 14.04c-.24.68-1.4 1.3-1.96 1.35-.5.05-1.13.07-3.23-.9-2.7-1.24-4.4-4.02-4.54-4.21-.13-.19-1.07-1.47-1.07-2.8 0-1.34.7-2 .95-2.27.24-.27.52-.34.7-.34h.5c.16 0 .38-.06.59.45.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.3.38-.42.5-.14.14-.29.3-.13.58.17.28.74 1.23 1.6 1.99 1.1.99 2.03 1.3 2.32 1.44.29.14.46.12.63-.07.17-.2.72-.85.91-1.14.19-.29.38-.24.64-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.7-.17 1.38Z"/></svg>
           </div>
-          <div>
-            <h3 id="consult-title" class="text-sm font-semibold text-foreground">{t('waForm.title')}</h3>
-            <div class="flex items-center gap-1.5">
-              <span class="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse"></span>
-              <span class="text-[0.65rem] text-muted-foreground">{t('waForm.statusNote')}</span>
-            </div>
+          <div class="min-w-0">
+            <h3 id="consult-title" data-wa-title={t('waForm.title')} class="truncate text-sm font-semibold text-foreground">
+              {t('waForm.title')}
+            </h3>
+            <p id="consult-subtitle" data-wa-sub={t('waForm.statusNote')} data-ai-sub={t('consultation.statusOnline')} class="truncate text-[0.7rem] text-muted-foreground">
+              {t('waForm.statusNote')}
+            </p>
           </div>
         </div>
-        <button id="consult-close" class="h-11 w-11 rounded-full flex items-center justify-center transition hover:bg-accent cursor-interactive" aria-label="Close">
-          <X class="h-4 w-4 text-muted-foreground" />
+        <button
+          type="button"
+          id="consult-close"
+          class="h-11 w-11 shrink-0 rounded-full flex items-center justify-center transition hover:bg-accent cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          aria-label="Close"
+        >
+          <X class="h-4 w-4 text-muted-foreground" aria-hidden="true" />
         </button>
       </div>
 
-      <form id="wa-form" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar" novalidate>
-        <div>
-          <label for="wa-name" class="mb-1 block text-xs font-medium text-muted-foreground">{t('waForm.name')}</label>
-          <input
-            id="wa-name"
-            type="text"
-            required
-            maxlength="60"
-            autocomplete="name"
-            placeholder={t('waForm.namePlaceholder')}
-            class="w-full glass-input rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none"
-          />
-        </div>
-        <div>
-          <label for="wa-need" class="mb-1 block text-xs font-medium text-muted-foreground">{t('waForm.need')}</label>
-          <select
-            id="wa-need"
-            class="w-full glass-input rounded-xl px-4 py-2.5 text-sm text-foreground outline-none"
-          >
-            <option value="website">{t('waForm.needWebsite')}</option>
-            <option value="mobile">{t('waForm.needMobile')}</option>
-            <option value="maintenance">{t('waForm.needMaintenance')}</option>
-            <option value="other">{t('waForm.needOther')}</option>
-          </select>
-        </div>
-
-        <div>
-          <label for="wa-message" class="mb-1 block text-xs font-medium text-muted-foreground">{t('waForm.message')}</label>
-          <textarea
-            id="wa-message"
-            rows="3"
-            maxlength="500"
-            placeholder={t('waForm.messagePlaceholder')}
-            class="w-full glass-input rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none resize-none"
-          ></textarea>
-        </div>
-        <div>
-          <p id="wa-preview-label" class="mb-1 block text-xs font-medium text-muted-foreground">{t('waForm.previewLabel')}</p>
-          <div class="flex justify-end" aria-hidden="true">
-            <div class="rounded-2xl rounded-tr-md bg-green-600/15 border border-green-600/25 px-4 py-3 max-w-[90%]">
-              <p id="wa-preview" class="text-sm text-foreground leading-relaxed whitespace-pre-line"></p>
-            </div>
-          </div>
-        </div>
-      </form>
-
-      <div class="p-3 border-t border-border bg-card/80 backdrop-blur-xl">
+      <!-- Mode Tabs (shown when AI consultation is active & ready) -->
+      <div
+        id="consult-tabs"
+        role="tablist"
+        aria-label="Mode konsultasi"
+        class="hidden grid grid-cols-2 gap-1.5 border-b border-border bg-muted/40 p-2"
+      >
         <button
           type="button"
-          id="wa-submit"
-          class="flex w-full items-center justify-center gap-2 rounded-xl bg-green-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-green-600/90 active:scale-[0.98] cursor-interactive disabled:opacity-50"
+          id="consult-tab-ai"
+          role="tab"
+          aria-selected="false"
+          aria-controls="consult-panel-ai"
+          class="min-h-[44px] cursor-pointer rounded-xl px-3 py-2 text-xs font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.51 14.94L2 22l5.2-1.5A9.9 9.9 0 1 0 12.04 2Zm5.8 14.04c-.24.68-1.4 1.3-1.96 1.35-.5.05-1.13.07-3.23-.9-2.7-1.24-4.4-4.02-4.54-4.21-.13-.19-1.07-1.47-1.07-2.8 0-1.34.7-2 .95-2.27.24-.27.52-.34.7-.34h.5c.16 0 .38-.06.59.45.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.3.38-.42.5-.14.14-.29.3-.13.58.17.28.74 1.23 1.6 1.99 1.1.99 2.03 1.3 2.32 1.44.29.14.46.12.63-.07.17-.2.72-.85.91-1.14.19-.29.38-.24.64-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.7-.17 1.38Z"/></svg>
+          {t('consultation.tabAi')}
+        </button>
+        <button
+          type="button"
+          id="consult-tab-wa"
+          role="tab"
+          aria-selected="true"
+          aria-controls="consult-panel-wa"
+          class="min-h-[44px] cursor-pointer rounded-xl px-3 py-2 text-xs font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        >
+          {t('consultation.tabWhatsapp')}
+        </button>
+      </div>
 
-        <p class="mt-2 text-[0.6rem] text-center text-muted-foreground/70">
-          {t('waForm.privacyNote')}
-        </p>
+      <!-- AI Chat Panel -->
+      <div
+        id="consult-panel-ai"
+        role="tabpanel"
+        aria-labelledby="consult-tab-ai"
+        class="hidden flex-1 flex-col min-h-0 overflow-hidden"
+      >
+        <div
+          id="consult-messages"
+          role="log"
+          aria-live="polite"
+          aria-relevant="additions"
+          class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar min-h-[240px]"
+        >
+          <div class="flex justify-start">
+            <div class="rounded-2xl rounded-tl-md border border-border bg-muted/40 px-4 py-3 max-w-[88%]">
+              <p id="consult-greeting-text" class="text-sm text-foreground leading-relaxed">
+                {t('consultation.greeting')}
+              </p>
+            </div>
+          </div>
+
+          <div id="consult-quick-actions" class="flex flex-wrap gap-2 pt-1">
+            <button
+              type="button"
+              data-ai-quick="Berapa kisaran biaya dan estimasi pengerjaan pembuatan website di Ekalliptus?"
+              class="min-h-[40px] cursor-pointer rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition hover:bg-accent"
+            >
+              {t('consultation.quickWebsite')}
+            </button>
+            <button
+              type="button"
+              data-ai-quick="Saya tertarik membuat aplikasi mobile Android/iOS. Bagaimana alur dan estimasinya?"
+              class="min-h-[40px] cursor-pointer rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition hover:bg-accent"
+            >
+              {t('consultation.quickMobile')}
+            </button>
+            <button
+              type="button"
+              data-switch-wa
+              class="min-h-[40px] cursor-pointer rounded-xl border border-green-700/30 bg-green-700/10 px-3 py-1.5 text-xs font-semibold text-green-800 dark:text-green-300 transition hover:bg-green-700/20"
+            >
+              {t('consultation.continueWa')}
+            </button>
+          </div>
+        </div>
+
+        <div class="p-3 border-t border-border bg-card">
+          <form id="consult-ai-form" class="flex gap-2">
+            <label for="consult-ai-input" class="sr-only">{t('consultation.placeholder')}</label>
+            <input
+              id="consult-ai-input"
+              type="text"
+              autocomplete="off"
+              maxlength="500"
+              placeholder={t('consultation.placeholder')}
+              class="flex-1 min-w-0 min-h-[44px] glass-input rounded-xl px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            />
+            <button
+              type="submit"
+              id="consult-ai-send"
+              class="h-11 w-11 rounded-xl bg-primary flex items-center justify-center text-primary-foreground transition hover:bg-primary/90 active:scale-[0.95] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              aria-label="Kirim pesan ke AI"
+            >
+              <Send class="h-4 w-4" aria-hidden="true" />
+            </button>
+          </form>
+          <p class="mt-1.5 text-[0.65rem] text-center text-muted-foreground">
+            {t('consultation.disclaimer')}
+          </p>
+        </div>
+      </div>
+
+      <!-- WhatsApp Form Panel (default / fallback view) -->
+      <div
+        id="consult-panel-wa"
+        role="tabpanel"
+        aria-labelledby="consult-tab-wa"
+        class="flex flex-1 flex-col min-h-0 overflow-hidden"
+      >
+        <form id="wa-form" class="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar" novalidate>
+          <div>
+            <label for="wa-name" class="mb-1 block text-xs font-medium text-muted-foreground">{t('waForm.name')}</label>
+            <input
+              id="wa-name"
+              type="text"
+              required
+              maxlength="60"
+              autocomplete="name"
+              placeholder={t('waForm.namePlaceholder')}
+              class="w-full min-h-[44px] glass-input rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            />
+          </div>
+          <div>
+            <label for="wa-need" class="mb-1 block text-xs font-medium text-muted-foreground">{t('waForm.need')}</label>
+            <select
+              id="wa-need"
+              class="w-full min-h-[44px] glass-input rounded-xl px-4 py-2.5 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+            >
+              <option value="website">{t('waForm.needWebsite')}</option>
+              <option value="mobile">{t('waForm.needMobile')}</option>
+              <option value="maintenance">{t('waForm.needMaintenance')}</option>
+              <option value="other">{t('waForm.needOther')}</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="wa-message" class="mb-1 block text-xs font-medium text-muted-foreground">{t('waForm.message')}</label>
+            <textarea
+              id="wa-message"
+              rows="3"
+              maxlength="500"
+              placeholder={t('waForm.messagePlaceholder')}
+              class="w-full glass-input rounded-xl px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground outline-none resize-none focus-visible:ring-2 focus-visible:ring-primary"
+            ></textarea>
+          </div>
+          <div>
+            <p id="wa-preview-label" class="mb-1 block text-xs font-medium text-muted-foreground">{t('waForm.previewLabel')}</p>
+            <div class="flex justify-end" aria-hidden="true">
+              <div class="rounded-2xl rounded-tr-md bg-green-700/10 border border-green-700/25 px-4 py-3 max-w-[90%]">
+                <p id="wa-preview" class="text-sm text-foreground leading-relaxed whitespace-pre-line"></p>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="p-3 border-t border-border bg-card">
+          <button
+            type="button"
+            id="wa-submit"
+            class="flex w-full min-h-[44px] items-center justify-center gap-2 rounded-xl bg-green-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-green-800 active:scale-[0.98] cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 shrink-0" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.51 14.94L2 22l5.2-1.5A9.9 9.9 0 1 0 12.04 2Zm5.8 14.04c-.24.68-1.4 1.3-1.96 1.35-.5.05-1.13.07-3.23-.9-2.7-1.24-4.4-4.02-4.54-4.21-.13-.19-1.07-1.47-1.07-2.8 0-1.34.7-2 .95-2.27.24-.27.52-.34.7-.34h.5c.16 0 .38-.06.59.45.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.3.38-.42.5-.14.14-.29.3-.13.58.17.28.74 1.23 1.6 1.99 1.1.99 2.03 1.3 2.32 1.44.29.14.46.12.63-.07.17-.2.72-.85.91-1.14.19-.29.38-.24.64-.14.26.09 1.66.78 1.94.93.28.14.47.21.54.33.07.12.07.7-.17 1.38Z"/></svg>
+            <span>{t('waForm.submit')}</span>
+          </button>
+
+          <p class="mt-2 text-[0.65rem] text-center text-muted-foreground">
+            {t('waForm.privacyNote')}
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -104,6 +235,7 @@ const { t } = Astro.props
 </style>
 
 <script>
+import { escapeHtml, formatChatResponse } from '../lib/chat-format'
 import { buildWaConsultMessage, waConsultUrl } from '../lib/wa-consult'
 
 let _dialogInited = false
@@ -124,6 +256,21 @@ function _doInitDialog() {
   const backdrop = document.getElementById('consult-backdrop')
   const panel = document.getElementById('consult-panel')
   const closeBtn = document.getElementById('consult-close')
+  const titleEl = document.getElementById('consult-title')
+  const subtitleEl = document.getElementById('consult-subtitle')
+
+  const tabsEl = document.getElementById('consult-tabs')
+  const tabAi = document.getElementById('consult-tab-ai')
+  const tabWa = document.getElementById('consult-tab-wa')
+  const panelAi = document.getElementById('consult-panel-ai')
+  const panelWa = document.getElementById('consult-panel-wa')
+
+  const messagesEl = document.getElementById('consult-messages')
+  const greetingTextEl = document.getElementById('consult-greeting-text')
+  const aiForm = document.getElementById('consult-ai-form') as HTMLFormElement | null
+  const aiInput = document.getElementById('consult-ai-input') as HTMLInputElement | null
+  const aiSendBtn = document.getElementById('consult-ai-send') as HTMLButtonElement | null
+
   const formEl = document.getElementById('wa-form') as HTMLFormElement | null
   const nameEl = document.getElementById('wa-name') as HTMLInputElement | null
   const needEl = document.getElementById('wa-need') as HTMLSelectElement | null
@@ -135,8 +282,193 @@ function _doInitDialog() {
 
   const dialogEl = dialog
   const panelEl = panel
+  const sendingLabel = dialogEl.dataset.sendingLabel || 'Mengetik balasan...'
+  const errorReplyText =
+    dialogEl.dataset.errorReply || 'Koneksi AI sedang sibuk. Silakan lanjutkan lewat tab WhatsApp.'
+  const continueWaLabel = dialogEl.dataset.continueWa || 'Lanjut ke WhatsApp'
+
   let isOpen = false
   let previousFocus: HTMLElement | null = null
+  let activeMode: 'ai' | 'wa' = 'wa'
+  let aiReady = false
+  let assistantName = 'eBot'
+  let configCheckedAt = 0
+  let sendingAi = false
+  const history: Array<{ role: 'user' | 'assistant'; content: string }> = []
+
+  function setMode(mode: 'ai' | 'wa') {
+    activeMode = mode
+    const showAi = mode === 'ai' && aiReady
+
+    if (showAi) {
+      panelAi?.classList.remove('hidden')
+      panelAi?.classList.add('flex')
+      panelWa?.classList.add('hidden')
+      panelWa?.classList.remove('flex')
+
+      tabAi?.setAttribute('aria-selected', 'true')
+      tabWa?.setAttribute('aria-selected', 'false')
+      tabAi?.classList.add('bg-card', 'text-foreground', 'shadow-sm')
+      tabAi?.classList.remove('text-muted-foreground')
+      tabWa?.classList.remove('bg-card', 'text-foreground', 'shadow-sm')
+      tabWa?.classList.add('text-muted-foreground')
+
+      if (titleEl) titleEl.textContent = assistantName
+      if (subtitleEl) subtitleEl.textContent = subtitleEl.dataset.aiSub || 'Online'
+    } else {
+      panelWa?.classList.remove('hidden')
+      panelWa?.classList.add('flex')
+      panelAi?.classList.add('hidden')
+      panelAi?.classList.remove('flex')
+
+      tabWa?.setAttribute('aria-selected', 'true')
+      tabAi?.setAttribute('aria-selected', 'false')
+      tabWa?.classList.add('bg-card', 'text-foreground', 'shadow-sm')
+      tabWa?.classList.remove('text-muted-foreground')
+      tabAi?.classList.remove('bg-card', 'text-foreground', 'shadow-sm')
+      tabAi?.classList.add('text-muted-foreground')
+
+      if (titleEl) titleEl.textContent = titleEl.dataset.waTitle || 'WhatsApp'
+      if (subtitleEl) subtitleEl.textContent = subtitleEl.dataset.waSub || ''
+    }
+  }
+
+  function transferContextToWa() {
+    const userMsgs = history.filter((m) => m.role === 'user').map((m) => m.content)
+    if (userMsgs.length > 0 && !messageEl!.value.trim()) {
+      messageEl!.value = userMsgs.slice(-2).join(' | ').slice(0, 480)
+      updatePreview()
+    }
+    setMode('wa')
+    nameEl?.focus()
+  }
+
+  async function refreshConsultConfig(switchToAiOnFirstLoad: boolean) {
+    const now = Date.now()
+    if (configCheckedAt > 0 && now - configCheckedAt < 15000) return
+    configCheckedAt = now
+    try {
+      const res = await fetch('/api/consult', {
+        method: 'GET',
+        headers: { Accept: 'application/json' },
+      })
+      if (!res.ok) return
+      const cfg = (await res.json()) as {
+        enabled?: boolean
+        ready?: boolean
+        assistant_name?: string
+        greeting_message?: string
+      }
+      aiReady = Boolean(cfg.enabled && cfg.ready)
+      assistantName =
+        typeof cfg.assistant_name === 'string' && cfg.assistant_name.trim()
+          ? cfg.assistant_name.trim()
+          : 'eBot'
+      if (
+        greetingTextEl &&
+        typeof cfg.greeting_message === 'string' &&
+        cfg.greeting_message.trim()
+      ) {
+        greetingTextEl.textContent = cfg.greeting_message.trim()
+      }
+      if (aiReady) {
+        tabsEl?.classList.remove('hidden')
+        if (switchToAiOnFirstLoad && history.length === 0) {
+          setMode('ai')
+          aiInput?.focus()
+        } else {
+          setMode(activeMode)
+        }
+      } else {
+        tabsEl?.classList.add('hidden')
+        setMode('wa')
+      }
+    } catch {
+      aiReady = false
+      tabsEl?.classList.add('hidden')
+      setMode('wa')
+    }
+  }
+
+  function appendUserMessage(text: string) {
+    if (!messagesEl) return
+    const wrap = document.createElement('div')
+    wrap.className = 'flex justify-end'
+    wrap.innerHTML = `<div class="rounded-2xl rounded-tr-md bg-primary px-4 py-2.5 max-w-[85%] text-sm text-primary-foreground leading-relaxed">${escapeHtml(text)}</div>`
+    messagesEl.appendChild(wrap)
+    messagesEl.scrollTop = messagesEl.scrollHeight
+  }
+
+  function appendBotMessage(text: string, showHandoffAction: boolean) {
+    if (!messagesEl) return
+    const wrap = document.createElement('div')
+    wrap.className = 'flex flex-col items-start gap-2'
+    const bubble = document.createElement('div')
+    bubble.className =
+      'rounded-2xl rounded-tl-md border border-border bg-muted/40 px-4 py-3 max-w-[88%] text-sm text-foreground leading-relaxed'
+    bubble.innerHTML = formatChatResponse(text)
+    wrap.appendChild(bubble)
+
+    if (showHandoffAction) {
+      const btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className =
+        'min-h-[40px] cursor-pointer rounded-xl bg-green-700 px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-green-800'
+      btn.textContent = continueWaLabel
+      btn.addEventListener('click', transferContextToWa)
+      wrap.appendChild(btn)
+    }
+
+    messagesEl.appendChild(wrap)
+    messagesEl.scrollTop = messagesEl.scrollHeight
+  }
+
+  async function sendAiPrompt(rawText: string) {
+    const clean = rawText.trim().slice(0, 500)
+    if (!clean || sendingAi) return
+
+    sendingAi = true
+    if (aiSendBtn) aiSendBtn.disabled = true
+    if (aiInput) aiInput.value = ''
+
+    appendUserMessage(clean)
+    history.push({ role: 'user', content: clean })
+
+    const loadingRow = document.createElement('div')
+    loadingRow.className = 'flex justify-start'
+    loadingRow.innerHTML = `<div class="rounded-2xl rounded-tl-md border border-border bg-muted/30 px-4 py-2.5 text-xs text-muted-foreground">${escapeHtml(sendingLabel)}</div>`
+    messagesEl?.appendChild(loadingRow)
+    if (messagesEl) messagesEl.scrollTop = messagesEl.scrollHeight
+
+    try {
+      const locale = (document.documentElement.lang || 'id').trim().toLowerCase()
+      const res = await fetch('/api/consult', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: history.slice(-10),
+          locale,
+        }),
+      })
+      const data = (await res.json().catch(() => null)) as {
+        reply?: string
+        handoff?: boolean
+        disabled?: boolean
+      } | null
+
+      loadingRow.remove()
+      const replyText = data?.reply || errorReplyText
+      history.push({ role: 'assistant', content: replyText })
+      appendBotMessage(replyText, Boolean(data?.handoff || data?.disabled))
+    } catch {
+      loadingRow.remove()
+      appendBotMessage(errorReplyText, true)
+    } finally {
+      sendingAi = false
+      if (aiSendBtn) aiSendBtn.disabled = false
+      aiInput?.focus()
+    }
+  }
 
   function open() {
     if (isOpen) return
@@ -147,8 +479,16 @@ function _doInitDialog() {
       panelEl.classList.remove('translate-y-full', 'sm:translate-y-8', 'opacity-0')
       panelEl.classList.add('translate-y-0', 'opacity-100')
     })
-    nameEl!.focus()
     document.body.style.overflow = 'hidden'
+    if (aiReady) {
+      setMode(activeMode)
+      if (activeMode === 'ai') aiInput?.focus()
+      else nameEl?.focus()
+    } else {
+      setMode('wa')
+      nameEl?.focus()
+    }
+    void refreshConsultConfig(true)
   }
 
   function close() {
@@ -165,18 +505,51 @@ function _doInitDialog() {
   function updatePreview() {
     previewEl!.textContent = buildWaConsultMessage({
       name: nameEl!.value || '...',
-      need: (needEl!.value as 'website' | 'mobile' | 'maintenance' | 'other'),
+      need: needEl!.value as 'website' | 'mobile' | 'maintenance' | 'other',
       message: messageEl!.value,
       source: window.location.host + window.location.pathname,
     })
   }
+
+  tabAi?.addEventListener('click', () => {
+    setMode('ai')
+    aiInput?.focus()
+  })
+  tabWa?.addEventListener('click', () => {
+    setMode('wa')
+    nameEl?.focus()
+  })
+  tabsEl?.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault()
+      const next = activeMode === 'ai' ? 'wa' : 'ai'
+      setMode(next)
+      ;(next === 'ai' ? tabAi : tabWa)?.focus()
+    }
+  })
+
+  aiForm?.addEventListener('submit', (e) => {
+    e.preventDefault()
+    if (aiInput) void sendAiPrompt(aiInput.value)
+  })
+
+  dialogEl.querySelectorAll<HTMLButtonElement>('[data-ai-quick]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const prompt = btn.dataset.aiQuick
+      if (prompt) void sendAiPrompt(prompt)
+    })
+  })
+
+  dialogEl.querySelectorAll<HTMLButtonElement>('[data-switch-wa]').forEach((btn) => {
+    btn.addEventListener('click', transferContextToWa)
+  })
 
   formEl.addEventListener('input', updatePreview)
   updatePreview()
 
   function trackEvent(eventName: string, params?: Record<string, unknown>) {
     if (typeof (window as any).gtag === 'function') {
-      (window as any).gtag('event', eventName, params || {})
+      ;(window as any).gtag('event', eventName, params || {})
     }
   }
 
@@ -184,7 +557,7 @@ function _doInitDialog() {
     if (!formEl.reportValidity()) return
     const url = waConsultUrl({
       name: nameEl!.value.trim(),
-      need: (needEl!.value as 'website' | 'mobile' | 'maintenance' | 'other'),
+      need: needEl!.value as 'website' | 'mobile' | 'maintenance' | 'other',
       message: messageEl!.value.trim(),
       source: window.location.host + window.location.pathname,
     })
@@ -200,14 +573,24 @@ function _doInitDialog() {
     if (!isOpen) return
     if (e.key === 'Escape') close()
     if (e.key === 'Tab') {
-      const controls = Array.from(panelEl.querySelectorAll<HTMLElement>('button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])')).filter(el => el.getClientRects().length)
-      const first = controls[0], last = controls[controls.length - 1]
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus() }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus() }
+      const controls = Array.from(
+        panelEl.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled])',
+        ),
+      ).filter((el) => el.getClientRects().length)
+      const first = controls[0]
+      const last = controls[controls.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last?.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first?.focus()
+      }
     }
   })
 
-  document.querySelectorAll('[data-consult-open]').forEach(btn => {
+  document.querySelectorAll('[data-consult-open]').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.preventDefault()
       open()
@@ -218,22 +601,27 @@ function _doInitDialog() {
 })()
 }
 
-// GA4: lacak tombol konsultasi, link WhatsApp, dan tombol order di luar dialog.
 function trackEvent(eventName: string, params?: Record<string, unknown>) {
   if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
-    (window as any).gtag('event', eventName, params || {})
+    ;(window as any).gtag('event', eventName, params || {})
   }
 }
 
 document.querySelectorAll('[data-track="consultation"]').forEach(function(btn) {
-  btn.addEventListener('click', function() { trackEvent('consultation_click', { source: 'button' }) })
+  btn.addEventListener('click', function() {
+    trackEvent('consultation_click', { source: 'button' })
+  })
 })
 
 document.querySelectorAll('a[data-track="whatsapp"]').forEach(function(link) {
-  link.addEventListener('click', function() { trackEvent('whatsapp_click', { source: window.location.pathname }) })
+  link.addEventListener('click', function() {
+    trackEvent('whatsapp_click', { source: window.location.pathname })
+  })
 })
 
 document.querySelectorAll('a[data-track="order"], button[data-track="order"]').forEach(function(el) {
-  el.addEventListener('click', function() { trackEvent('order_click', { source: window.location.pathname }) })
+  el.addEventListener('click', function() {
+    trackEvent('order_click', { source: window.location.pathname })
+  })
 })
 </script>

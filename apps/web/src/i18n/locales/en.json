@@ -135,10 +135,17 @@
   },
   "consultation": {
     "statusOnline": "Online",
-    "greeting": "Hi! I'm eBot, Ekalliptus AI assistant. How can I help you? Ask about our services, pricing, or type \"chat admin\" to speak directly with our team.",
-    "placeholder": "Type your message...",
-    "disclaimer": "Powered by AI - for a more personal response, type \"chat admin\"",
-    "adminConnected": "Connected to Ekalliptus Admin"
+    "greeting": "Hi! I'm eBot, Ekalliptus Digital's consultation assistant. Ask about websites, mobile apps, ERP systems, pricing estimates, or switch to the WhatsApp tab anytime.",
+    "placeholder": "Ask about your digital project...",
+    "disclaimer": "AI replies are managed from Ekalliptus ERP. Switch to WhatsApp anytime.",
+    "adminConnected": "Ready to continue on WhatsApp",
+    "tabAi": "AI Chat",
+    "tabWhatsapp": "WhatsApp",
+    "quickWebsite": "Website Estimate",
+    "quickMobile": "Mobile App",
+    "continueWa": "Switch to WhatsApp",
+    "sending": "Replying...",
+    "errorReply": "Sorry, the AI service is busy right now. Please continue via the WhatsApp tab."
   },
   "footer": {
     "contact": "Contact Us",
