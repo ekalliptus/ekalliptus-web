@@ -6,6 +6,7 @@ export const DEFAULT_ERP_API_BASE_URL =
 export type PortfolioCategory =
   | 'website'
   | 'mobile_app'
+  | 'web_mobile'
   | 'erp_system'
   | 'ui_ux'
   | 'automation'

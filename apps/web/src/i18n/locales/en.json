@@ -1111,6 +1111,7 @@
     "categories": {
       "website": "Website",
       "mobile_app": "Mobile App",
+      "web_mobile": "Website & Mobile",
       "erp_system": "ERP System",
       "ui_ux": "UI/UX Design",
       "automation": "Automation & Bots",

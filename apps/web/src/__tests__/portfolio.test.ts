@@ -114,6 +114,8 @@ describe('Portfolio i18n coverage (7 locales)', () => {
         expect(text).not.toContain('\u2014')
       }
     }
+    expect(idLocale.portfolio.categories.web_mobile).toBe('Website & Mobile')
+    expect(enLocale.portfolio.categories.web_mobile).toBe('Website & Mobile')
   })
 })
 
