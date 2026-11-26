@@ -7,7 +7,7 @@ import { serializeJsonLd } from '../lib/article-html'
 import { waLink } from '../lib/constants'
 import { localizedPath, type Locale } from '../lib/locale-routing'
 import { fetchPublicPortfolio, type PublicPortfolioProject } from '../lib/portfolio'
-import { buildPortfolioWaUrl, formatPortfolioPrice } from '../lib/portfolio-wa'
+import { buildPortfolioWaUrl, formatListedPortfolioPrice } from '../lib/portfolio-wa'
 
 export const prerender = false
 
@@ -27,7 +27,7 @@ const siteUrl = 'https://ekalliptus.com'
 const canonical = new URL(Astro.locals.publicPathname ?? Astro.url.pathname, siteUrl).toString()
 
 const buildCardWa = (item: PublicPortfolioProject) => {
-  const priceLabel = formatPortfolioPrice(item, locale)
+  const priceLabel = formatListedPortfolioPrice(item, locale)
   const intent = item.offer_type === 'custom_similar' ? 'custom_similar' : 'buy_ready'
   return buildPortfolioWaUrl({
     title: item.title,
@@ -197,19 +197,21 @@ const catalogSchema = {
                   </div>
                 ) : null}
 
-                <div class="flex flex-wrap items-baseline gap-3 pt-1">
-                  <p class="text-2xl font-bold text-foreground">
-                    {formatPortfolioPrice(featured, locale)}
-                  </p>
-                  {featured.original_price_amount && featured.price_type !== 'negotiable' ? (
-                    <span class="text-sm text-muted-foreground line-through">
-                      {formatPortfolioPrice(
-                        { price_type: 'fixed', price_amount: featured.original_price_amount },
-                        locale,
-                      )}
-                    </span>
-                  ) : null}
-                </div>
+                {formatListedPortfolioPrice(featured, locale) ? (
+                  <div class="flex flex-wrap items-baseline gap-3 pt-1">
+                    <p class="text-2xl font-bold text-foreground">
+                      {formatListedPortfolioPrice(featured, locale)}
+                    </p>
+                    {featured.original_price_amount ? (
+                      <span class="text-sm text-muted-foreground line-through">
+                        {formatListedPortfolioPrice(
+                          { price_type: 'fixed', price_amount: featured.original_price_amount },
+                          locale,
+                        )}
+                      </span>
+                    ) : null}
+                  </div>
+                ) : null}
 
                 <div class="portfolio-actions">
                   <a
@@ -295,19 +297,21 @@ const catalogSchema = {
                       </div>
                     ) : null}
 
-                    <div class="flex flex-wrap items-baseline gap-2.5 pt-1">
-                      <p class="text-lg font-bold text-foreground">
-                        {formatPortfolioPrice(item, locale)}
-                      </p>
-                      {item.original_price_amount && item.price_type !== 'negotiable' ? (
-                        <span class="text-xs text-muted-foreground line-through">
-                          {formatPortfolioPrice(
-                            { price_type: 'fixed', price_amount: item.original_price_amount },
-                            locale,
-                          )}
-                        </span>
-                      ) : null}
-                    </div>
+                    {formatListedPortfolioPrice(item, locale) ? (
+                      <div class="flex flex-wrap items-baseline gap-2.5 pt-1">
+                        <p class="text-lg font-bold text-foreground">
+                          {formatListedPortfolioPrice(item, locale)}
+                        </p>
+                        {item.original_price_amount ? (
+                          <span class="text-xs text-muted-foreground line-through">
+                            {formatListedPortfolioPrice(
+                              { price_type: 'fixed', price_amount: item.original_price_amount },
+                              locale,
+                            )}
+                          </span>
+                        ) : null}
+                      </div>
+                    ) : null}
 
                     <div class="portfolio-actions">
                       <a

@@ -13,7 +13,7 @@ import {
 } from '../../lib/portfolio'
 import {
   buildPortfolioWaUrl,
-  formatPortfolioPrice,
+  formatListedPortfolioPrice,
   type PortfolioPurchaseIntent,
 } from '../../lib/portfolio-wa'
 
@@ -62,10 +62,10 @@ const mediaImages = [
 ]
 const primaryImage = mediaImages[0] ?? null
 
-const priceLabel = formatPortfolioPrice(item, locale)
+const listedPriceLabel = formatListedPortfolioPrice(item, locale)
 const originalPriceLabel =
-  item.original_price_amount && item.price_type !== 'negotiable'
-    ? formatPortfolioPrice(
+  listedPriceLabel && item.original_price_amount
+    ? formatListedPortfolioPrice(
         { price_type: 'fixed', price_amount: item.original_price_amount },
         locale,
       )
@@ -74,7 +74,7 @@ const originalPriceLabel =
 const buyReadyWaHref = buildPortfolioWaUrl({
   title: item.title,
   slug: item.slug,
-  priceLabel,
+  priceLabel: listedPriceLabel,
   intent: 'buy_ready',
   pageUrl: canonical,
   customIntro: item.whatsapp_prefill,
@@ -84,7 +84,7 @@ const buyReadyWaHref = buildPortfolioWaUrl({
 const customWaHref = buildPortfolioWaUrl({
   title: item.title,
   slug: item.slug,
-  priceLabel,
+  priceLabel: listedPriceLabel,
   intent: 'custom_similar',
   pageUrl: canonical,
   customIntro: item.whatsapp_prefill,
@@ -298,17 +298,19 @@ const productSchema = {
             </span>
           </div>
 
-          <div>
-            <p class="text-xs font-medium text-muted-foreground">{tr('portfolio.priceLabel')}</p>
-            <div class="mt-1 flex flex-wrap items-baseline gap-2.5">
-              <p class="text-3xl font-bold text-foreground">{priceLabel}</p>
-              {originalPriceLabel ? (
-                <span class="text-sm text-muted-foreground line-through">
-                  {originalPriceLabel}
-                </span>
-              ) : null}
+          {listedPriceLabel ? (
+            <div>
+              <p class="text-xs font-medium text-muted-foreground">{tr('portfolio.priceLabel')}</p>
+              <div class="mt-1 flex flex-wrap items-baseline gap-2.5">
+                <p class="text-3xl font-bold text-foreground">{listedPriceLabel}</p>
+                {originalPriceLabel ? (
+                  <span class="text-sm text-muted-foreground line-through">
+                    {originalPriceLabel}
+                  </span>
+                ) : null}
+              </div>
             </div>
-          </div>
+          ) : null}
 
           {item.offer_type === 'hybrid' && item.availability_status !== 'sold' ? (
             <div class="portfolio-intent-group" role="group" aria-label={tr('portfolio.buyReadyOption')}>
@@ -424,9 +426,11 @@ const productSchema = {
                       {rel.title}
                     </a>
                   </h3>
-                  <p class="text-base font-bold text-foreground">
-                    {formatPortfolioPrice(rel, locale)}
-                  </p>
+                  {formatListedPortfolioPrice(rel, locale) ? (
+                    <p class="text-base font-bold text-foreground">
+                      {formatListedPortfolioPrice(rel, locale)}
+                    </p>
+                  ) : null}
                   <div class="portfolio-actions">
                     <a href={publicPath(`/portfolio/${rel.slug}`)} class="portfolio-btn-secondary">
                       <span>{tr('portfolio.viewDetail')}</span>

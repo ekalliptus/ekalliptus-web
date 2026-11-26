@@ -20,6 +20,26 @@ function formatIdrString(rawDigits: string): string {
   return `Rp ${grouped}`
 }
 
+export function hasListedPortfolioPrice(project: {
+  price_type: 'fixed' | 'starting_from' | 'negotiable'
+  price_amount: string | null
+}): boolean {
+  if (project.price_type === 'negotiable') return false
+  const digits = project.price_amount?.replace(/\D/g, '') ?? ''
+  return digits.length > 0 && BigInt(digits) > 0n
+}
+
+export function formatListedPortfolioPrice(
+  project: {
+    price_type: 'fixed' | 'starting_from' | 'negotiable'
+    price_amount: string | null
+  },
+  locale = 'id',
+): string | null {
+  if (!hasListedPortfolioPrice(project)) return null
+  return formatPortfolioPrice(project, locale)
+}
+
 export function formatPortfolioPrice(
   project: {
     price_type: 'fixed' | 'starting_from' | 'negotiable'
@@ -42,7 +62,7 @@ export function formatPortfolioPrice(
 export interface PortfolioWaMessageInput {
   title: string
   slug: string
-  priceLabel: string
+  priceLabel?: string | null
   intent: PortfolioPurchaseIntent
   pageUrl?: string
   customIntro?: string | null
@@ -55,6 +75,7 @@ export function buildPortfolioWaMessage(input: PortfolioWaMessageInput): string 
   const slug = input.slug.trim().slice(0, 96)
   const intro = input.customIntro?.trim().slice(0, 280)
   const pageUrl = input.pageUrl?.trim()
+  const priceLabel = input.priceLabel?.trim() || ''
 
   if (locale === 'id') {
     const intentLabel =
@@ -65,8 +86,8 @@ export function buildPortfolioWaMessage(input: PortfolioWaMessageInput): string 
       intro || `Halo Ekalliptus, saya tertarik membeli project "${title}".`,
       `Kode project: ${slug}`,
       `Kebutuhan: ${intentLabel}`,
-      `Harga tertera: ${input.priceLabel}`,
     ]
+    if (priceLabel) lines.push(`Harga tertera: ${priceLabel}`)
     if (pageUrl) lines.push(`Halaman project: ${pageUrl}`)
     return lines.join('\n')
   }
@@ -79,8 +100,8 @@ export function buildPortfolioWaMessage(input: PortfolioWaMessageInput): string 
     intro || `Hello Ekalliptus, I am interested in purchasing the project "${title}".`,
     `Project code: ${slug}`,
     `Request type: ${intentLabel}`,
-    `Listed price: ${input.priceLabel}`,
   ]
+  if (priceLabel) lines.push(`Listed price: ${priceLabel}`)
   if (pageUrl) lines.push(`Project page: ${pageUrl}`)
   return lines.join('\n')
 }

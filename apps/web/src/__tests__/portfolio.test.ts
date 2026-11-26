@@ -16,7 +16,9 @@ import {
 import {
   buildPortfolioWaMessage,
   buildPortfolioWaUrl,
+  formatListedPortfolioPrice,
   formatPortfolioPrice,
+  hasListedPortfolioPrice,
 } from '../lib/portfolio-wa'
 
 function collectStrings(obj: unknown): string[] {
@@ -42,9 +44,28 @@ describe('Portfolio WhatsApp & Price helpers', () => {
     expect(formatPortfolioPrice({ price_type: 'negotiable', price_amount: null }, 'id')).toBe(
       'Diskusi Harga',
     )
+    expect(hasListedPortfolioPrice({ price_type: 'negotiable', price_amount: null })).toBe(false)
+    expect(hasListedPortfolioPrice({ price_type: 'fixed', price_amount: null })).toBe(false)
+    expect(hasListedPortfolioPrice({ price_type: 'fixed', price_amount: '3500000' })).toBe(true)
+    expect(formatListedPortfolioPrice({ price_type: 'negotiable', price_amount: '6000' }, 'id')).toBeNull()
+    expect(formatListedPortfolioPrice({ price_type: 'fixed', price_amount: '3500000' }, 'id')).toContain(
+      '3.500.000',
+    )
   })
 
-  it('builds encoded WhatsApp URL with title, slug, intent, price, and zero em dashes', () => {
+  it('builds encoded WhatsApp URL with title, slug, intent, optional price, and zero em dashes', () => {
+    const msgHiddenPrice = buildPortfolioWaMessage({
+      title: 'EL-Saver Platform',
+      slug: 'el-saver',
+      priceLabel: null,
+      intent: 'custom_similar',
+      pageUrl: 'https://ekalliptus.com/id/portfolio/el-saver',
+      locale: 'id',
+    })
+    expect(msgHiddenPrice).toContain('EL-Saver Platform')
+    expect(msgHiddenPrice).not.toContain('Harga tertera:')
+    expect(msgHiddenPrice).not.toContain('Diskusi Harga')
+    expect(msgHiddenPrice).not.toContain('\u2014')
     const msg = buildPortfolioWaMessage({
       title: 'Web Toko Ekalliptus',
       slug: 'web-toko-ekalliptus',
