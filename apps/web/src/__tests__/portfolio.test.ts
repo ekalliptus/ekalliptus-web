@@ -137,6 +137,10 @@ describe('Portfolio i18n coverage (7 locales)', () => {
     }
     expect(idLocale.portfolio.categories.web_mobile).toBe('Website & Mobile')
     expect(enLocale.portfolio.categories.web_mobile).toBe('Website & Mobile')
+    expect(idLocale.portfolio.categories.desktop).toBe('Desktop')
+    expect(enLocale.portfolio.categories.desktop).toBe('Desktop')
+    expect(idLocale.portfolio.categories.desktop_mobile).toBe('Desktop & Mobile')
+    expect(enLocale.portfolio.categories.desktop_mobile).toBe('Desktop & Mobile')
   })
 })
 

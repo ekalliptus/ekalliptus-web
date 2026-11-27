@@ -7,6 +7,8 @@ export type PortfolioCategory =
   | 'website'
   | 'mobile_app'
   | 'web_mobile'
+  | 'desktop'
+  | 'desktop_mobile'
   | 'erp_system'
   | 'ui_ux'
   | 'automation'
